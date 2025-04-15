@@ -8,6 +8,7 @@ const Buttonf = ({
    variant = 'contained',
    disabled,
    type = 'submit',
+   color,
    ...rest
 }) => {
    return (
@@ -17,6 +18,7 @@ const Buttonf = ({
             type={type}
             disabled={disabled}
             variant={variant}
+            color={color}
             {...rest}
          >
             {children}
@@ -163,42 +165,61 @@ const StyledButton = styled(Button)(({ variant }) => {
          fontSize: '16px',
          border: 'none',
          color: '#969696',
+         width: '200px',
+         padding: 0,
          backgroundColor: 0,
          boxShadow: 0,
          outline: 0,
          transition: 0,
 
          '&:hover': {
-            backgroundColor: 0,
-            boxShadow: 0,
             transition: 0,
          },
          '&:active': {
             color: '#F34901',
-            backgroundColor: 0,
-            boxShadow: 0,
-            transition: 0,
          },
          '&.Mui-disabled': {
             color: '#969696',
-            backgroundColor: 0,
-            boxShadow: 0,
-            transition: 0,
          },
          '&:focus': {
-            boxShadow: 0,
-            outline: 0,
-            backgroundColor: 0,
             transition: 0,
          },
          '&:focus-visible': {
-            boxShadow: 0,
-            outline: 0,
-            backgroundColor: 0,
+            transition: 'none',
+         },
+      }
+   } else if (variant === 'notboru') {
+      buttonStyles['&.MuiButton-root'] = {
+         ...buttonStyles['&.MuiButton-root'],
+         fontSize: '16px',
+         border: 'none',
+         color: '#1c1c1c',
+         width: '200px',
+         padding: 0,
+         backgroundColor: 0,
+         boxShadow: 0,
+         outline: 0,
+         transition: 0,
+         textDecoration: 'underline',
+
+         '&:hover': {
+            transition: 0,
+         },
+         '&:active': {
+            color: '#F34901',
+         },
+         '&.Mui-disabled': {
+            color: '#969696',
+         },
+         '&:focus': {
+            transition: 0,
+         },
+         '&:focus-visible': {
             transition: 'none',
          },
       }
    }
+
 
    return buttonStyles
 })
