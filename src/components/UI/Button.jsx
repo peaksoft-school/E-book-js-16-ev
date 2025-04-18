@@ -1,7 +1,6 @@
 import { Box, Button as MUIButton, styled } from '@mui/material'
 import plusIcon from '../../assets/icons/svgs/Plus.svg'
 
-
 const Button = ({
    children,
    onClick,
@@ -20,17 +19,15 @@ const Button = ({
       color={color}
       {...rest}
    >
-      {icon && <Img component="img" src={plusIcon} alt='plus'/>}
+      {icon && <Img component="img" src={plusIcon} alt="plus" />}
       {children}
    </StyledButton>
 )
 
-
-
 export default Button
 
 const Img = styled(Box)`
-margin-right: 8px;
+   margin-right: 8px;
 `
 const StyledButton = styled(MUIButton)(({ variant }) => {
    const buttonStyles = {
@@ -40,9 +37,8 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
          width: '99px',
          padding: '10px 24px',
          marginTop: '20px',
-         textTransform: 'none', 
+         textTransform: 'none',
          fontSize: '16px',
-         
       },
    }
 
@@ -83,10 +79,12 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
             backgroundColor: '#Fe6F33',
             color: '#ffffff',
          },
+
          '&:active': {
             backgroundColor: '#E54400',
             Color: '#ffffff',
          },
+
          '&.Mui-disabled': {
             color: '#1C1B1F1F',
             backgroundColor: '#ffffff',
@@ -108,11 +106,13 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
             color: '#ffffff',
             border: 'none',
          },
+
          '&:active': {
             backgroundColor: '#E54400',
             color: '#FFFFFF',
             border: 'none',
          },
+
          '&.Mui-disabled': {
             backgroundColor: '#1C1B1F1F',
             color: 'white',
@@ -133,10 +133,12 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
             backgroundColor: '#F34901',
             color: '#ffffff',
          },
+
          '&:active': {
             backgroundColor: '#F34901',
             color: '#FFFFFF',
          },
+
          '&.Mui-disabled': {
             backgroundColor: '#1C1B1F1F',
             color: 'white',
@@ -159,11 +161,13 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
             color: '#ffffff',
             border: 'none',
          },
+
          '&:active': {
             backgroundColor: '#F34901',
             color: '#FFFFFF',
             border: 'none',
          },
+
          '&.Mui-disabled': {
             backgroundColor: '#1C1B1F1F',
             color: 'white',
@@ -186,15 +190,19 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
          '&:hover': {
             transition: 0,
          },
+
          '&:active': {
             color: '#F34901',
          },
+
          '&.Mui-disabled': {
             color: '#969696',
          },
+
          '&:focus': {
             transition: 0,
          },
+
          '&:focus-visible': {
             transition: 'none',
          },
@@ -214,17 +222,21 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
          textDecoration: 'underline',
 
          '&:hover': {
-            transition: "none",
+            transition: 'none',
          },
+
          '&:active': {
             color: '#F34901',
          },
+
          '&.Mui-disabled': {
             color: '#969696',
          },
+
          '&:focus': {
-            transition: "none",
+            transition: 'none',
          },
+
          '&:focus-visible': {
             transition: 'none',
          },
