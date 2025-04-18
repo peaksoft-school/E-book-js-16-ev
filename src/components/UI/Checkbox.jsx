@@ -32,9 +32,11 @@ const StyledCheckbox = styled(MuiCheckbox)({
    '&.Mui-checked': {
       color: '#F34901',
    },
+
    '&:hover': {
       backgroundColor: 'transparent',
    },
+
    '&.Mui-focusVisible': {
       outline: 'none',
       boxShadow: 'none',
