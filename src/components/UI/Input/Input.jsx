@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
    TextField,
    InputAdornment,
@@ -11,7 +12,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
 const Input = ({
    type = 'search',
-   withIcon = true,
+   withIcon = type !== 'info',
    placeholder,
    value,
    onChange,
@@ -23,18 +24,24 @@ const Input = ({
       console.error('Ошибка: placeholder является обязательным пропсом')
    }
 
+   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
+   const handleTogglePasswordVisibility = () => {
+      setIsPasswordVisible((prev) => !prev)
+   }
+
    const getEndAdornment = () => {
       if (!withIcon) return null
 
       if (type === 'search') return <SearchIcon />
 
-      if (type === 'info') {
+      if (type === 'password') {
          return (
-            <IconButton edge="end">
-               {iconVariant === 'off' ? (
-                  <VisibilityOffIcon />
-               ) : (
+            <IconButton edge="end" onClick={handleTogglePasswordVisibility}>
+               {isPasswordVisible ? (
                   <RemoveRedEyeIcon />
+               ) : (
+                  <VisibilityOffIcon />
                )}
             </IconButton>
          )
@@ -42,6 +49,9 @@ const Input = ({
 
       return null
    }
+
+   const resolvedInputType =
+      type === 'password' ? (isPasswordVisible ? 'text' : 'password') : 'text'
 
    return (
       <div>
@@ -58,7 +68,7 @@ const Input = ({
                ),
             }}
             variant="outlined"
-            type="text"
+            type={resolvedInputType}
             autoComplete="off"
             inputType={type}
             {...rest}
@@ -123,6 +133,29 @@ const StyledInput = styled(TextField, {
          },
          '&:hover .MuiSvgIcon-root': {
             color: '#C4C4C4',
+         },
+      }
+   }
+
+   if (inputType === 'password') {
+      return {
+         ...common,
+         '& .MuiOutlinedInput-root': {
+            ...common['& .MuiOutlinedInput-root'],
+            borderRadius: '0px',
+            backgroundColor: '#fff',
+            width: '514px',
+            height: '38px',
+            '& .MuiSvgIcon-root': {
+               color: '#C4C4C4',
+            },
+            '&.Mui-focused .MuiSvgIcon-root': {
+               color: '#C4C4C4',
+            },
+            '&.Mui-focused fieldset': {
+               borderColor: '#C4C4C4',
+               borderWidth: '2px',
+            },
          },
       }
    }
