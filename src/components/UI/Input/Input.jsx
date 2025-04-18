@@ -20,15 +20,13 @@ const Input = ({
    label,
    ...rest
 }) => {
-   if (!placeholder) {
-      console.error('Ошибка: placeholder является обязательным пропсом')
-   }
-
    const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
-   const handleTogglePasswordVisibility = () => {
+   if (!placeholder)
+      return console.error('Ошибка: placeholder является обязательным пропсом')
+
+   const handleTogglePasswordVisibility = () =>
       setIsPasswordVisible((prev) => !prev)
-   }
 
    const getEndAdornment = () => {
       if (!withIcon) return null
@@ -54,12 +52,17 @@ const Input = ({
       type === 'password' ? (isPasswordVisible ? 'text' : 'password') : 'text'
 
    return (
-      <div>
+      <>
          {label && <InputLabel>{label}</InputLabel>}
+
          <StyledInput
             placeholder={placeholder}
             value={value}
             onChange={onChange}
+            variant="outlined"
+            type={resolvedInputType}
+            autoComplete="off"
+            inputType={type}
             InputProps={{
                endAdornment: (
                   <InputAdornment position="end">
@@ -67,13 +70,9 @@ const Input = ({
                   </InputAdornment>
                ),
             }}
-            variant="outlined"
-            type={resolvedInputType}
-            autoComplete="off"
-            inputType={type}
             {...rest}
          />
-      </div>
+      </>
    )
 }
 
@@ -89,29 +88,36 @@ const StyledInput = styled(TextField, {
          borderRadius: '4px',
          height: '50px',
          fontSize: '16px',
+
          '& fieldset': {
             borderColor: '#C4C4C4',
          },
+
          '&:hover fieldset': {
             borderColor: '#C4C4C4',
          },
+
          '&.Mui-focused fieldset': {
             borderColor: '#f26522',
             borderWidth: '2px',
          },
+
          '& input': {
             padding: '12px 14px',
             fontSize: '16px',
             color: '#000',
+
             '&::placeholder': {
                color: '#C4C4C4',
                opacity: 1,
                transition: 'opacity 0.2s ease',
             },
+
             '&:focus::placeholder': {
                opacity: inputType === 'search' ? 0 : 1,
             },
          },
+
          '&.Mui-focused .MuiSvgIcon-root': {
             color: '#f26522',
          },
@@ -121,6 +127,7 @@ const StyledInput = styled(TextField, {
    if (inputType === 'search') {
       return {
          ...common,
+
          '& .MuiOutlinedInput-root': {
             ...common['& .MuiOutlinedInput-root'],
             borderRadius: '0px',
@@ -128,9 +135,11 @@ const StyledInput = styled(TextField, {
             width: '895px',
             height: '40px',
          },
+
          '& .MuiSvgIcon-root': {
             color: '#C4C4C4',
          },
+
          '&:hover .MuiSvgIcon-root': {
             color: '#C4C4C4',
          },
@@ -146,12 +155,15 @@ const StyledInput = styled(TextField, {
             backgroundColor: '#fff',
             width: '514px',
             height: '38px',
+
             '& .MuiSvgIcon-root': {
                color: '#C4C4C4',
             },
+
             '&.Mui-focused .MuiSvgIcon-root': {
                color: '#C4C4C4',
             },
+
             '&.Mui-focused fieldset': {
                borderColor: '#C4C4C4',
                borderWidth: '2px',
@@ -169,12 +181,15 @@ const StyledInput = styled(TextField, {
             backgroundColor: '#fff',
             width: '514px',
             height: '38px',
+
             '& .MuiSvgIcon-root': {
                color: '#C4C4C4',
             },
+
             '&.Mui-focused .MuiSvgIcon-root': {
                color: '#C4C4C4',
             },
+
             '&.Mui-focused fieldset': {
                borderColor: '#C4C4C4',
                borderWidth: '2px',
