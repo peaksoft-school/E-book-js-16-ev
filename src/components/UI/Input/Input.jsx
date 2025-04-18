@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, forwardRef } from 'react'
 import {
    TextField,
    InputAdornment,
@@ -10,71 +10,83 @@ import SearchIcon from '@mui/icons-material/Search'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
-const Input = ({
-   type = 'search',
-   withIcon = type !== 'info',
-   placeholder,
-   value,
-   onChange,
-   iconVariant = 'on',
-   label,
-   ...rest
-}) => {
-   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+const Input = forwardRef(
+   (
+      {
+         type = 'search',
+         withIcon = type !== 'info',
+         placeholder,
+         value,
+         onChange,
+         iconVariant = 'on',
+         label,
+         ...rest
+      },
+      ref
+   ) => {
+      const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
-   if (!placeholder)
-      return console.error('Ошибка: placeholder является обязательным пропсом')
-
-   const handleTogglePasswordVisibility = () =>
-      setIsPasswordVisible((prev) => !prev)
-
-   const getEndAdornment = () => {
-      if (!withIcon) return null
-
-      if (type === 'search') return <SearchIcon />
-
-      if (type === 'password') {
-         return (
-            <IconButton edge="end" onClick={handleTogglePasswordVisibility}>
-               {isPasswordVisible ? (
-                  <RemoveRedEyeIcon />
-               ) : (
-                  <VisibilityOffIcon />
-               )}
-            </IconButton>
+      if (!placeholder)
+         return console.error(
+            'Ошибка: placeholder является обязательным пропсом'
          )
+
+      const handleTogglePasswordVisibility = () =>
+         setIsPasswordVisible((prev) => !prev)
+
+      const getEndAdornment = () => {
+         if (!withIcon) return null
+
+         if (type === 'search') return <SearchIcon />
+
+         if (type === 'password') {
+            return (
+               <IconButton edge="end" onClick={handleTogglePasswordVisibility}>
+                  {isPasswordVisible ? (
+                     <RemoveRedEyeIcon />
+                  ) : (
+                     <VisibilityOffIcon />
+                  )}
+               </IconButton>
+            )
+         }
+
+         return null
       }
 
-      return null
+      const resolvedInputType =
+         type === 'password'
+            ? isPasswordVisible
+               ? 'text'
+               : 'password'
+            : 'text'
+
+      return (
+         <>
+            {label && <InputLabel>{label}</InputLabel>}
+
+            <StyledInput
+               placeholder={placeholder}
+               value={value}
+               onChange={onChange}
+               variant="outlined"
+               type={resolvedInputType}
+               autoComplete="off"
+               inputType={type}
+               ref={ref}
+               InputProps={{
+                  endAdornment: (
+                     <InputAdornment position="end">
+                        {getEndAdornment()}
+                     </InputAdornment>
+                  ),
+               }}
+               {...rest}
+            />
+         </>
+      )
    }
-
-   const resolvedInputType =
-      type === 'password' ? (isPasswordVisible ? 'text' : 'password') : 'text'
-
-   return (
-      <>
-         {label && <InputLabel>{label}</InputLabel>}
-
-         <StyledInput
-            placeholder={placeholder}
-            value={value}
-            onChange={onChange}
-            variant="outlined"
-            type={resolvedInputType}
-            autoComplete="off"
-            inputType={type}
-            InputProps={{
-               endAdornment: (
-                  <InputAdornment position="end">
-                     {getEndAdornment()}
-                  </InputAdornment>
-               ),
-            }}
-            {...rest}
-         />
-      </>
-   )
-}
+)
 
 export default Input
 
