@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 import { Box, Button } from '@mui/material'
 import uploadIcon from '../../assets/icons/svgs/Frame.svg'
 import CheckIcon from '@mui/icons-material/Check'
 import { styled } from '@mui/system'
 
-const UploadButton = ({ label, fileName, disabled }) => {
+const UploadButton = forwardRef(({ label, fileName, disabled }) => {
    const [status, setStatus] = useState('default')
 
    const loading = true
@@ -51,7 +51,7 @@ const UploadButton = ({ label, fileName, disabled }) => {
          </StyledButton>
       </Container>
    )
-}
+})
 
 export default UploadButton
 
