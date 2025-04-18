@@ -1,32 +1,35 @@
 import { Box, Button as MUIButton, styled } from '@mui/material'
 import plusIcon from '../../assets/icons/svgs/Plus.svg'
+import { forwardRef } from 'react'
 
-const Button = ({
-   children,
-   onClick,
-   variant = 'contained',
-   disabled,
-   type = 'submit',
-   color,
-   icon = false,
-   ...rest
-}) => (
-   <StyledButton
-      onClick={onClick}
-      type={type}
-      disabled={disabled}
-      variant={variant}
-      color={color}
-      {...rest}
-   >
-      {icon && <Img component="img" src={plusIcon} alt="plus" />}
-      {children}
-   </StyledButton>
+const Button = forwardRef(
+   ({
+      children,
+      onClick,
+      variant = 'contained',
+      disabled,
+      type = 'submit',
+      color,
+      icon = false,
+      ...rest
+   }) => (
+      <StyledButton
+         onClick={onClick}
+         type={type}
+         disabled={disabled}
+         variant={variant}
+         color={color}
+         {...rest}
+      >
+         {icon && <StyledImg component="img" src={plusIcon} alt="plus" />}
+         {children}
+      </StyledButton>
+   )
 )
 
 export default Button
 
-const Img = styled(Box)`
+const StyledImg = styled(Box)`
    margin-right: 8px;
 `
 const StyledButton = styled(MUIButton)(({ variant }) => {
