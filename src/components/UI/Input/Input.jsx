@@ -95,7 +95,6 @@ const StyledInput = styled(TextField, {
 })(({ inputType }) => {
    const common = {
       width: '100%',
-
       '& .MuiOutlinedInput-root': {
          backgroundColor: '#fafafa',
          borderRadius: '4px',
