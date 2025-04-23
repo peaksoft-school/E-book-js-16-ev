@@ -44,20 +44,20 @@ const Slider = forwardRef(
       return (
          <StyledBox ref={ref} {...rest}>
             <GlobalFont />
-            <TitleBox>
+            <StyledTitleBox>
                <StyledText>{title}</StyledText>
                {onButtonClick && (
-                  <UnderlineButton onClick={onButtonClick}>
+                  <StyledUnderlineButton onClick={onButtonClick}>
                      {buttonText}
-                  </UnderlineButton>
+                  </StyledUnderlineButton>
                )}
-            </TitleBox>
+            </StyledTitleBox>
 
-            <BookBox>
-               <BookDetails>
-                  <BookTitle variant="h4" gutterBottom>
+            <StyledBookBox>
+               <StyledBookDetails>
+                  <StyledBookTitle variant="h4" gutterBottom>
                      {books[index].title}
-                  </BookTitle>
+                  </StyledBookTitle>
                   <Typography variant="body2" color="text.secondary" mb={2}>
                      {books[index].description}
                   </Typography>
@@ -66,14 +66,16 @@ const Slider = forwardRef(
                      justifyContent="space-between"
                      alignItems="center"
                   >
-                     <UnderlineButton>Подробнее</UnderlineButton>
-                     <PriceTypography>{books[index].price}</PriceTypography>
+                     <StyledUnderlineButton>Подробнее</StyledUnderlineButton>
+                     <StyledPriceTypography>
+                        {books[index].price}
+                     </StyledPriceTypography>
                   </Box>
-               </BookDetails>
+               </StyledBookDetails>
 
-               <SliderBox>
+               <StyledSliderBox>
                   {visibleBooks.map((book, i) => (
-                     <CardStyled
+                     <StyledCardStyled
                         key={i}
                         isActive={i === 0}
                         cardWidth={cardWidth}
@@ -89,10 +91,10 @@ const Slider = forwardRef(
                               objectFit: 'cover',
                            }}
                         />
-                     </CardStyled>
+                     </StyledCardStyled>
                   ))}
-               </SliderBox>
-            </BookBox>
+               </StyledSliderBox>
+            </StyledBookBox>
 
             <StyledIconBox>
                <IconButton onClick={handlePrev}>
@@ -122,7 +124,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
    marginRight: '0px',
 }))
 
-const TitleBox = styled(Box)(({ theme }) => ({
+const StyledTitleBox = styled(Box)(({ theme }) => ({
    display: 'flex',
    justifyContent: 'space-between',
    alignItems: 'center',
@@ -131,13 +133,13 @@ const TitleBox = styled(Box)(({ theme }) => ({
    marginBottom: '45px',
 }))
 
-const BookBox = styled(Box)(({ theme }) => ({
+const StyledBookBox = styled(Box)(({ theme }) => ({
    display: 'flex',
    gap: theme.spacing(4),
    alignItems: 'flex-end',
 }))
 
-const BookDetails = styled(Box)(({ theme }) => ({
+const StyledBookDetails = styled(Box)(({ theme }) => ({
    maxWidth: 492,
    height: '423px',
    marginRight: '94px',
@@ -150,7 +152,7 @@ const StyledIconBox = styled(Box)(({ theme }) => ({
    marginTop: '80px',
 }))
 
-const BookTitle = styled(Typography)(({ theme }) => ({
+const StyledBookTitle = styled(Typography)(({ theme }) => ({
    fontWeight: 600,
    marginBottom: '50px',
    marginTop: '45px',
@@ -170,11 +172,11 @@ const StyledText = styled(Typography)(({ theme }) => ({
    color: '#1C1C1C',
 }))
 
-const PriceTypography = styled(Typography)(({ theme }) => ({
+const StyledPriceTypography = styled(Typography)(({ theme }) => ({
    color: 'orangered',
 }))
 
-const SliderBox = styled(Box)(() => ({
+const StyledSliderBox = styled(Box)(() => ({
    display: 'flex',
    alignItems: 'flex-end',
    gap: '20px',
@@ -184,7 +186,7 @@ const SliderBox = styled(Box)(() => ({
    marginLeft: '100px',
 }))
 
-const CardStyled = styled(Card)(
+const StyledCardStyled = styled(Card)(
    ({ isActive, cardWidth, cardHeight, cardScale }) => ({
       width: isActive ? cardWidth : '220px',
       height: isActive ? cardHeight : '339px',
@@ -196,7 +198,7 @@ const CardStyled = styled(Card)(
    })
 )
 
-const UnderlineButton = styled(Button)({
+const StyledUnderlineButton = styled(Button)({
    color: 'orangered',
    textTransform: 'none',
    fontWeight: 400,
