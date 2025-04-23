@@ -1,11 +1,10 @@
 import { forwardRef, useState } from 'react'
-import { Box, IconButton, Typography } from '@mui/material'
+import { Box, IconButton, Typography, styled } from '@mui/material'
 import { useSwipeable } from 'react-swipeable'
-import { styled } from '@mui/material/styles'
-import VectorBackground from './vendorfon'
-import { Icons } from '../../../assets/icons'
+import { Icons } from '../../assets/icons'
+import { Images } from '../../assets/images'
 
-const Slider2 = forwardRef(({ books }) => {
+const BookSlider = forwardRef(({ books }) => {
    const [currentIndex, setCurrentIndex] = useState(0)
 
    const prevSlide = () =>
@@ -18,17 +17,18 @@ const Slider2 = forwardRef(({ books }) => {
    const handlers = useSwipeable({
       onSwipedLeft: nextSlide,
       onSwipedRight: prevSlide,
+
       trackMouse: true,
    })
 
    return (
       <StyledCon {...handlers}>
          <SliderWrapper>
-            <VectorBackground />
-            <ArrowButton onClick={prevSlide} sx={{ left: 350 }}>
+            <ArrowButton onClick={prevSlide} className="arrow-left-btn">
                <img src={Icons.leftfill} alt="left" />
             </ArrowButton>
-            <ArrowButton onClick={nextSlide} sx={{ right: 350 }}>
+
+            <ArrowButton onClick={nextSlide} className="arrow-right-btn">
                <img src={Icons.rightfill} alt="right" />
             </ArrowButton>
 
@@ -37,12 +37,12 @@ const Slider2 = forwardRef(({ books }) => {
                   const offset = i - 1
                   const book = books[getIndex(offset)]
 
-                  const handleClick = () => {
-                     if (pos === 'left') prevSlide()
-                     else if (pos === 'right') nextSlide()
-                  }
+                  const handleClick = () =>
+                     pos === 'left' ? prevSlide() : nextSlide()
+
                   const truncateText = (text, maxLength) => {
                      if (!text) return ''
+
                      return text.length > maxLength
                         ? text.slice(0, maxLength) + '...'
                         : text
@@ -74,13 +74,13 @@ const Slider2 = forwardRef(({ books }) => {
    )
 })
 
-export default Slider2
+export default BookSlider
 
 const StyledCon = styled(Box)({
-   backgroundColor: '#000',
-   margin: 0,
-   padding: 0,
-   top: 0,
+   backgroundImage: `url(${Images.bgSlider})`,
+   backgroundRepeat: 'no-repeat',
+   backgroundPosition: 'center',
+   backgroundSize: 'cover',
 })
 
 const SliderWrapper = styled(Box)({
@@ -95,6 +95,14 @@ const SliderWrapper = styled(Box)({
    alignItems: 'center',
    justifyContent: 'center',
    overflow: 'hidden',
+
+   '& .arrow-left-btn': {
+      left: 350,
+   },
+
+   '& .arrow-right-btn': {
+      right: 350,
+   },
 })
 
 const ArrowButton = styled(IconButton)({
