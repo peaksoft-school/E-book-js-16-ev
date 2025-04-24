@@ -1,30 +1,32 @@
-import fotogreen from '../../assets/images/pngs/green.jpeg'
-import fotowhite from '../../assets/images/pngs/white.jpeg'
-import fotobrown from '../../assets/images/pngs/brown.jpeg'
+import { Images } from '../../assets/images'
 
 const BOOK_SLIDER = [
    {
+      id: 1,
       title: 'Harry Potter and the Chamber of Secrets',
       author: 'J.K. Rowling',
       price: '450 с',
-      image: fotowhite,
+      image: Images.chamberOfSecrets,
    },
 
    {
+      id: 2,
       title: 'Земля обетованная',
       author: 'Эрих Мария Ремарк',
       price: '400 с',
-      image: fotogreen,
+      image: Images.gelobtesLand,
    },
 
    {
+      id: 3,
       title: 'История книги',
       author: 'Э. Эмэр, М. Бахтияров',
       price: '380 с',
-      image: fotobrown,
+      image: Images.historyOfBook,
    },
 
    {
+      id: 4,
       title: 'История grt книги',
       author: 'М. Бахтияров',
       price: '304 с',
