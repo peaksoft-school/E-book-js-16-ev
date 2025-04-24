@@ -1,5 +1,6 @@
 import { Box, Button as MUIButton, styled } from '@mui/material'
-import plusIcon from '../../assets/icons/svgs/Plus.svg'
+// import plusIcon from '../../assets/icons/svgs/Plus.svg'
+import {Icons} from "../../../assets/icons/index.js"
 import { forwardRef } from 'react'
 
 const Button = forwardRef(
@@ -21,7 +22,7 @@ const Button = forwardRef(
          color={color}
          {...rest}
       >
-         {icon && <StyledImg component="img" src={plusIcon} alt="plus" />}
+         {icon && <StyledImg component="img" src={Icons.inc} alt="plus" />}
          {children}
       </StyledButton>
    )
