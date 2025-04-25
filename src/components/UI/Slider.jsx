@@ -82,14 +82,10 @@ const Slider = forwardRef(
                         cardHeight={cardHeight}
                         cardScale={cardScale}
                      >
-                        <CardMedia
+                        <StyledCardMedia
                            component="img"
                            image={book.img}
                            alt={book.title}
-                           sx={{
-                              height: '100%',
-                              objectFit: 'cover',
-                           }}
                         />
                      </StyledCardStyled>
                   ))}
@@ -97,12 +93,12 @@ const Slider = forwardRef(
             </StyledBookBox>
 
             <StyledIconBox>
-               <IconButton onClick={handlePrev}>
+               <StyledIconButton onClick={handlePrev}>
                   <img src={Icons.leftfill} alt="назад" />
-               </IconButton>
-               <IconButton onClick={handleNext}>
+               </StyledIconButton>
+               <StyledIconButton onClick={handleNext}>
                   <img src={Icons.rightfill} alt="вперёд" />
-               </IconButton>
+               </StyledIconButton>
             </StyledIconBox>
          </StyledBox>
       )
@@ -129,7 +125,6 @@ const StyledTitleBox = styled(Box)(({ theme }) => ({
    justifyContent: 'space-between',
    alignItems: 'center',
    paddingRight: '80px',
-   marginBottom: theme.spacing(2),
    marginBottom: '45px',
 }))
 
@@ -231,4 +226,31 @@ const StyledUnderlineButton = styled(Button)({
       outline: 'none',
       boxShadow: 'none',
    },
+})
+
+const StyledIconButton = styled(IconButton)({
+   boxShadow: 'none',
+   backgroundColor: 'transparent',
+   '&:hover': {
+      backgroundColor: 'transparent',
+      boxShadow: 'none',
+   },
+   '&:active': {
+      backgroundColor: '#ffffff',
+      boxShadow: 'none',
+   },
+   '&:focus': {
+      outline: 'none',
+      boxShadow: 'none',
+      backgroundColor: 'transparent',
+   },
+   '&:focus-visible': {
+      outline: 'none',
+      boxShadow: 'none',
+   },
+})
+const StyledCardMedia = styled(CardMedia)({
+   height: '100%',
+   width: '100%',
+   objectFit: 'contain',
 })
