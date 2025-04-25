@@ -6,12 +6,30 @@
 
 
 import React from 'react'
-import CatygoryBook from './components/CatygoryBook'
+import CategoryBook from './components/CatygoryBook'
 
 const App = () => {
   return (
     <div>
-        <CatygoryBook/>
+        {/* <CatygoryBook/> */}
+        <CategoryBook
+  book={{
+    image: "https://toppsta.com/images/covers/5/9/0/4/9781408855904.webp?t=1709095286",
+    title: "История книги",
+    description:
+      "Предлагаемый перевод является первой попыткой обращения к творчеству Павла Орозия — римского христианского историка начала V века...",
+    price: 456,
+  }}
+  categories={[
+    "Бизнес-литература",
+    "Детские книги",
+    "Хобби и досуг",
+    "Публицистика",
+    "Учебная литература",
+    "Поэзия",
+  ]}
+/>
+
     </div>
   )
 }
