@@ -236,7 +236,6 @@ const StyledIconButton = styled(IconButton)({
       boxShadow: 'none',
    },
    '&:active': {
-      backgroundColor: '#ffffff',
       boxShadow: 'none',
    },
    '&:focus': {
