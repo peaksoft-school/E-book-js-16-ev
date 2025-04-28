@@ -3,19 +3,23 @@ import { useState } from 'react'
 import { keyframes } from '@mui/system'
 import bgOrange from '../assets/images/pngs/bgOrange.png'
 import { CATEGORIES } from '../utils/helpers'
-import { books } from '../utils/constants'
+import { LATEST_PUBLICATIONS_BOOKS } from '../utils/constants'
 
 const LatestPublications = () => {
    const [activeCategory, setActiveCategory] = useState(CATEGORIES[0])
 
-   const activeBook = books.find((book) => book.category === activeCategory)
+   const activeBook = LATEST_PUBLICATIONS_BOOKS.find(
+      ({ category }) => category === activeCategory
+   )
 
    return (
       <StyledWrapper>
          <Styledhad>
             <Typography>Последние публикации</Typography>
-            <>Смотреть все</>
+
+            <Typography>Смотреть все</Typography>
          </Styledhad>
+
          <StyledContent>
             <CategoryList>
                {CATEGORIES.map((cat) => (
@@ -31,6 +35,7 @@ const LatestPublications = () => {
                   </CategoryItem>
                ))}
             </CategoryList>
+
             <StyledContent2>
                <StyledBoxImage>
                   <BookImage src={activeBook?.image} alt={activeBook?.title} />
@@ -40,15 +45,18 @@ const LatestPublications = () => {
                   <Typography variant="h6" fontSize="1.5rem" mb={1}>
                      {activeBook?.title}
                   </Typography>
+
                   <Typography variant="body2" mb={2}>
                      {activeBook?.description || 'Описание недоступно.'}
                   </Typography>
+
                   <Box
                      display="flex"
                      justifyContent="space-between"
                      alignItems="center"
                   >
                      <MoreButton>Подробнее</MoreButton>
+
                      <Typography color="orange" fontWeight={600}>
                         {activeBook?.price || '—'} c
                      </Typography>
@@ -63,10 +71,7 @@ const LatestPublications = () => {
 export default LatestPublications
 
 const StyledContent3 = styled(Box)({
-   // display: 'flex',
    width: 400,
-   // gap: 60,
-   // alignItems: 'center',
 })
 
 const StyledContent2 = styled(Box)({
@@ -137,13 +142,6 @@ const StyledBoxImage = styled(Box)({
    justifyContent: 'center',
    margin: '0 2rem',
 })
-
-// const BookImage = styled('img')({
-//   width: '21.9rem',
-//   height: '37rem',
-//   objectFit: 'contain',
-//   transform: 'rotate(-10deg)',
-// });
 
 const MoreButton = styled('button')({
    background: 'transparent',

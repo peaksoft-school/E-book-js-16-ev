@@ -1,7 +1,6 @@
 import { Box, Button as MUIButton, styled } from '@mui/material'
-// import plusIcon from '../../assets/icons/svgs/Plus.svg'
-import {Icons} from "../../../assets/icons/index.js"
 import { forwardRef } from 'react'
+import { Icons } from '../../../assets/icons'
 
 const Button = forwardRef(
    ({
@@ -15,6 +14,7 @@ const Button = forwardRef(
       ...rest
    }) => (
       <StyledButton
+         disableRipple={true}
          onClick={onClick}
          type={type}
          disabled={disabled}
@@ -22,7 +22,7 @@ const Button = forwardRef(
          color={color}
          {...rest}
       >
-         {icon && <StyledImg component="img" src={Icons.inc} alt="plus" />}
+         {icon && <StyledImg component="img" src={Icons.plusw} alt="plus" />}
          {children}
       </StyledButton>
    )
@@ -193,22 +193,32 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
 
          '&:hover': {
             transition: 0,
+            padding: 0,
+            border: 'none',
          },
 
          '&:active': {
             color: '#F34901',
+            padding: 0,
+            border: 'none',
          },
 
          '&.Mui-disabled': {
             color: '#969696',
+            padding: 0,
+            border: 'none',
          },
 
          '&:focus': {
             transition: 0,
+            padding: 0,
+            border: 'none',
          },
 
          '&:focus-visible': {
             transition: 'none',
+            padding: 0,
+            border: 'none',
          },
       }
    } else if (variant === 'notboru') {
