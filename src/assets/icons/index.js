@@ -38,6 +38,8 @@ import exclfill from './svgs/!iconB.svg'
 import eyeclose from './svgs/System,Default=Eye-close.svg'
 import eBook from './svgs/eBook.svg'
 import menu from './svgs/menu.svg'
+import plusw from './svgs/wplus.svg'
+
 export const Icons = {
    x,
    stop,
@@ -79,4 +81,5 @@ export const Icons = {
    exclfill,
    eBook,
    menu,
+   plusw,
 }
