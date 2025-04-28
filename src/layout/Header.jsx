@@ -49,11 +49,18 @@ const Header = ({ onSearchChange, navLinks = [], onLogin }) => {
             </StyledMenuWrapper>
 
             <NavLinks>
-               {navLinks.map((link) => (
-                  <StyledNavLink key={link.to} to={link.to}>
-                     {link.label}
-                  </StyledNavLink>
-               ))}
+               {
+                  (navLinks = [
+                     { label: 'Электронные книги', to: '/ebooks' },
+                     { label: 'Audio books', to: '/audio' },
+                     { label: 'Промокоды', to: '/promo' },
+                     { label: 'Начать продавать на eBook', to: '/sell' },
+                  ].map((link) => (
+                     <StyledNavLink key={link.to} to={link.to}>
+                        {link.label}
+                     </StyledNavLink>
+                  )))
+               }
             </NavLinks>
 
             <StyledButton onClick={onLogin}>Войти</StyledButton>
