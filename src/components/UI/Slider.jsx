@@ -11,87 +11,88 @@ import { createGlobalStyle } from 'styled-components'
 import { Icons } from '../../assets/icons'
 import { styled } from '@mui/system'
 
-const Slider = forwardRef(({ books, onButtonClick, ...rest }, ref) => {
-   const [index, setIndex] = useState(0)
+const Slider = forwardRef(
+   ({ books, onButtonClick, title = 'Бестселлеры', ...rest }, ref) => {
+      const [index, setIndex] = useState(0)
 
-   const handlePrev = () => {
-      setIndex((prev) => (prev > 0 ? prev - 1 : books.length - 1))
+      const handlePrev = () => {
+         setIndex((prev) => (prev > 0 ? prev - 1 : books.length - 1))
+      }
+
+      const handleNext = () => {
+         setIndex((prev) => (prev < books.length - 1 ? prev + 1 : 0))
+      }
+
+      const visibleBooks = [
+         books[index],
+         books[(index + 1) % books.length],
+         books[(index + 2) % books.length],
+      ]
+
+      return (
+         <StyledBox ref={ref} {...rest}>
+            <GlobalFont />
+            <StyledTitleBox>
+               <StyledText>{title}</StyledText>
+               {onButtonClick && (
+                  <StyledUnderlineButton onClick={onButtonClick}>
+                     Смотреть все
+                  </StyledUnderlineButton>
+               )}
+            </StyledTitleBox>
+
+            <StyledMainBox>
+               <StyledBookBox>
+                  <StyledBookTitle variant="h4" gutterBottom>
+                     {books[index].title}
+                  </StyledBookTitle>
+                  <Typography variant="body2" color="text.secondary" mb={2}>
+                     {books[index].description}
+                  </Typography>
+                  <Box
+                     display="flex"
+                     justifyContent="space-between"
+                     alignItems="center"
+                     mt={4}
+                  >
+                     <StyledUnderlineButton>Подробнее</StyledUnderlineButton>
+                     <StyledPriceTypography>
+                        {books[index].price}
+                     </StyledPriceTypography>
+                  </Box>
+               </StyledBookBox>
+
+               <StyledSliderBox>
+                  {visibleBooks.map((book, i) => (
+                     <StyledCard key={i} isactive={i === 0 ? 1 : 0}>
+                        <StyledCardMedia
+                           component="img"
+                           image={book.img}
+                           alt={book.title}
+                        />
+                     </StyledCard>
+                  ))}
+               </StyledSliderBox>
+
+               <StyledIconBox>
+                  <StyledIconButton onClick={handlePrev}>
+                     <img src={Icons.leftfill} alt="Назад" />
+                  </StyledIconButton>
+                  <StyledIconButton onClick={handleNext}>
+                     <img src={Icons.rightfill} alt="Вперёд" />
+                  </StyledIconButton>
+               </StyledIconBox>
+            </StyledMainBox>
+         </StyledBox>
+      )
    }
-
-   const handleNext = () => {
-      setIndex((prev) => (prev < books.length - 1 ? prev + 1 : 0))
-   }
-
-   const visibleBooks = [
-      books[index],
-      books[(index + 1) % books.length],
-      books[(index + 2) % books.length],
-   ]
-
-   return (
-      <StyledBox ref={ref} {...rest}>
-         <GlobalFont />
-         <StyledTitleBox>
-            <StyledText>Бестселлеры</StyledText>
-            {onButtonClick && (
-               <StyledUnderlineButton onClick={onButtonClick}>
-                  Смотреть все
-               </StyledUnderlineButton>
-            )}
-         </StyledTitleBox>
-
-         <StyledMainBox>
-            <StyledBookBox>
-               <StyledBookTitle variant="h4" gutterBottom>
-                  {books[index].title}
-               </StyledBookTitle>
-               <Typography variant="body2" color="text.secondary" mb={2}>
-                  {books[index].description}
-               </Typography>
-               <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  mt={4}
-               >
-                  <StyledUnderlineButton>Подробнее</StyledUnderlineButton>
-                  <StyledPriceTypography>
-                     {books[index].price}
-                  </StyledPriceTypography>
-               </Box>
-            </StyledBookBox>
-
-            <StyledSliderBox>
-               {visibleBooks.map((book, i) => (
-                  <StyledCard key={i} isactive={i === 0 ? 1 : 0}>
-                     <StyledCardMedia
-                        component="img"
-                        image={book.img}
-                        alt={book.title}
-                     />
-                  </StyledCard>
-               ))}
-            </StyledSliderBox>
-            <StyledIconBox>
-               <StyledIconButton onClick={handlePrev}>
-                  <img src={Icons.leftfill} alt="Назад" />
-               </StyledIconButton>
-               <StyledIconButton onClick={handleNext}>
-                  <img src={Icons.rightfill} alt="Вперёд" />
-               </StyledIconButton>
-            </StyledIconBox>
-         </StyledMainBox>
-      </StyledBox>
-   )
-})
+)
 
 export default Slider
 
 const GlobalFont = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
-  body {
-    font-family: 'Open Sans', sans-serif;
-  }
+  body { font-family: 'Open Sans', sans-serif; }
 `
 
 const StyledBox = styled(Box)({
@@ -115,12 +116,14 @@ const StyledBookBox = styled(Box)({
    maxWidth: '492px',
    display: 'flex',
    flexDirection: 'column',
+   marginBottom: '81px',
 })
 
 const StyledSliderBox = styled(Box)({
    display: 'flex',
-   gap: '20px',
+   gap: '40px',
    overflow: 'hidden',
+   marginBottom: '80px',
 })
 
 const StyledBookTitle = styled(Typography)({
@@ -147,34 +150,10 @@ const StyledUnderlineButton = styled(Button)({
    textTransform: 'none',
    fontWeight: 400,
    padding: 0,
-   minWidth: 'auto',
-   lineHeight: 1,
    fontSize: '14px',
    borderRadius: 0,
-   backgroundColor: 'transparent',
    borderBottom: '1px solid orangered',
-   '&:hover': {
-      borderBottom: '1px solid darkorange',
-      backgroundColor: 'transparent',
-   },
-   '&:active': {
-      backgroundColor: 'transparent',
-      boxShadow: 'none',
-      outline: 'none',
-      borderBottom: '1px solid orangered',
-   },
-   '&:focus': {
-      outline: 'none',
-      backgroundColor: 'transparent',
-      borderBottom: '1px solid orangered',
-   },
-   '&:focus-visible': {
-      outline: 'none',
-   },
-   '&:focus-visible:focus': {
-      outline: 'none',
-      boxShadow: 'none',
-   },
+   '&:hover': { borderBottom: '1px solid darkorange' },
 })
 
 const StyledMainBox = styled(Box)({
@@ -188,7 +167,7 @@ const StyledMainBox = styled(Box)({
    position: 'relative',
 })
 
-const StyledIconBox = styled(Box)(() => ({
+const StyledIconBox = styled(Box)({
    display: 'flex',
    gap: '20px',
    justifyContent: 'flex-end',
@@ -197,14 +176,12 @@ const StyledIconBox = styled(Box)(() => ({
    bottom: '20px',
    right: '20px',
    zIndex: 1,
-   width: 'auto',
-}))
+   marginTop: '81px',
+})
 
 const StyledIconButton = styled(IconButton)({
    backgroundColor: 'transparent',
-   '&:hover': {
-      backgroundColor: 'transparent',
-   },
+   '&:hover': { backgroundColor: 'transparent' },
 })
 
 const StyledCard = styled(Card)(({ isactive }) => ({
