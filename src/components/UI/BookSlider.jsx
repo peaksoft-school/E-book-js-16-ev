@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { Box, IconButton, Typography, styled } from '@mui/material'
 import { useSwipeable } from 'react-swipeable'
 import { Icons } from '../../assets/icons'
@@ -12,7 +12,7 @@ const getIndex = (current, offset, length) =>
 const truncateText = (text = '', maxLength) =>
    text.length > maxLength ? text.slice(0, maxLength) + '...' : text
 
-const BookSlider = forwardRef(({ books }, ref) => {
+const BookSlider = ({ books }, ref) => {
    const [currentIndex, setCurrentIndex] = useState(0)
 
    const prevSlide = () =>
@@ -68,7 +68,7 @@ const BookSlider = forwardRef(({ books }, ref) => {
          </SliderWrapper>
       </StyledCon>
    )
-})
+}
 
 export default BookSlider
 const StyledCon = styled(Box)({
