@@ -1,13 +1,12 @@
 import { forwardRef, useState } from 'react'
-import { Box, Button } from '@mui/material'
-import uploadIcon from '../../assets/icons/svgs/Frame.svg'
+import { Box, Button, styled } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
-import { styled } from '@mui/system'
+import { Icons } from '../../../assets/icons'
 
 const UploadButton = forwardRef(({ label, fileName, disabled }) => {
    const [status, setStatus] = useState('default')
 
-   const loading = true
+   const loading = false
 
    const handleUpload = () => {
       setStatus('loading')
@@ -31,7 +30,7 @@ const UploadButton = forwardRef(({ label, fileName, disabled }) => {
          case 'uploaded':
             return <CheckIcon />
          default:
-            return <IconImage component="img" alt="icon" src={uploadIcon} />
+            return <IconImage component="img" alt="icon" src={Icons.download} />
       }
    }
 

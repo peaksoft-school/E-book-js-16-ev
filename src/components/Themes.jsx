@@ -7,6 +7,7 @@ const theme = createTheme({
          white: '#FFFFFF',
          darkGray: '#A3A3A3',
       },
+
       secondary: {
          main: '#F34901',
          yellow: '#F8DF00',
@@ -15,6 +16,7 @@ const theme = createTheme({
          strokeGray: '#C4C4C4',
          placeholderGray: '#969696',
       },
+
       tertiary: {
          main: '#F10000',
          green: '#00AB1B',
