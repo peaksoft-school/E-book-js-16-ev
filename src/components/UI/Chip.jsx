@@ -1,6 +1,6 @@
+import { forwardRef } from 'react'
 import { Chip as MuiChip, styled } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { forwardRef } from 'react'
 
 const Chip = forwardRef(
    ({
