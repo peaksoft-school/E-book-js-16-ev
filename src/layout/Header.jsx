@@ -76,45 +76,78 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
    paddingLeft: '80px',
    backgroundColor: theme.palette.background.paper,
    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'center',
+   [theme.breakpoints.down('sm')]: {
+      paddingLeft: '20px',
+      paddingRight: '20px',
+   },
 }))
 
-const StyledHeaderUp = styled(Box)({
+const StyledHeaderUp = styled(Box)(({ theme }) => ({
+   width: '100%',
+   maxWidth: '1280px',
    display: 'flex',
    alignItems: 'center',
-})
+   justifyContent: 'space-between',
+   gap: '20px',
+   paddingRight: '25px',
+   [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center',
+   },
+}))
 
-const StyledTypography = styled(Typography)({
+const StyledNav = styled(Box)(({ theme }) => ({
+   width: '100%',
+   maxWidth: '1280px',
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'space-between',
+   marginTop: '20px',
+   marginBottom: '20px',
+   [theme.breakpoints.down('sm')]: {
+      gap: '10px',
+      flexDirection: 'column',
+   },
+}))
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
    color: '#222222',
    fontFamily: 'Open Sans, sans-serif',
    fontWeight: 600,
    fontSize: '16px',
-})
-const StyledBasket = styled(Typography)({
+}))
+
+const StyledBasket = styled(Typography)(({ theme }) => ({
    color: '#222222',
    fontFamily: 'Open Sans, sans-serif',
    fontWeight: 400,
    fontSize: '14px',
-})
+}))
 
-const StyledNav = styled(Box)({
+const StyledMenuWrapper = styled(Box)(({ theme }) => ({
    display: 'flex',
    alignItems: 'center',
-   gap: '24px',
-   marginTop: '20px',
-   marginBottom: '20px',
-   paddingLeft: '4px',
-})
-const StyledMenuWrapper = styled(Box)({
-   display: 'flex',
-   alignItems: 'center',
+   justifyContent: 'flex-start',
    gap: '14px',
-})
-const NavLinks = styled(Box)({
+   paddingLeft: '3px',
+}))
+
+const NavLinks = styled(Box)(({ theme }) => ({
    display: 'flex',
    gap: '34px',
    marginLeft: '103px',
    marginRight: '372px',
-})
+   flexWrap: 'nowrap',
+   [theme.breakpoints.down('sm')]: {
+      flexDirection: 'row',
+      gap: '10px',
+      marginLeft: '0',
+      marginRight: '0',
+   },
+}))
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
    fontFamily: 'Open Sans, sans-serif',
@@ -122,6 +155,7 @@ const StyledNavLink = styled(NavLink)(({ theme }) => ({
    color: '#222222',
    fontWeight: 400,
    fontSize: '14px',
+   whiteSpace: 'nowrap',
    '&.active': {
       color: '#FF4C00',
       fontWeight: 600,
@@ -149,16 +183,17 @@ const GlobalFont = createGlobalStyle`
       font-family: 'Open Sans', sans-serif;
    }
 `
-const StyledInputWrapper = styled(Box)({
-   marginRight: '45px',
-})
 
-const StyledButton = styled(Button)({
+const StyledInputWrapper = styled(Box)(({ theme }) => ({
    marginRight: '45px',
+}))
+
+const StyledButton = styled(Button)(({ theme }) => ({
+   marginLeft: '115px',
    backgroundColor: '#1C1C1C',
    width: '99px',
    height: '42px',
    borderRadius: '0px',
    color: 'white',
    padding: '10px 24px',
-})
+}))

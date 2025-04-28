@@ -1,17 +1,5 @@
 import './App.css'
-import Header from './layout/Header'
 
-const App = () => (
-   <h1>
-      <Header
-         navLinks={[
-            { label: 'Электронные книги', to: '/ebooks' },
-            { label: 'Audio books', to: '/audio' },
-            { label: 'Промокоды', to: '/promo' },
-            { label: 'Начать продавать на eBook', to: '/sell' },
-         ]}
-      />
-   </h1>
-)
+const App = () => <h1>eBook-js-16-ev</h1>
 
 export default App
