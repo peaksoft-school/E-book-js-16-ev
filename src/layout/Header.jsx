@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
    AppBar,
    Box,
@@ -11,61 +10,49 @@ import { NavLink } from 'react-router'
 import Input from '../components/UI/Input'
 import { Icons } from '../assets/icons'
 import { createGlobalStyle } from 'styled-components'
+import { NAV_LINKS } from '../utils/helpers'
 
-const Header = ({ onSearchChange, navLinks = [], onLogin }) => {
-   const [value, setValue] = useState('')
-
-   const handleChange = (event) => {
-      setValue(event.target.value)
-      if (onSearchChange) onSearchChange(event.target.value)
-   }
-
+const Header = ({ onLogin }) => {
    return (
-      <StyledAppBar position="static">
-         <StyledHeaderUp>
-            <LogoImage src={Icons.eBook} alt="Логотип" />
-            <StyledInputWrapper>
-               <Input
-                  type="search"
-                  placeholder="Искать жанр, книги, авторов, издательства..."
-                  value={value}
-                  onChange={handleChange}
-               />
-            </StyledInputWrapper>
+      <>
+         <GlobalFont />
+         <StyledAppBar position="static">
+            <StyledHeaderUp>
+               <LogoImage src={Icons.eBook} alt="Логотип" />
+               <StyledInputWrapper>
+                  <Input
+                     type="search"
+                     placeholder="Искать жанр, книги, авторов, издательства..."
+                  />
+               </StyledInputWrapper>
 
-            <StyledIconButton>
-               <img src={Icons.like} alt="Like" />
-            </StyledIconButton>
+               <StyledIconButton>
+                  <img src={Icons.like} alt="Like" />
+               </StyledIconButton>
 
-            <StyledBasket>Корзина({3})</StyledBasket>
-         </StyledHeaderUp>
+               <StyledBasket>Корзина({3})</StyledBasket>
+            </StyledHeaderUp>
 
-         <StyledNav>
-            <StyledMenuWrapper>
-               <IconButton edge="start" color="inherit" aria-label="menu">
-                  <img src={Icons.menu} alt="menu" />
-               </IconButton>
-               <StyledTypography>Жанры</StyledTypography>
-            </StyledMenuWrapper>
+            <StyledNav>
+               <StyledMenuWrapper>
+                  <IconButton edge="start" color="inherit" aria-label="menu">
+                     <img src={Icons.menu} alt="menu" />
+                  </IconButton>
+                  <StyledTypography>Жанры</StyledTypography>
+               </StyledMenuWrapper>
 
-            <NavLinks>
-               {
-                  (navLinks = [
-                     { label: 'Электронные книги', to: '/ebooks' },
-                     { label: 'Audio books', to: '/audio' },
-                     { label: 'Промокоды', to: '/promo' },
-                     { label: 'Начать продавать на eBook', to: '/sell' },
-                  ].map((link) => (
-                     <StyledNavLink key={link.to} to={link.to}>
-                        {link.label}
+               <NavLinks>
+                  {NAV_LINKS.map(({ to, label }) => (
+                     <StyledNavLink key={to} to={to}>
+                        {label}
                      </StyledNavLink>
-                  )))
-               }
-            </NavLinks>
+                  ))}
+               </NavLinks>
 
-            <StyledButton onClick={onLogin}>Войти</StyledButton>
-         </StyledNav>
-      </StyledAppBar>
+               <StyledButton onClick={onLogin}>Войти</StyledButton>
+            </StyledNav>
+         </StyledAppBar>
+      </>
    )
 }
 
@@ -79,7 +66,8 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
    display: 'flex',
    justifyContent: 'center',
    alignItems: 'center',
-   [theme.breakpoints.down('sm')]: {
+   overflowX: 'hidden',
+   [theme.breakpoints.down('md')]: {
       paddingLeft: '20px',
       paddingRight: '20px',
    },
@@ -89,10 +77,10 @@ const StyledHeaderUp = styled(Box)(({ theme }) => ({
    width: '100%',
    maxWidth: '1280px',
    display: 'flex',
+   flexWrap: 'wrap',
    alignItems: 'center',
    justifyContent: 'space-between',
    gap: '20px',
-   paddingRight: '25px',
    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'center',
@@ -103,13 +91,15 @@ const StyledNav = styled(Box)(({ theme }) => ({
    width: '100%',
    maxWidth: '1280px',
    display: 'flex',
+   flexWrap: 'wrap',
    alignItems: 'center',
    justifyContent: 'space-between',
    marginTop: '20px',
    marginBottom: '20px',
+   gap: '10px',
    [theme.breakpoints.down('sm')]: {
-      gap: '10px',
       flexDirection: 'column',
+      alignItems: 'center',
    },
 }))
 
@@ -132,21 +122,14 @@ const StyledMenuWrapper = styled(Box)(({ theme }) => ({
    alignItems: 'center',
    justifyContent: 'flex-start',
    gap: '14px',
-   paddingLeft: '3px',
+   paddingLeft: '4px',
 }))
 
 const NavLinks = styled(Box)(({ theme }) => ({
    display: 'flex',
-   gap: '34px',
-   marginLeft: '103px',
-   marginRight: '372px',
-   flexWrap: 'nowrap',
-   [theme.breakpoints.down('sm')]: {
-      flexDirection: 'row',
-      gap: '10px',
-      marginLeft: '0',
-      marginRight: '0',
-   },
+   flexWrap: 'wrap',
+   gap: '20px',
+   justifyContent: 'center',
 }))
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
@@ -167,29 +150,37 @@ const StyledNavLink = styled(NavLink)(({ theme }) => ({
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
    marginLeft: '0px',
-   marginRight: '45px',
+   marginRight: '20px',
 }))
 
 const LogoImage = styled('img')({
-   width: '147px',
+   maxWidth: '147px',
    height: '85px',
-   marginRight: '45px',
+   marginRight: '20px',
 })
 
 const GlobalFont = createGlobalStyle`
    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
 
+   * {
+      box-sizing: border-box;
+   }
+
    body {
       font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
    }
 `
 
 const StyledInputWrapper = styled(Box)(({ theme }) => ({
-   marginRight: '45px',
+   marginRight: '20px',
+   flexGrow: 1,
+   minWidth: '200px',
 }))
 
 const StyledButton = styled(Button)(({ theme }) => ({
-   marginLeft: '115px',
    backgroundColor: '#1C1C1C',
    width: '99px',
    height: '42px',

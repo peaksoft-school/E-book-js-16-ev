@@ -7,8 +7,10 @@ import { Themes } from './components/Themes'
 
 createRoot(document.getElementById('root')).render(
    <StrictMode>
-      <Themes>
-         <App />
-      </Themes>
+      <BrowserRouter>
+         <Themes>
+            <App />
+         </Themes>
+      </BrowserRouter>
    </StrictMode>
 )
