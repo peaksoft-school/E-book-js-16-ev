@@ -90,11 +90,6 @@ const Slider = forwardRef(
 
 export default Slider
 
-const GlobalFont = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
-  body { font-family: 'Open Sans', sans-serif; }
-`
-
 const StyledBox = styled(Box)({
    width: '100%',
    padding: '40px 20px',
@@ -190,8 +185,26 @@ const StyledCard = styled(Card)(({ isactive }) => ({
    transition: 'transform 0.3s ease',
    transform: isactive ? 'scale(1.1)' : 'scale(1)',
    alignSelf: 'flex-end',
-}))
 
+   '@media (max-width: 1200px)': {
+      width: isactive ? '250px' : '190px',
+      height: isactive ? '370px' : '290px',
+   },
+
+   '@media (max-width: 800px)': {
+      width: isactive ? '200px' : '160px',
+      height: isactive ? '300px' : '250px',
+   },
+
+   '@media (max-width: 480px)': {
+      width: isactive ? '180px' : '140px',
+      height: isactive ? '280px' : '230px',
+   },
+}))
+const GlobalFont = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+  body { font-family: 'Open Sans', sans-serif; }
+`
 const StyledCardMedia = styled(CardMedia)({
    width: '100%',
    height: '100%',
