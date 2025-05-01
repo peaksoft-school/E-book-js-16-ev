@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 import { styled } from '@mui/material/styles'
 import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material'
 
