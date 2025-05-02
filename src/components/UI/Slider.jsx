@@ -74,14 +74,19 @@ const Slider = forwardRef(
                   ))}
                </StyledSliderBox>
 
-               <StyledIconBox>
+               <StyledIconProgressBox>
                   <StyledIconButton onClick={handlePrev}>
                      <img src={Icons.leftfill} alt="Назад" />
                   </StyledIconButton>
+
                   <StyledIconButton onClick={handleNext}>
                      <img src={Icons.rightfill} alt="Вперёд" />
                   </StyledIconButton>
-               </StyledIconBox>
+                  <StyledProgressLine
+                     progress={((index + 1) / books.length) * 100}
+                     lineWidth={694}
+                  />
+               </StyledIconProgressBox>
             </StyledMainBox>
          </StyledBox>
       )
@@ -107,6 +112,22 @@ const StyledTitleBox = styled(Box)({
    marginBottom: '45px',
 })
 
+const StyledProgressLine = styled(Box)(({ progress, lineWidth }) => ({
+   width: `${lineWidth}px`,
+   height: '1px',
+   backgroundColor: '#e0e0e0',
+   borderRadius: '0px',
+   overflow: 'hidden',
+   '&::after': {
+      content: '""',
+      display: 'block',
+      width: `${progress}%`,
+      height: '100%',
+      backgroundColor: '#FF4C00',
+      transition: 'width 0.3s ease',
+   },
+}))
+
 const StyledBookBox = styled(Box)({
    maxWidth: '492px',
    display: 'flex',
@@ -119,6 +140,7 @@ const StyledSliderBox = styled(Box)({
    gap: '40px',
    overflow: 'hidden',
    marginBottom: '80px',
+   marginRight: '-20px',
 })
 
 const StyledBookTitle = styled(Typography)({
@@ -153,24 +175,23 @@ const StyledUnderlineButton = styled(Button)({
 
 const StyledMainBox = styled(Box)({
    width: '100%',
-   maxWidth: '1200px',
+   maxWidth: '1360px',
    display: 'flex',
    justifyContent: 'center',
    alignItems: 'flex-end',
    gap: '40px',
    paddingBottom: '60px',
    position: 'relative',
+   marginRight: 0,
 })
 
-const StyledIconBox = styled(Box)({
+const StyledIconProgressBox = styled(Box)({
    display: 'flex',
    gap: '20px',
-   justifyContent: 'flex-end',
-   alignItems: 'flex-end',
+   alignItems: 'center',
    position: 'absolute',
    bottom: '20px',
    right: '20px',
-   zIndex: 1,
    marginTop: '81px',
 })
 
