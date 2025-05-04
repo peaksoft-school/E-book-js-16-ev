@@ -1,29 +1,27 @@
+import { forwardRef } from 'react'
 import {
    FormGroup,
    FormControlLabel,
    Checkbox as MuiCheckbox,
    styled,
 } from '@mui/material'
-import { forwardRef } from 'react'
 
 const Checkbox = forwardRef(
-   ({ label = '', checked, onChange, ...rest }, ref) => {
-      return (
-         <FormGroup>
-            <FormControlLabel
-               control={
-                  <StyledCheckbox
-                     checked={checked}
-                     onChange={onChange}
-                     ref={ref}
-                     {...rest}
-                  />
-               }
-               label={label}
-            />
-         </FormGroup>
-      )
-   }
+   ({ label = '', checked, onChange, ...rest }, ref) => (
+      <FormGroup>
+         <FormControlLabel
+            control={
+               <StyledCheckbox
+                  checked={checked}
+                  onChange={onChange}
+                  ref={ref}
+                  {...rest}
+               />
+            }
+            label={label}
+         />
+      </FormGroup>
+   )
 )
 
 export default Checkbox
