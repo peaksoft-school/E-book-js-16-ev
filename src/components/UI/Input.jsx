@@ -102,7 +102,7 @@ const StyledInput = styled(TextField, {
          fontSize: '16px',
 
          '& fieldset': {
-            borderColor: '#C4C4C4',
+            borderColor: '#b7b6b6',
          },
 
          '&:hover fieldset': {
