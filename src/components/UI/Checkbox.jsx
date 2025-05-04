@@ -28,7 +28,7 @@ export default Checkbox
 
 const StyledCheckbox = styled(MuiCheckbox)({
    '&.Mui-checked': {
-      color: '#F34901',
+      color: '#f54d04',
    },
 
    '&:hover': {
