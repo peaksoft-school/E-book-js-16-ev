@@ -219,7 +219,7 @@ const StyledCard = styled(Card)(({ isactive }) => ({
 
    '@media (max-width: 480px)': {
       width: isactive ? '180px' : '140px',
-      height: isactive ? '280px' : '230px',
+      height: isactive ? '279px' : '230px',
    },
 }))
 const GlobalFont = createGlobalStyle`
