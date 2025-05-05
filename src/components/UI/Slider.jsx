@@ -6,22 +6,19 @@ import {
    Card,
    CardMedia,
    IconButton,
+   styled,
 } from '@mui/material'
-import { createGlobalStyle } from 'styled-components'
 import { Icons } from '../../assets/icons'
-import { styled } from '@mui/system'
 
 const Slider = forwardRef(
    ({ books, onButtonClick, title = 'Бестселлеры', ...rest }, ref) => {
       const [index, setIndex] = useState(0)
 
-      const handlePrev = () => {
+      const handlePrev = () =>
          setIndex((prev) => (prev > 0 ? prev - 1 : books.length - 1))
-      }
 
-      const handleNext = () => {
+      const handleNext = () =>
          setIndex((prev) => (prev < books.length - 1 ? prev + 1 : 0))
-      }
 
       const visibleBooks = [
          books[index],
@@ -31,7 +28,6 @@ const Slider = forwardRef(
 
       return (
          <StyledBox ref={ref} {...rest}>
-            <GlobalFont />
             <StyledTitleBox>
                <StyledText>{title}</StyledText>
                {onButtonClick && (
@@ -49,17 +45,12 @@ const Slider = forwardRef(
                   <Typography variant="body2" color="text.secondary" mb={2}>
                      {books[index].description}
                   </Typography>
-                  <Box
-                     display="flex"
-                     justifyContent="space-between"
-                     alignItems="center"
-                     mt={4}
-                  >
+                  <StyledInfoBox>
                      <StyledUnderlineButton>Подробнее</StyledUnderlineButton>
                      <StyledPriceTypography>
                         {books[index].price}
                      </StyledPriceTypography>
-                  </Box>
+                  </StyledInfoBox>
                </StyledBookBox>
 
                <StyledSliderBox>
@@ -97,7 +88,7 @@ export default Slider
 
 const StyledBox = styled(Box)({
    width: '100%',
-   padding: '40px 20px',
+   padding: '2.5rem 1.25rem',
    display: 'flex',
    flexDirection: 'column',
    alignItems: 'center',
@@ -105,16 +96,16 @@ const StyledBox = styled(Box)({
 
 const StyledTitleBox = styled(Box)({
    width: '100%',
-   maxWidth: '1200px',
+   maxWidth: '75rem',
    display: 'flex',
    justifyContent: 'space-between',
    alignItems: 'center',
-   marginBottom: '45px',
+   marginBottom: '2.8rem',
 })
 
 const StyledProgressLine = styled(Box)(({ progress, lineWidth }) => ({
-   width: `${lineWidth}px`,
-   height: '1px',
+   width: `${lineWidth / 16}rem`,
+   height: '0.0625rem',
    backgroundColor: '#e0e0e0',
    borderRadius: '0px',
    overflow: 'hidden',
@@ -129,35 +120,35 @@ const StyledProgressLine = styled(Box)(({ progress, lineWidth }) => ({
 }))
 
 const StyledBookBox = styled(Box)({
-   maxWidth: '492px',
+   maxWidth: '30.75rem',
    display: 'flex',
    flexDirection: 'column',
-   marginBottom: '81px',
+   marginBottom: '5rem',
 })
 
 const StyledSliderBox = styled(Box)({
    display: 'flex',
-   gap: '40px',
+   gap: '2.5rem',
    overflow: 'hidden',
-   marginBottom: '80px',
-   marginRight: '-20px',
+   marginBottom: '5rem',
+   marginRight: '-1.25rem',
 })
 
 const StyledBookTitle = styled(Typography)({
    fontWeight: 600,
-   fontSize: '56px',
+   fontSize: '3.5rem',
    color: '#222',
-   marginBottom: '50px',
+   marginBottom: '3.125rem',
 })
 
 const StyledText = styled(Typography)({
-   fontSize: '24px',
+   fontSize: '1.5rem',
    fontWeight: 600,
    color: '#1C1C1C',
 })
 
 const StyledPriceTypography = styled(Typography)({
-   fontSize: '18px',
+   fontSize: '1.125rem',
    fontWeight: 700,
    color: 'orangered',
 })
@@ -167,32 +158,32 @@ const StyledUnderlineButton = styled(Button)({
    textTransform: 'none',
    fontWeight: 400,
    padding: 0,
-   fontSize: '14px',
+   fontSize: '0.875rem',
    borderRadius: 0,
-   borderBottom: '1px solid orangered',
-   '&:hover': { borderBottom: '1px solid darkorange' },
+   borderBottom: '0.0625rem solid orangered',
+   '&:hover': { borderBottom: '0.0625rem solid darkorange' },
 })
 
 const StyledMainBox = styled(Box)({
    width: '100%',
-   maxWidth: '1360px',
+   maxWidth: '85rem',
    display: 'flex',
    justifyContent: 'center',
    alignItems: 'flex-end',
-   gap: '40px',
-   paddingBottom: '60px',
+   gap: '2.5rem',
+   paddingBottom: '3.75rem',
    position: 'relative',
    marginRight: 0,
 })
 
 const StyledIconProgressBox = styled(Box)({
    display: 'flex',
-   gap: '20px',
+   gap: '1.25rem',
    alignItems: 'center',
    position: 'absolute',
-   bottom: '20px',
-   right: '20px',
-   marginTop: '81px',
+   bottom: '1.25rem',
+   right: '1.25rem',
+   marginTop: '5rem',
 })
 
 const StyledIconButton = styled(IconButton)({
@@ -201,33 +192,37 @@ const StyledIconButton = styled(IconButton)({
 })
 
 const StyledCard = styled(Card)(({ isactive }) => ({
-   width: isactive ? '294px' : '220px',
-   height: isactive ? '443px' : '339px',
+   width: isactive ? '18.375rem' : '13.75rem',
+   height: isactive ? '27.7rem' : '21.2rem',
    transition: 'transform 0.3s ease',
    transform: isactive ? 'scale(1.1)' : 'scale(1)',
    alignSelf: 'flex-end',
 
    '@media (max-width: 1200px)': {
-      width: isactive ? '250px' : '190px',
-      height: isactive ? '370px' : '290px',
+      width: isactive ? '15.625rem' : '11.875rem',
+      height: isactive ? '23.125rem' : '18.125rem',
    },
 
    '@media (max-width: 800px)': {
-      width: isactive ? '200px' : '160px',
-      height: isactive ? '300px' : '250px',
+      width: isactive ? '12.5rem' : '10rem',
+      height: isactive ? '18.75rem' : '15.625rem',
    },
 
    '@media (max-width: 480px)': {
-      width: isactive ? '180px' : '140px',
-      height: isactive ? '279px' : '230px',
+      width: isactive ? '11.25rem' : '8.75rem',
+      height: isactive ? '17.4375rem' : '14.375rem',
    },
 }))
-const GlobalFont = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
-  body { font-family: 'Open Sans', sans-serif; }
-`
+
 const StyledCardMedia = styled(CardMedia)({
    width: '100%',
    height: '100%',
    objectFit: 'contain',
+})
+
+const StyledInfoBox = styled(Box)({
+   display: 'flex',
+   justifyContent: 'space-between',
+   alignItems: 'center',
+   marginTop: '2rem', // 32px
 })
