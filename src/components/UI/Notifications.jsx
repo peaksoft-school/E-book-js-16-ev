@@ -1,8 +1,35 @@
-import React from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Alert, styled } from '@mui/material'
 
+const Notifications = () => {
+   return (
+      <StyledToastContainer
+         position="top-right"
+         autoClose={3000}
+         hideProgressBar
+      />
+   )
+}
+
+export const notify = (message, type = 'info') => {
+   toast(
+      <Alert
+         severity={type}
+         sx={{
+            width: '100%',
+            boxShadow: 'none',
+            background: 'transparent',
+            p: 0,
+            m: 0,
+         }}
+      >
+         {message}
+      </Alert>
+   )
+}
+
+export default Notifications
 const StyledToastContainer = styled(ToastContainer)(({ theme }) => ({
    '.Toastify__toast': {
       borderRadius: theme.shape.borderRadius,
@@ -42,32 +69,3 @@ const StyledToastContainer = styled(ToastContainer)(({ theme }) => ({
       },
    },
 }))
-
-const Notifications = () => {
-   return (
-      <StyledToastContainer
-         position="top-right"
-         autoClose={3000}
-         hideProgressBar
-      />
-   )
-}
-
-export const notify = (message, type = 'info') => {
-   toast(
-      <Alert
-         severity={type}
-         sx={{
-            width: '100%',
-            boxShadow: 'none',
-            background: 'transparent',
-            p: 0,
-            m: 0,
-         }}
-      >
-         {message}
-      </Alert>
-   )
-}
-
-export default Notifications
