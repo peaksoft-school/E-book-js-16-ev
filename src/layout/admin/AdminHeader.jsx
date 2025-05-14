@@ -1,5 +1,5 @@
 const AdminHeader = () => {
-   return <div>AdminHeader</div>
+   return <div>AdminHead</div>
 }
 
 export default AdminHeader
