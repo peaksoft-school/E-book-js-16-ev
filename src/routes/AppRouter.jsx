@@ -2,8 +2,10 @@ import { Route, Routes } from 'react-router'
 import { Suspense, lazy } from 'react'
 import { ROLES } from './routes'
 import PrivateRouter from './PrivateRouter'
-import SignIn from '../pages/sign-in/SignIn'
-import SignUp from '../pages/sign-up/SignUp'
+import Loading from '../components/UI/Loading'
+
+const SignUp = lazy(() => import('../pages/sign-up/SignUp'))
+const SignIn = lazy(() => import('../pages/sign-in/SignIn'))
 const Home = lazy(() => import('../layout/home/Home'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
@@ -18,7 +20,7 @@ const AppRouter = () => {
                <PrivateRouter
                   roles={[ROLES.GUEST, ROLES.USER]}
                   Component={
-                     <Suspense fallback="Loading">
+                     <Suspense fallback={<Loading />}>
                         <Home />
                      </Suspense>
                   }
@@ -27,8 +29,23 @@ const AppRouter = () => {
             }
          />
 
-         <Route path="/sign-in" element={<SignIn />} />
-         <Route path="/sign-up" element={<SignUp />} />
+         <Route
+            path="/sign-in"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <SignIn />
+               </Suspense>
+            }
+         />
+
+         <Route
+            path="/sign-up"
+            element={
+               <Suspense fallback={<Loading />}>
+                  <SignUp />
+               </Suspense>
+            }
+         />
 
          <Route
             path="/admin"
@@ -36,7 +53,7 @@ const AppRouter = () => {
                <PrivateRouter
                   roles={[ROLES.ADMIN]}
                   Component={
-                     <Suspense fallback="Loading">
+                     <Suspense fallback={<Loading />}>
                         <AdminLayout />
                      </Suspense>
                   }
@@ -51,7 +68,7 @@ const AppRouter = () => {
                <PrivateRouter
                   roles={[ROLES.USER]}
                   Component={
-                     <Suspense fallback="Loading">
+                     <Suspense fallback={<Loading />}>
                         <UserLayout />
                      </Suspense>
                   }
@@ -66,7 +83,7 @@ const AppRouter = () => {
                <PrivateRouter
                   roles={[ROLES.VENDOR]}
                   Component={
-                     <Suspense fallback="Loading">
+                     <Suspense fallback={<Loading />}>
                         <VendorLayout />
                      </Suspense>
                   }
