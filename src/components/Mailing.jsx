@@ -2,24 +2,22 @@ import { Box, styled, TextField, Typography } from '@mui/material'
 import Button from './UI/buttons/Button'
 import { Link } from 'react-router-dom'
 
-const Mailing = () => {
-   return (
-      <StyledContainer>
-         <Box>
-            <Typography className="text">Подписаться на рассылку</Typography>
-            <StyledBoxInt>
-               <StyledTfield placeholder="Напишите ваш E-mail" />
-               <Button>Отправить</Button>
-            </StyledBoxInt>
-         </Box>
-         <StyledLinkBox>
-            <StyledLink to="/instagram">Instagram</StyledLink>
-            <StyledLink to="/facebook">Facebook</StyledLink>
-            <StyledLink to="/vk">ВКонтакте</StyledLink>
-         </StyledLinkBox>
-      </StyledContainer>
-   )
-}
+const Mailing = () => (
+   <StyledContainer>
+      <Box>
+         <Typography className="text">Подписаться на рассылку</Typography>
+         <StyledBoxInt>
+            <StyledTfield placeholder="Напишите ваш E-mail" />
+            <Button>Отправить</Button>
+         </StyledBoxInt>
+      </Box>
+      <StyledLinkBox>
+         <StyledLink to="/instagram">Instagram</StyledLink>
+         <StyledLink to="/facebook">Facebook</StyledLink>
+         <StyledLink to="/vk">ВКонтакте</StyledLink>
+      </StyledLinkBox>
+   </StyledContainer>
+)
 
 export default Mailing
 

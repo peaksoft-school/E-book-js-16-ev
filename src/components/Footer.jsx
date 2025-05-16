@@ -1,42 +1,40 @@
 import { Box, Container, Typography, styled } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 
-const Footer = ({ variant = 'full' }) => {
-   return (
-      <FooterWrapper>
-         <FooterContainer maxWidth="lg" disableGutters variant={variant}>
-            <FooterColumn>
-               <LogoLink to="/">eBooK</LogoLink>
-               {variant === 'compact' && (
-                  <FooterLink>Политика конфиденциальности</FooterLink>
-               )}
-            </FooterColumn>
-
-            {variant === 'full' && (
-               <>
-                  <FooterColumn>
-                     <FooterLink>Жанры</FooterLink>
-                     <FooterLink>Аудиокниги</FooterLink>
-                     <FooterLink>Электронные книги</FooterLink>
-                  </FooterColumn>
-
-                  <FooterColumn>
-                     <FooterLink>Бестселлеры</FooterLink>
-                     <FooterLink>Промокоды</FooterLink>
-                     <FooterLink>Политика конфиденциальности</FooterLink>
-                  </FooterColumn>
-               </>
+const Footer = ({ variant = 'full' }) => (
+   <FooterWrapper>
+      <FooterContainer maxWidth="lg" disableGutters variant={variant}>
+         <FooterColumn>
+            <LogoLink to="/">eBooK</LogoLink>
+            {variant === 'compact' && (
+               <FooterLink>Политика конфиденциальности</FooterLink>
             )}
+         </FooterColumn>
 
-            <FooterColumn>
-               <FooterTitle>Свяжитесь с нами</FooterTitle>
-               <FooterLink>+996707123456</FooterLink>
-               <FooterLink>г. Бишкек ул. Исанова 45</FooterLink>
-            </FooterColumn>
-         </FooterContainer>
-      </FooterWrapper>
-   )
-}
+         {variant === 'full' && (
+            <>
+               <FooterColumn>
+                  <FooterLink>Жанры</FooterLink>
+                  <FooterLink>Аудиокниги</FooterLink>
+                  <FooterLink>Электронные книги</FooterLink>
+               </FooterColumn>
+
+               <FooterColumn>
+                  <FooterLink>Бестселлеры</FooterLink>
+                  <FooterLink>Промокоды</FooterLink>
+                  <FooterLink>Политика конфиденциальности</FooterLink>
+               </FooterColumn>
+            </>
+         )}
+
+         <FooterColumn>
+            <FooterTitle>Свяжитесь с нами</FooterTitle>
+            <FooterLink>+996707123456</FooterLink>
+            <FooterLink>г. Бишкек ул. Исанова 45</FooterLink>
+         </FooterColumn>
+      </FooterContainer>
+   </FooterWrapper>
+)
 
 export default Footer
 
