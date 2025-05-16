@@ -6,6 +6,7 @@ const Footer = ({ variant = 'full' }) => (
       <FooterContainer maxWidth="lg" disableGutters variant={variant}>
          <FooterColumn>
             <LogoLink to="/">eBooK</LogoLink>
+
             {variant === 'compact' && (
                <FooterLink>Политика конфиденциальности</FooterLink>
             )}
@@ -47,7 +48,7 @@ const FooterWrapper = styled(Box)`
 
 const FooterContainer = styled(Container, {
    shouldForwardProp: (prop) => prop !== 'variant',
-})(({ variant }) => ({
+})(() => ({
    display: 'flex',
    justifyContent: 'space-between',
    flexWrap: 'wrap',

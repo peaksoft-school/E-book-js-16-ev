@@ -36,6 +36,8 @@ import applicationfill from './svgs/Application-orange.svg'
 import excl from './svgs/!icon.svg'
 import exclfill from './svgs/!iconB.svg'
 import eyeclose from './svgs/System,Default=Eye-close.svg'
+import eBook from './svgs/eBook.svg'
+import menu from './svgs/menu.svg'
 import plusw from './svgs/wplus.svg'
 
 export const Icons = {
@@ -77,5 +79,7 @@ export const Icons = {
    application,
    applicationfill,
    exclfill,
-   plusw
+   eBook,
+   menu,
+   plusw,
 }

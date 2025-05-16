@@ -6,11 +6,14 @@ const Mailing = () => (
    <StyledContainer>
       <Box>
          <Typography className="text">Подписаться на рассылку</Typography>
+
          <StyledBoxInt>
             <StyledTfield placeholder="Напишите ваш E-mail" />
+
             <Button>Отправить</Button>
          </StyledBoxInt>
       </Box>
+
       <StyledLinkBox>
          <StyledLink to="/instagram">Instagram</StyledLink>
          <StyledLink to="/facebook">Facebook</StyledLink>
