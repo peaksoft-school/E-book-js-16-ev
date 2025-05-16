@@ -4,60 +4,68 @@ import VendorFooter from '../layout/VendorFooter'
 import VendorCard from '../components/UI/VendorCard'
 import { VENDORCARDS } from '../utils/constants'
 
-const LandingPage = () => {
-   return (
-      <>
-         <StyledAppBar>
-            <Toolbar sx={{ justifyContent: 'space-between' }}>
-               <Box>
-                  <img src={Icons.eBook} alt="" />
-               </Box>
+const LandingPage = () => (
+   <>
+      <StyledAppBar>
+         <Toolbar sx={{ justifyContent: 'space-between' }}>
+            <Box>
+               <img src={Icons.eBook} alt="" />
+            </Box>
 
-               <NavButton>Личный кабинет</NavButton>
-            </Toolbar>
-         </StyledAppBar>
-         <StyledMain>
-            <StyledSectionUp>
-               <Box>
-                  <Title>
-                     Портал в <Orange>книжный</Orange> мир
-                  </Title>
-                  <Subtitle>Начните продавать свои книги на eBook</Subtitle>
-                  <StyledButton>Стать продавцом</StyledButton>
-               </Box>
-               <Box>
-                  <StyledCircle>
-                     <StyledImg src={Icons.knowledge} alt="" />
-                  </StyledCircle>
-               </Box>
-            </StyledSectionUp>
-            <StyledCardsBoxUp>
-               <StyledCardTitle>Как начать продавать на eBook?</StyledCardTitle>
-               <StyledCards>
-                  {VENDORCARDS.map((item) => (
-                     <VendorCard img={item.img} text={item.text} />
-                  ))}
-               </StyledCards>
-            </StyledCardsBoxUp>
+            <NavButton>Личный кабинет</NavButton>
+         </Toolbar>
+      </StyledAppBar>
 
-            <StyledCardsBoxDown>
-               <StyledCardTitle>Условия</StyledCardTitle>
-               <StyledCards>
-                  {VENDORCARDS.map((item) => (
-                     <VendorCard img={item.img} text={item.text} />
-                  ))}
-               </StyledCards>
-            </StyledCardsBoxDown>
-            <StyledButtonBox>
+      <StyledMain>
+         <StyledSectionUp>
+            <Box>
+               <Title>
+                  Портал в <Orange>книжный</Orange> мир
+               </Title>
+
+               <Subtitle>Начните продавать свои книги на eBook</Subtitle>
+
                <StyledButton>Стать продавцом</StyledButton>
-            </StyledButtonBox>
-         </StyledMain>
-         <VendorFooter />
-      </>
-   )
-}
+            </Box>
+
+            <Box>
+               <StyledCircle>
+                  <StyledImg src={Icons.knowledge} alt="" />
+               </StyledCircle>
+            </Box>
+         </StyledSectionUp>
+
+         <StyledCardsBoxUp>
+            <StyledCardTitle>Как начать продавать на eBook?</StyledCardTitle>
+
+            <StyledCards>
+               {VENDORCARDS.map((item) => (
+                  <VendorCard img={item.img} text={item.text} />
+               ))}
+            </StyledCards>
+         </StyledCardsBoxUp>
+
+         <StyledCardsBoxDown>
+            <StyledCardTitle>Условия</StyledCardTitle>
+
+            <StyledCards>
+               {VENDORCARDS.map((item) => (
+                  <VendorCard img={item.img} text={item.text} />
+               ))}
+            </StyledCards>
+         </StyledCardsBoxDown>
+
+         <StyledButtonBox>
+            <StyledButton>Стать продавцом</StyledButton>
+         </StyledButtonBox>
+      </StyledMain>
+
+      <VendorFooter />
+   </>
+)
 
 export default LandingPage
+
 const StyledAppBar = styled(AppBar)({
    width: '100%',
    maxWidth: '80rem',
@@ -77,12 +85,14 @@ const NavButton = styled(Button)({
    border: '1px solid #C4C4C4',
    borderRadius: 0,
 })
+
 const StyledMain = styled(Box)({
    width: '100%',
    maxWidth: '80rem',
    margin: '0 auto',
    padding: '1.25rem',
 })
+
 const StyledSectionUp = styled(Box)({
    width: '100%',
    maxWidth: '80rem',
@@ -91,6 +101,7 @@ const StyledSectionUp = styled(Box)({
    alignItems: 'center',
    justifyContent: 'space-between',
 })
+
 const Title = styled(Typography)(({ theme }) => ({
    fontFamily: 'VKHUETYPE, sans-serif',
    fontSize: '4.5rem',
@@ -128,16 +139,19 @@ const StyledCircle = styled(Box)({
    position: 'relative',
    overflow: 'visible',
 })
+
 const Orange = styled('span')({
    color: '#F34901',
    fontFamily: 'VKHUETYPE, sans-serif',
 })
+
 const StyledImg = styled('img')({
    position: 'absolute',
    left: '-50px',
    top: '60%',
    transform: 'translateY(-50%)',
 })
+
 const StyledCards = styled(Box)({
    display: 'flex',
    gap: '20px',
@@ -147,9 +161,11 @@ const StyledCardsBoxUp = styled(Box)({
    marginTop: '139px',
    marginBottom: '151px',
 })
+
 const StyledCardsBoxDown = styled(Box)({
    marginBottom: '235px',
 })
+
 const StyledButtonBox = styled(Box)({
    margin: '0 500px ',
    marginBottom: '84px',

@@ -1,13 +1,12 @@
 import { Box, Typography, styled } from '@mui/material'
 
-const VendorCard = ({ img, text }) => {
-   return (
-      <CardContainer>
-         <Image src={img} alt=" " />
-         <StyledText>{text}</StyledText>
-      </CardContainer>
-   )
-}
+const VendorCard = ({ img, text }) => (
+   <CardContainer>
+      <Image src={img} alt=" " />
+
+      <StyledText>{text}</StyledText>
+   </CardContainer>
+)
 
 export default VendorCard
 

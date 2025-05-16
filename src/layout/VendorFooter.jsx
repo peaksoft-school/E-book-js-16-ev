@@ -1,22 +1,20 @@
 import { Box, Typography, Link, styled } from '@mui/material'
 
-const VendorFooter = () => {
-   return (
-      <StyledFooterBox>
-         <StyledText>
-            <StyledTitle>eBooK</StyledTitle>
-            <StyledTextConf>Политика конфиденциальности</StyledTextConf>
-         </StyledText>
-         <StyledLinksBox>
-            <StyledFooterLink href="#">Свяжитесь с нами </StyledFooterLink>
-            <StyledFooterLink href="#">+996 707 123 456</StyledFooterLink>
-            <StyledFooterLink href="#">
-               г. Бишкек ул. Исанова 45
-            </StyledFooterLink>
-         </StyledLinksBox>
-      </StyledFooterBox>
-   )
-}
+const VendorFooter = () => (
+   <StyledFooterBox>
+      <StyledText>
+         <StyledTitle>eBooK</StyledTitle>
+
+         <StyledTextConf>Политика конфиденциальности</StyledTextConf>
+      </StyledText>
+
+      <StyledLinksBox>
+         <StyledFooterLink href="#">Свяжитесь с нами </StyledFooterLink>
+         <StyledFooterLink href="#">+996 707 123 456</StyledFooterLink>
+         <StyledFooterLink href="#">г. Бишкек ул. Исанова 45</StyledFooterLink>
+      </StyledLinksBox>
+   </StyledFooterBox>
+)
 
 export default VendorFooter
 
