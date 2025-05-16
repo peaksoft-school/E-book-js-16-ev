@@ -2,64 +2,60 @@ import { Box, Typography, styled } from '@mui/material'
 import { NavLink } from 'react-router-dom'
 import { Icons } from '../assets/icons'
 
-const SideBar = () => {
-   return (
-      <StyledSideBarBox>
-         <LogoText variant="h2" component="div">
-            eBooK
-         </LogoText>
+const SideBar = () => (
+   <StyledSideBarBox>
+      <LogoText variant="h2" component="div">
+         eBooK
+      </LogoText>
 
-         <StyledContBar>
-            <NavItem to="/w">
-               {({ isActive }) => (
-                  <>
-                     <img
-                        src={
-                           isActive ? Icons.applicationfill : Icons.application
-                        }
-                        alt="Заявки"
-                     />
-                     Заявки
-                  </>
-               )}
-            </NavItem>
-            <NavItem to="/2">
-               {({ isActive }) => (
-                  <>
-                     <img
-                        src={isActive ? Icons.usersfill : Icons.users}
-                        alt="Продавцы"
-                     />
-                     Продавцы
-                  </>
-               )}
-            </NavItem>
-            <NavItem to="3">
-               {({ isActive }) => (
-                  <>
-                     <img
-                        src={isActive ? Icons.userfill : Icons.user}
-                        alt="Пользователи"
-                     />
-                     Пользователи
-                  </>
-               )}
-            </NavItem>
-            <NavItem to="d">
-               {({ isActive }) => (
-                  <>
-                     <img
-                        src={isActive ? Icons.booksfill : Icons.books}
-                        alt="Книги"
-                     />
-                     Книги
-                  </>
-               )}
-            </NavItem>
-         </StyledContBar>
-      </StyledSideBarBox>
-   )
-}
+      <StyledContBar>
+         <NavItem to="/w">
+            {({ isActive }) => (
+               <>
+                  <img
+                     src={isActive ? Icons.applicationfill : Icons.application}
+                     alt="Заявки"
+                  />
+                  Заявки
+               </>
+            )}
+         </NavItem>
+         <NavItem to="/2">
+            {({ isActive }) => (
+               <>
+                  <img
+                     src={isActive ? Icons.usersfill : Icons.users}
+                     alt="Продавцы"
+                  />
+                  Продавцы
+               </>
+            )}
+         </NavItem>
+         <NavItem to="3">
+            {({ isActive }) => (
+               <>
+                  <img
+                     src={isActive ? Icons.userfill : Icons.user}
+                     alt="Пользователи"
+                  />
+                  Пользователи
+               </>
+            )}
+         </NavItem>
+         <NavItem to="d">
+            {({ isActive }) => (
+               <>
+                  <img
+                     src={isActive ? Icons.booksfill : Icons.books}
+                     alt="Книги"
+                  />
+                  Книги
+               </>
+            )}
+         </NavItem>
+      </StyledContBar>
+   </StyledSideBarBox>
+)
 
 export default SideBar
 
