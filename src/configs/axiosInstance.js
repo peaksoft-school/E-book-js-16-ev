@@ -12,7 +12,7 @@ export const axiosInstance = axios.create({
 
 let customStore
 
-export const injecStore = (store) => {
+export const injectStore = (store) => {
    customStore = store
 }
 
@@ -28,7 +28,7 @@ axiosInstance.interceptors.request.use(
 
       return updateConfig
    },
-   
+
    (error) => {
       return Promise.reject(error)
    }

@@ -1,12 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { storage } from 'redux-persist/lib/storage'
 import persistReducer from 'redux-persist/es/persistreducer'
 import persistStore from 'redux-persist/es/persistStore'
+import storage from 'redux-persist/lib/storage'
 
 const rootReducer = combineReducers({})
 
 const persistConfig = {
-   key: 'EBOOK',
+   key: 'E-BOOK',
    storage,
 }
 

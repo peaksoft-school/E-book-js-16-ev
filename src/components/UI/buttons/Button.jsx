@@ -52,8 +52,8 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
 
          backgroundColor: '#1c1c1c',
          color: '#fff',
-
          fontSize: '14px',
+         marginTop: 0,
 
          '&:hover': {
             backgroundColor: '#484848',

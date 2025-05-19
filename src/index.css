@@ -5,12 +5,14 @@
    padding: 0;
    box-sizing: border-box;
    font-family: 'Open Sans', sans-serif;
+   height: 100%;
 }
 
 h2 {
    font-size: 32px;
    font-weight: 700;
 }
+
 h3 {
    font-size: 24px;
    font-weight: 600;
@@ -19,4 +21,10 @@ h3 {
 h4 {
    font-size: 20px;
    font-weight: 500;
+}
+@font-face {
+   font-family: 'VKHUETYPE';
+   src: url('./assets//fonts/VKHUTETYPE.woff2') format('woff2');
+   font-weight: normal;
+   font-style: normal;
 }
