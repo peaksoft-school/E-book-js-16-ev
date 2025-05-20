@@ -1,9 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import persistReducer from 'redux-persist/es/persistreducer'
+import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
+import { authSlice } from './authSlice'
 
-const rootReducer = combineReducers({})
+const rootReducer = combineReducers({
+   [authSlice.name]: authSlice.reducer,
+})
 
 const persistConfig = {
    key: 'E-BOOK',
@@ -16,9 +19,7 @@ const store = configureStore({
    reducer: persistedReducer,
 
    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-         serializableCheck: false,
-      }),
+      getDefaultMiddleware({ serializableCheck: false }),
 })
 
 const persistor = persistStore(store)
