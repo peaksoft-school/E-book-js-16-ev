@@ -4,6 +4,7 @@ const VendorLayout = () => {
    return (
       <div>
          <h1>Vendor</h1>
+
          <Outlet />
       </div>
    )
