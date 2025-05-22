@@ -59,4 +59,19 @@ const LATEST_PUBLICATIONS_BOOKS = [
    },
 ]
 
-export { LATEST_PUBLICATIONS_BOOKS, BOOK_SLIDER }
+const VENDORCARDS = [
+   {
+      img: 'https://img.freepik.com/free-photo/old-cement-wall-texture_1149-1280.jpg?t=st=1746559935~exp=1746563535~hmac=bf78bf477a514ec540120e124ccfe7aea89c46d0408ed61dfbe2775743c09465&w=1380',
+      text: 'В целом, конечно, экономическая повестка сегодняшнего дня прекрасно подходит для реализации переосмысления внешнеэкономических политик.',
+   },
+   {
+      img: 'https://img.freepik.com/free-photo/old-cement-wall-texture_1149-1280.jpg?t=st=1746559935~exp=1746563535~hmac=bf78bf477a514ec540120e124ccfe7aea89c46d0408ed61dfbe2775743c09465&w=1380',
+      text: 'В целом, конечно, экономическая повестка сегодняшнего дня прекрасно подходит для реализации переосмысления внешнеэкономических политик.',
+   },
+   {
+      img: 'https://img.freepik.com/free-photo/old-cement-wall-texture_1149-1280.jpg?t=st=1746559935~exp=1746563535~hmac=bf78bf477a514ec540120e124ccfe7aea89c46d0408ed61dfbe2775743c09465&w=1380',
+      text: 'В целом, конечно, экономическая повестка сегодняшнего дня прекрасно подходит для реализации переосмысления внешнеэкономических политик.',
+   },
+]
+
+export { LATEST_PUBLICATIONS_BOOKS, BOOK_SLIDER, VENDORCARDS }
