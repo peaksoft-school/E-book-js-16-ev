@@ -5,6 +5,7 @@ import {
    Checkbox as MuiCheckbox,
    styled,
 } from '@mui/material'
+import { Icons } from '../../assets/icons'
 
 const Checkbox = forwardRef(
    ({ label = '', checked, onChange, ...rest }, ref) => (
@@ -15,6 +16,8 @@ const Checkbox = forwardRef(
                   checked={checked}
                   onChange={onChange}
                   ref={ref}
+                  checkedIcon={<img src={Icons.noneChecked} />}
+                  icon={<img src={Icons.checked} />}
                   {...rest}
                />
             }
@@ -29,6 +32,7 @@ export default Checkbox
 const StyledCheckbox = styled(MuiCheckbox)({
    '&.Mui-checked': {
       color: '#F34901',
+      borderRadius: 'none',
    },
 
    '&:hover': {

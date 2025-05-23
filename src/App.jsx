@@ -1,5 +1,6 @@
 import './App.css'
+import AppRouter from './routes/AppRouter'
 
-const App = () => <h1>eBook-js-16-ev</h1>
+const App = () => <AppRouter />
 
 export default App

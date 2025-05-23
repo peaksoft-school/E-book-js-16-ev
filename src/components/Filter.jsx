@@ -13,9 +13,9 @@ import {
    styled,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import Checkbox from './Checkbox'
-import Radio from './Radio'
-import Input from './Input'
+import Checkbox from './UI/Checkbox'
+import Radio from './UI/Radio'
+import Input from './UI/Input'
 
 const FilterPanel = () => {
    const [genre, setGenre] = useState(['Зарубежная литература'])
@@ -43,14 +43,20 @@ const FilterPanel = () => {
       <StyledBox>
          <NoShadowAccordion defaultExpanded>
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
-               <Typography>Жанры</Typography>
+               <Typography className="title">Жанры</Typography>
             </NoShadowAccordionSummary>
+
             <NoShadowAccordionDetails>
-               <Input type="search" placeholder="Я ищу... " />
+               <Input
+                  type="search"
+                  placeholder="Я ищу... "
+                  className="search-input"
+               />
+
                <FormGroup>
-                  {genres.map((g, index) => (
+                  {genres.map((g, i) => (
                      <FormControlLabel
-                        key={index}
+                        key={i}
                         control={
                            <Checkbox
                               checked={genre.includes(g)}
@@ -66,8 +72,9 @@ const FilterPanel = () => {
 
          <NoShadowAccordion defaultExpanded>
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
-               <Typography>Тип</Typography>
+               <Typography className="title">Тип</Typography>
             </NoShadowAccordionSummary>
+
             <NoShadowAccordionDetails>
                <RadioGroup
                   value={bookType}
@@ -94,10 +101,11 @@ const FilterPanel = () => {
 
          <NoShadowAccordion defaultExpanded>
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
-               <Typography>Стоимость</Typography>
+               <Typography className="title">Стоимость</Typography>
             </NoShadowAccordionSummary>
+
             <NoShadowAccordionDetails>
-               <Box display="flex" gap={1} mb={2}>
+               <Box display="flex" gap={1} mb={2} className="price-content">
                   <TextField
                      size="small"
                      type="number"
@@ -105,6 +113,7 @@ const FilterPanel = () => {
                      onChange={(e) => setPrice([+e.target.value, price[1]])}
                      label="от"
                   />
+
                   <TextField
                      size="small"
                      type="number"
@@ -113,6 +122,7 @@ const FilterPanel = () => {
                      label="до"
                   />
                </Box>
+
                <StyledSlider
                   value={price}
                   onChange={(e, newValue) => setPrice(newValue)}
@@ -124,7 +134,7 @@ const FilterPanel = () => {
 
          <NoShadowAccordion defaultExpanded noDivider>
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
-               <Typography>Язык издания</Typography>
+               <Typography className="title">Язык издания</Typography>
             </NoShadowAccordionSummary>
             <NoShadowAccordionDetails>
                <FormGroup>
@@ -151,28 +161,34 @@ const FilterPanel = () => {
 export default FilterPanel
 
 const StyledBox = styled(Box)(() => ({
-   width: '266px',
-   height: '935px',
+   maxWidth: '266px',
    margin: '20px',
+
+   '& .css-rpwreu-MuiPaper-root-MuiAccordion-root.Mui-expanded': {
+      margin: 0,
+   },
 }))
 
 const StyledSlider = styled(Slider)(() => ({
    color: '#FF4C00',
+
    '& .MuiSlider-track': {
       backgroundColor: '#FF4C00',
    },
+
    '& .MuiSlider-rail': {
       backgroundColor: '#C4C4C4',
       opacity: 1,
    },
 }))
 
-const NoShadowAccordion = styled(Accordion)(({ theme }) => ({
+const NoShadowAccordion = styled(Accordion)(() => ({
    boxShadow: 'none',
+
    '&:before': {
       display: 'none',
    },
-   borderBottom: '1px solid #e0e0e0',
+
    '&:last-of-type': {
       borderBottom: 'none',
    },
@@ -180,8 +196,68 @@ const NoShadowAccordion = styled(Accordion)(({ theme }) => ({
 
 const NoShadowAccordionSummary = styled(AccordionSummary)(() => ({
    boxShadow: 'none',
-}))
+   padding: 0,
+   borderBottom: '1px solid #C4C4C4',
 
+   '& .MuiAccordionSummary-content': {
+      margin: 0,
+   },
+
+   '& .title': {
+      fontFamily: 'Open Sans',
+      fontWeight: '600',
+      lineHeight: '120%',
+   },
+}))
 const NoShadowAccordionDetails = styled(AccordionDetails)(() => ({
-   boxShadow: 'none',
+   padding: 0,
+   position: 'relative',
+   overflowY: 'auto',
+   maxHeight: '276px',
+
+   scrollbarWidth: 'thin',
+   scrollbarColor: ' #f1f1f1',
+
+   '&::-webkit-scrollbar': {
+      width: '2px',
+   },
+
+   '&::-webkit-scrollbar-track': {
+      background: '#f1f1f1',
+   },
+
+   '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '#888',
+      borderRadius: '10px',
+      border: '2px solid #f1f1f1',
+   },
+
+   '&::-webkit-scrollbar-thumb:hover': {
+      background: '#555',
+   },
+
+   '& .search-input': {
+      paddingTop: '10px',
+
+      '& .MuiInputBase-root': {
+         backgroundColor: 'white',
+      },
+   },
+
+   '& .MuiFormGroup-root': {
+      paddingRight: '10px',
+
+      '& .MuiFormControlLabel-root': {
+         margin: 0,
+
+         '& .MuiButtonBase-root': {
+            padding: '9px 9px 9px 0',
+         },
+      },
+   },
+
+   '& .price-content': {
+      paddingTop: '20px',
+      overflowY: 'visible',
+   },
 }))

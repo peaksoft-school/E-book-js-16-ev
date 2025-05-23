@@ -4,13 +4,26 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router'
 import { Themes } from './components/Themes'
+import { injectStore } from './configs/axiosInstance.js'
+import { persistor, store } from './store/store.js'
+import Notification from './components/Notification.jsx'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+
+injectStore(store)
 
 createRoot(document.getElementById('root')).render(
    <StrictMode>
-      <BrowserRouter>
-         <Themes>
-            <App />
-         </Themes>
-      </BrowserRouter>
+      <Provider store={store}>
+         <PersistGate persistor={persistor}>
+            <BrowserRouter>
+               <Themes>
+                  <App />
+
+                  <Notification />
+               </Themes>
+            </BrowserRouter>
+         </PersistGate>
+      </Provider>
    </StrictMode>
 )
