@@ -59,6 +59,30 @@ const LATEST_PUBLICATIONS_BOOKS = [
    },
 ]
 
+const SELLERS = [
+   {
+      id: 1,
+      name: 'Мыктыбек Мыктыбеков',
+      phone: '+996 500 123 123',
+      email: 'myktybek@gmail.com',
+      books: 34,
+   },
+   {
+      id: 2,
+      name: 'Мыктыбек Мыктыбеков',
+      phone: '+996 500 123 123',
+      email: 'myktybek@gmail.com',
+      books: 34,
+   },
+   {
+      id: 3,
+      name: 'Мыктыбек Мыктыбеков',
+      phone: '+996 500 123 123',
+      email: 'myktybek@gmail.com',
+      books: 34,
+   },
+]
+
 const VENDORCARDS = [
    {
       img: 'https://img.freepik.com/free-photo/old-cement-wall-texture_1149-1280.jpg?t=st=1746559935~exp=1746563535~hmac=bf78bf477a514ec540120e124ccfe7aea89c46d0408ed61dfbe2775743c09465&w=1380',
@@ -74,4 +98,4 @@ const VENDORCARDS = [
    },
 ]
 
-export { LATEST_PUBLICATIONS_BOOKS, BOOK_SLIDER, VENDORCARDS }
+export { LATEST_PUBLICATIONS_BOOKS, BOOK_SLIDER, SELLERS, VENDORCARDS }
