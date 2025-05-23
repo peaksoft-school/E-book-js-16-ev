@@ -36,7 +36,12 @@ import applicationfill from './svgs/Application-orange.svg'
 import excl from './svgs/!icon.svg'
 import exclfill from './svgs/!iconB.svg'
 import eyeclose from './svgs/System,Default=Eye-close.svg'
+import eBook from './svgs/eBook.svg'
+import menu from './svgs/menu.svg'
 import plusw from './svgs/wplus.svg'
+import knowledge from './svgs/knowledge.svg'
+import noneChecked from './svgs/none-checked.svg'
+import checked from './svgs/checked.svg'
 
 export const Icons = {
    x,
@@ -77,5 +82,10 @@ export const Icons = {
    application,
    applicationfill,
    exclfill,
-   plusw
+   eBook,
+   menu,
+   plusw,
+   knowledge,
+   noneChecked,
+   checked,
 }

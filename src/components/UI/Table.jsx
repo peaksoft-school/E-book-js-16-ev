@@ -13,13 +13,12 @@ import {
    styled,
    Typography,
 } from '@mui/material'
-import { Icons } from '../assets/icons'
-import { SELLERS } from '../utils/constants'
-import Modal from './UI/Modal'
-import Button from './UI/buttons/Button'
+import { Icons } from '../../assets/icons'
+import { SELLERS } from '../../utils/constants'
+import Modal from './Modal'
+import Button from './buttons/Button'
 
-const Table = ({ variant = 'A' }) => {
-   const [selectedId, setSelectedId] = useState(null)
+const Table = ({ variant = 'B' }) => {
    const [sellers, setSellers] = useState(SELLERS)
    const [modalOpen, setModalOpen] = useState(false)
    const [toDelete, setToDelete] = useState(null)
@@ -55,13 +54,10 @@ const Table = ({ variant = 'A' }) => {
                   <TableCell />
                </StyledTableRowH>
             </StyledTableHead>
+
             <StyledTableBody>
                {sellers.map((seller, index) => (
-                  <StyledTableRow
-                     key={seller.id}
-                     selected={selectedId === seller.id}
-                     onClick={() => setSelectedId(seller.id)}
-                  >
+                  <StyledTableRow key={seller.id}>
                      <TableCell>{index + 1}</TableCell>
                      <TableCell>{seller.name}</TableCell>
                      <TableCell>
@@ -69,6 +65,7 @@ const Table = ({ variant = 'A' }) => {
                      </TableCell>
                      {variant === 'A' && <TableCell>{seller.email}</TableCell>}
                      {variant === 'A' && <TableCell>{seller.books}</TableCell>}
+
                      <StyledBBox>
                         <TableCell onClick={(e) => e.stopPropagation()}>
                            <IconButton
@@ -83,15 +80,15 @@ const Table = ({ variant = 'A' }) => {
                ))}
             </StyledTableBody>
          </StyledTable>
+
          <Modal open={modalOpen} handleClose={handleCloseModal}>
             <StyledText>
-               Вы уверены, что хотите удалить{' '}
-               <strong>{toDelete?.name} ?</strong>
+               Вы уверены, что хотите удалить <strong>{toDelete?.name}?</strong>
             </StyledText>
             <Stack direction="row" marginLeft="45px" justifyContent="start">
-               <Button variant="notbor" onClick={handleCloseModal}>
+               <StyledButton variant="notbor" onClick={handleCloseModal}>
                   Отмена
-               </Button>
+               </StyledButton>
                <Button
                   variant="contained"
                   color="error"
@@ -124,33 +121,25 @@ const StyledTableContainer = styled(TableContainer)({
    boxShadow: 'none',
    width: 'calc(100% - 290px)',
    margin: 0,
-   marginLeft: 290,
    overflowX: 'hidden',
 })
 
-const StyledTableHead = styled(TableHead)(({ theme }) => ({
+const StyledTableHead = styled(TableHead)({
    display: 'flex',
    '& .MuiTableCell-root': {
       fontWeight: 700,
       fontSize: '1rem',
       whiteSpace: 'nowrap',
    },
-}))
+})
 
-const StyledTableRow = styled(TableRow)(({ selected }) => ({
-   backgroundColor: selected ? 'rgba(255, 76, 0, 0.1)' : 'inherit',
-   cursor: 'pointer',
+const StyledTableRow = styled(TableRow)({
    display: 'flex',
    alignItems: 'center',
    width: 1170,
    '&:hover': {
       backgroundColor: 'rgba(255, 76, 0, 0.1)',
-   },
-   '&.Mui-selected': {
-      backgroundColor: 'rgba(255, 76, 0, 0.1)',
-   },
-   '&.Mui-selected:hover': {
-      backgroundColor: 'rgba(255, 76, 0, 0.1)',
+      cursor: 'pointer',
    },
    '& .iconBtn': {
       '&:hover': {
@@ -182,7 +171,7 @@ const StyledTableRow = styled(TableRow)(({ selected }) => ({
       justifyContent: 'flex-end',
       paddingRight: '1rem',
    },
-}))
+})
 
 const StyledTable = styled(MuiTable)({
    '& .MuiTableCell-root': {
@@ -217,5 +206,11 @@ const StyledTableRowH = styled(TableRow)({
    },
    '& th:nth-of-type(6)': {
       width: '4.125rem',
+   },
+})
+
+const StyledButton = styled(Button)({
+   '& .MuiButtonBase-root': {
+      margin: 0,
    },
 })
