@@ -1,5 +1,5 @@
 import { Box, Typography, styled } from '@mui/material'
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router'
 import { Icons } from '../assets/icons'
 
 const SideBar = () => (
@@ -67,6 +67,7 @@ const StyledSideBarBox = styled(Box)(({ theme }) => ({
    flexDirection: 'column',
    alignItems: 'center',
    justifyContent: 'center',
+   position: 'fixed',
 }))
 
 const LogoText = styled(Typography)(({ theme }) => ({
