@@ -5,6 +5,7 @@ import BasketCard from '../components/UI/cards/BasketCard'
 import { axiosInstance} from '../configs/axiosInstance'
 import { useSelector } from 'react-redux'
 import Input from '../components/UI/Input.jsx'
+import styled from 'styled-components'
 
 
 const Applications = () => {
@@ -38,11 +39,8 @@ useEffect(() => {
     <Box>
       <SideBar />
 
-      {/* <Input variant='search' sx={{marginLeft: '50px'}} placeholder='Искать жанр, книги, авторов, издательства... '/> */}
- <Input
-                     type="search"
-                     placeholder="Искать жанр, книги, авторов, издательства..."
-                  />
+      <StyledInput type='search' placeholder='Искать жанр, книги, авторов, издательства... '/>
+ 
       <Box >
         
           {books.map((book) => (
@@ -56,3 +54,9 @@ useEffect(() => {
 }
 
 export default Applications
+
+
+const StyledInput = styled(Input)({
+  marginLeft: 270,
+  // marginTop: 30,
+})

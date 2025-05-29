@@ -66,7 +66,6 @@ const StyledSideBarBox = styled(Box)(({ theme }) => ({
    display: 'flex',
    flexDirection: 'column',
    alignItems: 'center',
-   justifyContent: 'center',
    position: 'fixed',
 }))
 
