@@ -12,13 +12,15 @@ import {
    Stack,
    styled,
    Typography,
+   useTheme,
 } from '@mui/material'
 import { Icons } from '../../assets/icons'
 import { SELLERS } from '../../utils/constants'
 import Modal from './Modal'
 import Button from './buttons/Button'
 
-const Table = ({ variant = 'B' }) => {
+const Table = ({ variant = 'B', onRowClick }) => {
+   const theme = useTheme()
    const [sellers, setSellers] = useState(SELLERS)
    const [modalOpen, setModalOpen] = useState(false)
    const [toDelete, setToDelete] = useState(null)
@@ -57,7 +59,13 @@ const Table = ({ variant = 'B' }) => {
 
             <StyledTableBody>
                {sellers.map((seller, index) => (
-                  <StyledTableRow key={seller.id}>
+                  <StyledTableRow
+                     key={seller.id}
+                     // Используем пропс onRowClick, если он предоставлен
+                     onClick={
+                        onRowClick ? () => onRowClick(seller.id) : undefined
+                     }
+                  >
                      <TableCell>{index + 1}</TableCell>
                      <TableCell>{seller.name}</TableCell>
                      <TableCell>
@@ -66,16 +74,14 @@ const Table = ({ variant = 'B' }) => {
                      {variant === 'A' && <TableCell>{seller.email}</TableCell>}
                      {variant === 'A' && <TableCell>{seller.books}</TableCell>}
 
-                     <StyledBBox>
-                        <TableCell onClick={(e) => e.stopPropagation()}>
-                           <IconButton
-                              className="iconBtn"
-                              onClick={() => handleDeleteClick(seller)}
-                           >
-                              <img src={Icons.del} alt="delete" />
-                           </IconButton>
-                        </TableCell>
-                     </StyledBBox>
+                     <TableCell onClick={(e) => e.stopPropagation()}>
+                        <IconButton
+                           className="iconBtn"
+                           onClick={() => handleDeleteClick(seller)}
+                        >
+                           <img src={Icons.del} alt="delete" />
+                        </IconButton>
+                     </TableCell>
                   </StyledTableRow>
                ))}
             </StyledTableBody>
@@ -112,20 +118,25 @@ const StyledText = styled(Typography)({
    alignItems: 'center',
 })
 
-const StyledBBox = styled(Box)({
-   position: 'absolute',
-   marginLeft: 1054,
-})
-
 const StyledTableContainer = styled(TableContainer)({
    boxShadow: 'none',
-   width: 'calc(100% - 290px)',
+   width: '100%',
    margin: 0,
-   overflowX: 'hidden',
+   overflowX: 'auto',
+   maxWidth: '100%',
+})
+
+const StyledTable = styled(MuiTable)({
+   width: '100%',
+   borderCollapse: 'collapse',
+   '& .MuiTableCell-root': {
+      border: 'none',
+   },
 })
 
 const StyledTableHead = styled(TableHead)({
    display: 'flex',
+   width: '100%',
    '& .MuiTableCell-root': {
       fontWeight: 700,
       fontSize: '1rem',
@@ -133,81 +144,73 @@ const StyledTableHead = styled(TableHead)({
    },
 })
 
-const StyledTableRow = styled(TableRow)({
+const StyledTableRowH = styled(TableRow)(({ theme }) => ({
+   display: 'flex',
+   width: '100%',
+   '& th:nth-of-type(1)': { width: '5%' },
+   '& th:nth-of-type(2)': { width: '25%' },
+   '& th:nth-of-type(3)': { width: '20%' },
+   '& th:nth-of-type(4)': { width: '25%' },
+   '& th:nth-of-type(5)': { width: '15%' },
+   '& th:nth-of-type(6)': { width: '10%' },
+
+   [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      '& th': {
+         width: '100% !important',
+         padding: '8px 0',
+      },
+   },
+}))
+
+const StyledTableBody = styled(TableBody)({
+   display: 'flex',
+   flexDirection: 'column',
+   width: '100%',
+})
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
    display: 'flex',
    alignItems: 'center',
-   width: 1170,
+   width: '100%',
    '&:hover': {
       backgroundColor: 'rgba(255, 76, 0, 0.1)',
       cursor: 'pointer',
    },
-   '& .iconBtn': {
-      '&:hover': {
-         backgroundColor: '#FFCEB7',
-      },
+   '& .iconBtn:hover': {
+      backgroundColor: '#FFCEB7',
    },
    '& td': {
       display: 'flex',
       alignItems: 'center',
       fontSize: '1rem',
+      flexShrink: 0,
    },
-   '& td:nth-of-type(1)': {
-      width: '6.875rem',
-   },
-   '& td:nth-of-type(2)': {
-      width: '16.125rem',
-   },
-   '& td:nth-of-type(3)': {
-      width: '13.3125rem',
-   },
-   '& td:nth-of-type(4)': {
-      width: '17rem',
-   },
-   '& td:nth-of-type(5)': {
-      width: '13rem',
-   },
+   '& td:nth-of-type(1)': { width: '5%' },
+   '& td:nth-of-type(2)': { width: '25%' },
+   '& td:nth-of-type(3)': { width: '20%' },
+   '& td:nth-of-type(4)': { width: '25%' },
+   '& td:nth-of-type(5)': { width: '15%' },
    '& td:nth-of-type(6)': {
-      width: '4.75rem',
+      width: '10%',
       justifyContent: 'flex-end',
       paddingRight: '1rem',
    },
-})
 
-const StyledTable = styled(MuiTable)({
-   '& .MuiTableCell-root': {
-      border: 'none',
+   [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      '& td': {
+         width: '100% !important',
+         padding: '8px 0',
+      },
+      '& td:nth-of-type(6)': {
+         justifyContent: 'flex-start',
+         paddingRight: 0,
+      },
    },
-})
-
-const StyledTableBody = styled(TableBody)({
-   display: 'flex',
-   width: '100%',
-   flexDirection: 'column',
-})
-
-const StyledTableRowH = styled(TableRow)({
-   display: 'flex',
-   alignItems: 'center',
-   width: '100%',
-   '& th:nth-of-type(1)': {
-      width: '6.875rem',
-   },
-   '& th:nth-of-type(2)': {
-      width: '16.125rem',
-   },
-   '& th:nth-of-type(3)': {
-      width: '13.3125rem',
-   },
-   '& th:nth-of-type(4)': {
-      width: '17rem',
-   },
-   '& th:nth-of-type(5)': {
-      width: '13rem',
-   },
-   '& th:nth-of-type(6)': {
-      width: '4.125rem',
-   },
-})
+}))
 
 const StyledButton = styled(Button)({
    '& .MuiButtonBase-root': {
