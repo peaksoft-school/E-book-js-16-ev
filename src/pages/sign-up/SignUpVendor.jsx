@@ -2,7 +2,7 @@ import { Box, Button, Tab, Tabs, Typography, styled } from '@mui/material'
 import { useState } from 'react'
 import Input from '../../components/UI/Input'
 
-const SignIn = () => {
+const SignUpVendor = () => {
    const [value, setValue] = useState()
    const handleChange = () => {}
 
@@ -20,6 +20,20 @@ const SignIn = () => {
          </Tabs>
          <Input
             type="info"
+            placeholder="Напишите ваше имя"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            label="Ваше имя*"
+         />
+         <Input
+            type="info"
+            placeholder="Напишите ваше имя"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            label="Ваша фамилия**"
+         />
+         <Input
+            type="info"
             placeholder="Напишите email"
             value={value}
             onChange={(e) => setValue(e.target.value)}
@@ -33,12 +47,12 @@ const SignIn = () => {
             label="Пароль"
          />
          {/* <Typography>Неправильно указан Email и/или пароль</Typography> */}
-         <StyledButton>Войти</StyledButton>
+         <StyledButton>Создать аккаунт</StyledButton>
       </Box>
    )
 }
 
-export default SignIn
+export default SignUpVendor
 
 const StyledButton = styled(Button)({
    marginTop: '30px',
