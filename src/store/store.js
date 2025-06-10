@@ -1,16 +1,15 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
-// import { persistStore, persistReducer } from 'redux-persist'
-
 import storage from 'redux-persist/lib/storage'
-// import { authSlice } from './authSlice'
-import authReducer from './authSlice'
-
+import applicationReducer from './applications/applicationSlice'
+import { authSlice } from './authSlice'
+import bookReducer from './applications/innerpage/bookSlice'
 
 const rootReducer = combineReducers({
-   // [authSlice.name]: authSlice.reducer,
-   auth: authReducer,
+   [authSlice.name]: authSlice.reducer,
+   application: applicationReducer,
+   book: bookReducer,
 })
 
 const persistConfig = {
@@ -22,7 +21,6 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
    reducer: persistedReducer,
-
    middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ serializableCheck: false }),
 })

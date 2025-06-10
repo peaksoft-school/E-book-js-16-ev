@@ -3,6 +3,8 @@ import { Suspense, lazy } from 'react'
 import { ROLES } from './routes'
 import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
+import Applications from '../pages/admin/aplications/Applications'
+import InnerPageCard from '../pages/admin/aplications/InnerPageCard'
 
 const SignUp = lazy(() => import('../pages/sign-up/SignUp'))
 const SignIn = lazy(() => import('../pages/sign-in/SignIn'))
@@ -23,7 +25,7 @@ const AppRouter = () => (
                      <Home />
                   </Suspense>
                }
-               fallbackPath={'/'}
+               fallbackPath={'/admin'}
             />
          }
       />
@@ -59,7 +61,10 @@ const AppRouter = () => (
                fallbackPath={'/'}
             />
          }
-      />
+      >
+         <Route path="/admin/application" element={<Applications />} />
+         <Route path="/admin/application/:bookItemId" element={<InnerPageCard/>}/>
+      </Route>
 
       <Route
          path="/user"

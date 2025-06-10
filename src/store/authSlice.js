@@ -1,4 +1,3 @@
-// authSlice.js
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -6,7 +5,7 @@ const initialState = {
    user: null,
 }
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
    name: 'auth',
    initialState,
    reducers: {
