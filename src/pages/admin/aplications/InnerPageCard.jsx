@@ -46,19 +46,22 @@ const InnerPageCard = () => {
    if (book.type === 'ELECTRONIC') {
       infoFields.push({ label: 'Объем', value: `${book.valuePages} стр` })
       infoFields.push({ label: 'Смотреть PDF', value: book.pdfUrl })
-   } else if (book.type === 'AUDIO') {
-      infoFields.push({ label: 'Длительность', value: book.audioDuration })
-      infoFields.push({ label: 'Аудио', value: book.audioUrl })
-      infoFields.push({ label: 'Фрагмент', value: book.fragmentUrl })
-      if (book.fragmentDuration) {
-         infoFields.push({
-            label: 'Длительность фрагмента',
-            value: book.fragmentDuration,
-         })
-      }
-   } else {
+   } else if (book.type === 'PAPER') {
       infoFields.push({ label: 'Объем', value: `${book.valuePages} стр` })
+   } else if (book.type === 'AUDIO') {
+      infoFields.push({ label: 'Длительность', value: `${book.audioDuration}` })
    }
+   // else if (book.type === 'AUDIO') {
+   //    infoFields.push({ label: 'Длительность', value: book.audioDuration })
+   //    infoFields.push({ label: 'Аудио', value: book.audioUrl })
+   //    infoFields.push({ label: 'Фрагмент', value: book.fragmentUrl })
+   //    if (book.fragmentDuration) {
+   //       infoFields.push({
+   //          label: 'Длительность фрагмента',
+   //          value: book.fragmentDuration,
+   //       })
+   //    }
+   // }
 
    const handleCancelSubmit = () => {
       dispatch(rejectBook({ bookItemId, reason: cancelReason })).then(() => {
@@ -129,7 +132,7 @@ const InnerPageCard = () => {
                   <AudioPlayer
                      audioUrl={book.audioUrl}
                      fragmentUrl={book.fragmentUrl}
-                     fragmentDuration={book.fragmentDuration}
+                     // fragmentDuration={book.fragmentDuration}
                   />
                )}
 
@@ -163,12 +166,14 @@ const InnerPageCard = () => {
                   >
                      О книге
                   </TabItem>
-                  <TabItem
-                     active={activeTab === 'fragment'}
-                     onClick={() => setActiveTab('fragment')}
-                  >
-                     Читать фрагмент
-                  </TabItem>
+                  {(book.type === 'ELECTRONIC' || book.type === 'PAPER') && (
+                     <TabItem
+                        active={activeTab === 'fragment'}
+                        onClick={() => setActiveTab('fragment')}
+                     >
+                        Читать фрагмент
+                     </TabItem>
+                  )}
                </Tabs>
                <TabContent>
                   <Typography className="text" variant="p">
