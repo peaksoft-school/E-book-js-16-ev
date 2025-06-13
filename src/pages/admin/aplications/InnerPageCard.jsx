@@ -102,7 +102,9 @@ const InnerPageCard = () => {
                   </LabelsColumn>
                   <ValuesColumn>
                      {infoFields.map(({ label, value }) => (
-                        <ValueText key={label}>
+                        <ValueText key={label} sx={{
+         color: label === 'Смотреть PDF' ? '#969696' : theme.palette.primary.main,
+      }}>
                            {label === 'Смотреть PDF' && book.pdfUrl ? (
                               <a
                                  href={book.pdfUrl}
@@ -110,8 +112,9 @@ const InnerPageCard = () => {
                                  rel="noopener noreferrer"
                                  style={{
                                     color: '#1976d2',
-                                    textDecoration: 'underline',
+                                    textDecoration: 'none',
                                     fontWeight: 500,
+
                                  }}
                               >
                                  Document.pdf
@@ -356,7 +359,7 @@ const LabelText = styled(Typography)({
    fontWeight: 600,
 })
 
-const ValueText = styled(Typography)(({ theme }) => ({
+const ValueText = styled(Typography)(({ theme}) => ({
    color: theme.palette.primary.main,
    fontWeight: 400,
    fontSize: '14px',

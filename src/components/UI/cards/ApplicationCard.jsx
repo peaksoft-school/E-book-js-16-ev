@@ -88,6 +88,7 @@ const StyledCard = styled(Card)(({ theme, showed }) => ({
    height: 410,
    padding: '35px 35px 20px 35px',
    background: showed === false ? 'rgba(255, 76, 0, 0.08)' : '#EDEDED',
+   border: showed === false ? '1px solid #FF4C00' : '',
    borderRadius: '0px',
    cursor: 'pointer',
    boxShadow: 'none',
