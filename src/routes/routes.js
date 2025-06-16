@@ -1,6 +1,7 @@
 const ROUTES = {
    SIGN_IN: '/sign-in',
-   SIGN_UP: '/sign-up',
+   SIGN_UP_CLIENT: '/sign-up-client',
+   SIGN_UP_VENDOR: '/sign-up-vendor',
 
    ADMIN: {
       INDEX: '/admin',

@@ -3,7 +3,7 @@ import axios from 'axios'
 const BASE_URL = 'http://35.159.168.248/api'
 
 export const axiosInstance = axios.create({
-   baseUrl: BASE_URL,
+   baseURL: BASE_URL,
 
    headers: {
       'Content-Type': 'application/json',

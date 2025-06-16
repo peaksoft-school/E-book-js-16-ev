@@ -1,34 +1,31 @@
-import { Button, Typography, styled } from '@mui/material'
+import {
+   Button,
+   Typography,
+   styled,
+   Checkbox,
+   FormControlLabel,
+} from '@mui/material'
 import { useState } from 'react'
 import Input from '../../components/UI/Input'
 import { useDispatch, useSelector } from 'react-redux'
-import { registerVendor } from '../../store/slices/authThunk'
 import AuthFormWrapper from '../../components/AuthFormWrapper'
+import { useNavigate } from 'react-router'
+import { registerUser } from '../../store/slices/authThunk'
 
-const SignUpVendor = () => {
+const SignUpClient = () => {
    const [email, setEmail] = useState('')
    const [firstName, setFirstName] = useState('')
    const [password, setPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
-   const [lastName, setLastName] = useState('')
-   const [phoneNumber, setPhoneNumber] = useState('')
    const [subscribe, setSubscribe] = useState(false)
 
+   const navigate = useNavigate()
    const dispatch = useDispatch()
    const { error } = useSelector((state) => state.auth)
 
    const handleSubmit = (e) => {
       e.preventDefault()
-      dispatch(
-         registerVendor({
-            firstName,
-            email,
-            password,
-            confirmPassword,
-            lastName,
-            phoneNumber,
-         })
-      )
+      dispatch(registerUser({ firstName, email, password, confirmPassword }))
    }
 
    return (
@@ -43,57 +40,64 @@ const SignUpVendor = () => {
             />
             <Input
                type="info"
-               placeholder="Напишите вашу фамилию"
-               value={lastName}
-               onChange={(e) => setLastName(e.target.value)}
-               label="Ваша фамилия*"
-            />
-            <Input
-               type="info"
-               placeholder="+996 (_ _ _) _ _  _ _  _ _"
-               value={phoneNumber}
-               onChange={(e) => setPhoneNumber(e.target.value)}
-               label="Номер вашего телефона*"
-            />
-            <Input
-               type="info"
                placeholder="Напишите email"
                value={email}
                onChange={(e) => setEmail(e.target.value)}
-               label="Email*"
+               label="Email"
             />
             <Input
                type="password"
                placeholder="Напишите пароль"
                value={password}
                onChange={(e) => setPassword(e.target.value)}
-               label="Пароль*"
+               label="Пароль"
             />
             <Input
                type="password"
                placeholder="Подтвердите пароль"
                value={confirmPassword}
                onChange={(e) => setConfirmPassword(e.target.value)}
-               label="Подтвердите пароль*"
+               label="Подтвердите пароль"
             />
             {error && (
                <Typography color="error" mt={2}>
                   {error}
                </Typography>
             )}
-
+            <FormControlLabel
+               control={
+                  <Checkbox
+                     checked={subscribe}
+                     onChange={(e) => setSubscribe(e.target.checked)}
+                  />
+               }
+               label="Подписаться на рассылку eBook"
+            />
             <StyledButton type="submit">Создать аккаунт</StyledButton>
+            <StyledAuthButton onClick={() => navigate('/sign-up-vendor')}>
+               Стать продавцом на eBook
+            </StyledAuthButton>
          </form>
       </AuthFormWrapper>
    )
 }
 
-export default SignUpVendor
+export default SignUpClient
 
 const StyledButton = styled(Button)({
    marginTop: '20px',
    backgroundColor: '#1c1c1c',
    color: 'white',
+   borderRadius: '0',
+   padding: '12px',
+   fontSize: '16px',
+   width: '100%',
+})
+
+const StyledAuthButton = styled(Button)({
+   marginTop: '20px',
+   border: '1px solid black',
+   color: 'black',
    borderRadius: '0',
    padding: '12px',
    fontSize: '16px',

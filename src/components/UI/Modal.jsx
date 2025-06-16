@@ -18,7 +18,7 @@ const StyleBox = styled(Box)({
    boxShadow: 24,
    p: 4,
    borderRadius: 2,
-   width: 500,
+   minwidth: 500,
    padding: 20,
    backgroundColor: 'white',
 })
