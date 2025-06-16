@@ -60,8 +60,8 @@ const AppRouter = () => (
                fallbackPath={'/'}
             />
          }
-      > 
-      <Route path='admin/books' element={<Books/>}/>
+      >
+         <Route path="admin/books" element={<Books/>} />
       </Route>
 
       <Route
