@@ -31,7 +31,7 @@ axiosInstance.interceptors.request.use(
       console.log('👉 Токен:', token)
 
       if (token) {
-         updateConfig.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NDk3Mjc3ODAsImV4cCI6MTc0OTc2Mzc4MH0.YCnIs0d3xqqJr9SjPNieSI1asRdAQujW0zWrsK-PoBo`
+         updateConfig.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTAwNTI2MDEsImV4cCI6MTc1MDA4ODYwMX0.OS43tQlrtc1_WxF-jMbpAVJjRs3GMTakNitUNVf4OPg`
       }
 
       return updateConfig
