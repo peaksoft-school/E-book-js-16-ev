@@ -11,6 +11,7 @@ const Home = lazy(() => import('../layout/home/Home'))
 const AdminLayout = lazy(() => import('../layout/admin/AdminLayout'))
 const UserLayout = lazy(() => import('../layout/user/UserLayout'))
 const VendorLayout = lazy(() => import('../layout/vendor/VendorLayout'))
+const ResetPassword = lazy(() => import('../pages/sign-in/ResetPassword'))
 
 const AppRouter = () => (
    <Routes>
@@ -39,6 +40,15 @@ const AppRouter = () => (
             </Suspense>
          }
       />
+      <Route
+         path="/ResetPassword/:token"
+         element={
+            <Suspense fallback={<Loading />}>
+               <ResetPassword />
+            </Suspense>
+         }
+      />
+
       <Route
          path="/"
          element={
@@ -73,7 +83,7 @@ const AppRouter = () => (
          path="/user"
          element={
             <PrivateRouter
-               roles={[ROLES.USER]}
+               roles={[ROLES.CLIENT]}
                Component={
                   <Suspense fallback={<Loading />}>
                      <UserLayout />
@@ -94,7 +104,7 @@ const AppRouter = () => (
                      <VendorLayout />
                   </Suspense>
                }
-               fallbackPath={'/sign-in'}
+               fallbackPath={'/'}
             />
          }
       />

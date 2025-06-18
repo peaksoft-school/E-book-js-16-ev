@@ -43,7 +43,7 @@ const StyledForm = styled(Box)({
 const FormContent = styled(Box)({
    display: 'flex',
    flexDirection: 'column',
-   gap: '7px',
+   gap: '12px',
    width: '100%',
    marginTop: '10px',
    padding: '0 23px',

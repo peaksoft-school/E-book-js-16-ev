@@ -33,7 +33,7 @@ const SignUpVendor = () => {
 
    return (
       <AuthFormWrapper value={1}>
-         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+         <StyledForm onSubmit={handleSubmit} style={{ width: '100%' }}>
             <Input
                type="info"
                placeholder="Напишите ваше имя"
@@ -83,7 +83,7 @@ const SignUpVendor = () => {
             )}
 
             <StyledButton type="submit">Создать аккаунт</StyledButton>
-         </form>
+         </StyledForm>
       </AuthFormWrapper>
    )
 }
@@ -98,4 +98,10 @@ const StyledButton = styled(Button)({
    padding: '12px',
    fontSize: '16px',
    width: '100%',
+})
+const StyledForm = styled('form')({
+   width: '100%',
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '7px',
 })

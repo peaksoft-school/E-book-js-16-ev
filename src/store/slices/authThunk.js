@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import axios from 'axios'
 import { axiosInstance } from '../../configs/axiosInstance'
 
 export const registerUser = createAsyncThunk(
@@ -57,6 +58,24 @@ export const loginUser = createAsyncThunk(
       }
    }
 )
+// export const loginUser = createAsyncThunk(
+//    'auth/login',
+//    async ({ email, password }, { rejectWithValue }) => {
+//       try {
+//          const response = await axios.post(
+//             `http://35.159.168.248/api/auth/signIn`,
+//             {
+//                email,
+//                password,
+//             }
+//          )
+//          return response.data
+//       } catch (error) {
+//          // Убедитесь, что error.response.data существует
+//          return rejectWithValue(error.response?.data?.message || 'Login failed')
+//       }
+//    }
+// )
 
 export const forgotPassword = createAsyncThunk(
    'auth/forgotPassword',
@@ -77,15 +96,43 @@ export const resetPassword = createAsyncThunk(
    'auth/resetPassword',
    async ({ token, newPassword, confirmPassword }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.post(`/auth/ResetPassword`, {
-            token,
-            newPassword,
-            confirmPassword,
-         })
+         const response = await axiosInstance.post(
+            `/auth/ResetPassword/${token}`,
+            null,
+            {
+               params: {
+                  newPassword,
+                  confirmPassword,
+               },
+            }
+         )
          return response.data
       } catch (error) {
          const message = error.response?.data?.message || 'Что-то пошло не так'
          return rejectWithValue(message)
+      }
+   }
+)
+
+// authThunk.js
+
+export const googleSignIn = createAsyncThunk(
+   'auth/googleSignIn',
+   async (accessToken, { rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.post(
+            `/auth/signInGoogle`, // Your Google sign-in endpoint
+            { accessToken: accessToken } // Sending access_token in the request body
+         )
+         return response.data
+      } catch (error) {
+         console.error(
+            'Error in googleSignIn thunk:',
+            error.response?.data || error.message
+         )
+         return rejectWithValue(
+            error.response?.data?.message || 'Google Sign-In failed'
+         )
       }
    }
 )

@@ -5,12 +5,14 @@ import {
    Checkbox,
    FormControlLabel,
 } from '@mui/material'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Input from '../../components/UI/Input'
 import { useDispatch, useSelector } from 'react-redux'
 import AuthFormWrapper from '../../components/AuthFormWrapper'
 import { useNavigate } from 'react-router'
 import { registerUser } from '../../store/slices/authThunk'
+import { clearAuthError } from '../../store/slices/authSlice'
+import { toast } from 'react-toastify'
 
 const SignUpClient = () => {
    const [email, setEmail] = useState('')
@@ -23,40 +25,67 @@ const SignUpClient = () => {
    const dispatch = useDispatch()
    const { error } = useSelector((state) => state.auth)
 
-   const handleSubmit = (e) => {
+   useEffect(() => {
+      return () => {
+         dispatch(clearAuthError())
+      }
+   }, [dispatch])
+   const handleSubmit = async (e) => {
       e.preventDefault()
-      dispatch(registerUser({ firstName, email, password, confirmPassword }))
+      dispatch(clearAuthError())
+
+      const resultAction = await dispatch(
+         registerUser({ firstName, email, password, confirmPassword })
+      )
+
+      if (registerUser.fulfilled.match(resultAction)) {
+         toast.success('Регистрация прошла успешно! Теперь вы можете войти.', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+         })
+         navigate('/sign-in')
+      }
+   }
+
+   const handleInputChange = (setter) => (e) => {
+      setter(e.target.value)
+      // dispatch(clearAuthError()) // Опционально: очищать ошибку при каждом изменении поля
    }
 
    return (
       <AuthFormWrapper value={1}>
-         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+         <StyledForm onSubmit={handleSubmit}>
             <Input
                type="info"
                placeholder="Напишите ваше имя"
                value={firstName}
-               onChange={(e) => setFirstName(e.target.value)}
+               onChange={handleInputChange(setFirstName)}
                label="Ваше имя*"
             />
             <Input
                type="info"
                placeholder="Напишите email"
                value={email}
-               onChange={(e) => setEmail(e.target.value)}
+               onChange={handleInputChange(setEmail)}
                label="Email"
             />
             <Input
                type="password"
                placeholder="Напишите пароль"
                value={password}
-               onChange={(e) => setPassword(e.target.value)}
+               onChange={handleInputChange(setPassword)}
                label="Пароль"
             />
             <Input
                type="password"
                placeholder="Подтвердите пароль"
                value={confirmPassword}
-               onChange={(e) => setConfirmPassword(e.target.value)}
+               onChange={handleInputChange(setConfirmPassword)}
                label="Подтвердите пароль"
             />
             {error && (
@@ -77,7 +106,7 @@ const SignUpClient = () => {
             <StyledAuthButton onClick={() => navigate('/sign-up-vendor')}>
                Стать продавцом на eBook
             </StyledAuthButton>
-         </form>
+         </StyledForm>
       </AuthFormWrapper>
    )
 }
@@ -102,4 +131,11 @@ const StyledAuthButton = styled(Button)({
    padding: '12px',
    fontSize: '16px',
    width: '100%',
+})
+
+const StyledForm = styled('form')({
+   width: '100%',
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '7px',
 })

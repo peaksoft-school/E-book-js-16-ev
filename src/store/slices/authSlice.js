@@ -1,10 +1,14 @@
+// authSlice.js
 import { createSlice } from '@reduxjs/toolkit'
 import {
    forgotPassword,
    loginUser,
    registerUser,
    registerVendor,
+   resetPassword,
+   googleSignIn,
 } from './authThunk'
+import { saveStateToLocalStorage } from '../../utils/storage/lacalStorage'
 
 const initialState = {
    role: 'GUEST',
@@ -27,12 +31,20 @@ const authSlice = createSlice({
          state.isAuth = false
          state.role = 'GUEST'
          state.email = null
+         state.error = null // <-- Также обнуляем ошибку при выходе
+      },
+      clearAuthError: (state) => {
+         state.error = null
+         state.forgotPasswordStatus = 'idle'
+         state.resetPasswordStatus = 'idle'
+         state.forgotPasswordMessage = null
       },
    },
    extraReducers: (builder) => {
       builder
          .addCase(registerUser.pending, (state) => {
             state.isLoading = true
+            state.error = null // <-- ДОБАВЬТЕ ЭТУ СТРОКУ
          })
          .addCase(registerUser.fulfilled, (state, action) => {
             state.isLoading = false
@@ -40,6 +52,7 @@ const authSlice = createSlice({
             state.role = action.payload.role
             state.token = action.payload.token
             state.email = action.payload.email
+            state.error = null // <-- Убедитесь, что ошибка очищена при успехе
          })
          .addCase(registerUser.rejected, (state, action) => {
             state.isLoading = false
@@ -47,6 +60,7 @@ const authSlice = createSlice({
          })
          .addCase(registerVendor.pending, (state) => {
             state.isLoading = true
+            state.error = null // <-- ДОБАВЬТЕ ЭТУ СТРОКУ
          })
          .addCase(registerVendor.fulfilled, (state, action) => {
             state.isLoading = false
@@ -54,6 +68,7 @@ const authSlice = createSlice({
             state.role = action.payload.role
             state.token = action.payload.token
             state.email = action.payload.email
+            state.error = null // <-- Убедитесь, что ошибка очищена при успехе
          })
          .addCase(registerVendor.rejected, (state, action) => {
             state.isLoading = false
@@ -61,6 +76,7 @@ const authSlice = createSlice({
          })
          .addCase(loginUser.pending, (state) => {
             state.isLoading = true
+            state.error = null // <-- ДОБАВЬТЕ ЭТУ СТРОКУ
          })
          .addCase(loginUser.fulfilled, (state, action) => {
             state.isLoading = false
@@ -68,6 +84,7 @@ const authSlice = createSlice({
             state.role = action.payload.role
             state.token = action.payload.token
             state.email = action.payload.email
+            state.error = null // <-- Убедитесь, что ошибка очищена при успехе
          })
          .addCase(loginUser.rejected, (state, action) => {
             state.isLoading = false
@@ -88,8 +105,58 @@ const authSlice = createSlice({
             state.forgotPasswordStatus = 'failed'
             state.error = action.payload
          })
+         // ...
+         .addCase(resetPassword.pending, (state) => {
+            state.isLoading = true
+            state.error = null
+            state.resetPasswordStatus = 'loading'
+         })
+         .addCase(resetPassword.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.resetPasswordStatus = 'succeeded'
+            state.error = null
+         })
+         .addCase(resetPassword.rejected, (state, action) => {
+            state.isLoading = false
+            state.resetPasswordStatus = 'failed'
+            state.error = action.payload
+         })
+         // ...
+
+         .addCase(googleSignIn.pending, (state) => {
+            state.isLoading = true
+            state.error = null
+         })
+         .addCase(googleSignIn.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.error = null
+            state.token = action.payload.token
+            state.role = action.payload.role
+            state.email = action.payload.email || null
+            state.isAuth = true
+            state.user = {
+               id: action.payload.id,
+               role: action.payload.role,
+               email: action.payload.email,
+            }
+            saveStateToLocalStorage(
+               state.token,
+               state.role,
+               state.email,
+               state.user
+            )
+         })
+         .addCase(googleSignIn.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action.payload
+            state.isAuth = false
+            state.token = null
+            state.role = 'GUEST'
+            state.email = null
+            state.user = null
+         })
    },
 })
 
-export const { logOut } = authSlice.actions
+export const { logOut, clearAuthError } = authSlice.actions
 export default authSlice.reducer

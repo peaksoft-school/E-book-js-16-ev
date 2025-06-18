@@ -22,11 +22,13 @@ const ForgotPassword = ({ onClose }) => {
    const handleSendEmail = () => {
       dispatch(forgotPassword({ email }))
    }
-   console.log(email + '   hjkl;')
 
    return (
       <Modal open={true} handleClose={handleCloseModal}>
-         <Typography mb={2}>Введите вашу почту</Typography>
+         <Typography mb={2}>
+            Восстановление пароля <br /> Введите свой адрес электронной почты, и
+            ваш пароль будет сброшен и отправлен вам по электронной почте.
+         </Typography>
          <Input
             type="info"
             placeholder="Напишите email"

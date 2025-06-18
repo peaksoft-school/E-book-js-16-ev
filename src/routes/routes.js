@@ -20,7 +20,7 @@ const ROUTES = {
 
 const ROLES = {
    ADMIN: 'ADMIN',
-   USER: 'USER',
+   CLIENT: 'CLIENT',
    VENDOR: 'VENDOR',
    GUEST: 'GUEST',
 }
