@@ -19,7 +19,7 @@ import { SELLERS } from '../../utils/constants'
 import Modal from './Modal'
 import Button from './buttons/Button'
 
-const Table = ({ variant = 'B', onRowClick }) => {
+const Table = ({ variant = 'B', onRowClick, sellers, setSellers }) => {
    const theme = useTheme()
    const [sellers, setSellers] = useState(SELLERS)
    const [modalOpen, setModalOpen] = useState(false)
