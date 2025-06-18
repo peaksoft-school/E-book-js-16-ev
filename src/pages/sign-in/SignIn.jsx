@@ -1,12 +1,11 @@
-import { Button, Typography, styled, Stack } from '@mui/material'
+import { Button, Typography, styled } from '@mui/material'
 import Input from '../../components/UI/Input'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import AuthFormWrapper from '../../components/AuthFormWrapper'
-import { forgotPassword, loginUser } from '../../store/slices/authThunk'
+import { loginUser } from '../../store/slices/authThunk'
 import ForgotPassword from './ForgotPassword'
-import GoogleSignInButton from '../../components/GoogleSignInButton'
 
 const SignIn = () => {
    const [email, setEmail] = useState('')
@@ -16,37 +15,34 @@ const SignIn = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
 
-   const { isLoading, error } = useSelector((state) => state.auth)
+   const { isLoading, error, isAuth, role } = useSelector((state) => state.auth)
 
-   const handleSubmit = async (e) => {
+   const handleSubmit = (e) => {
       e.preventDefault()
-      try {
-         const resultAction = await dispatch(loginUser({ email, password }))
-
-         if (loginUser.fulfilled.match(resultAction)) {
-            const { role } = resultAction.payload
-            switch (role?.toUpperCase()) {
-               case 'ADMIN':
-                  navigate('/admin')
-                  break
-               case 'VENDOR':
-                  navigate('/vendor')
-                  break
-               case 'CLIENT':
-                  navigate('/user')
-                  break
-               default:
-                  navigate('/')
-            }
-         }
-      } catch (err) {
-         console.error('Login submission failed:', err)
-      }
+      dispatch(loginUser({ email, password }))
    }
 
    const handleForgotPassword = () => {
       setIsForgotModalOpen(true)
    }
+
+   useEffect(() => {
+      if (isAuth && role) {
+         switch (role.toUpperCase()) {
+            case 'ADMIN':
+               navigate('/admin')
+               break
+            case 'VENDOR':
+               navigate('/vendor')
+               break
+            case 'CLIENT':
+               navigate('/user')
+               break
+            default:
+               navigate('/')
+         }
+      }
+   }, [isAuth, role, navigate])
 
    return (
       <AuthFormWrapper value={0}>
@@ -83,7 +79,6 @@ const SignIn = () => {
             {isForgotModalOpen && (
                <ForgotPassword onClose={() => setIsForgotModalOpen(false)} />
             )}
-            {/* <GoogleSignInButton /> */}
          </StyledForm>
       </AuthFormWrapper>
    )
@@ -96,7 +91,7 @@ const StyledButton = styled(Button)({
    backgroundColor: '#1c1c1c',
    color: 'white',
    width: '100%',
-   borderRadius: '0',
+   borderRadius: 0,
 })
 
 const TypographyStyled = styled(Typography)({
@@ -107,6 +102,7 @@ const TypographyStyled = styled(Typography)({
       textDecoration: 'underline',
    },
 })
+
 const StyledForm = styled('form')({
    width: '100%',
    display: 'flex',

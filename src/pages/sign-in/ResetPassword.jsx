@@ -1,45 +1,45 @@
-import { Button, Typography, Box, Paper } from '@mui/material'
-import { styled } from '@mui/material/styles'
-import { useDispatch } from 'react-redux'
+import { Button, Typography, Box, Paper, styled } from '@mui/material'
 import { useParams, useNavigate } from 'react-router'
 import { useState } from 'react'
 import Input from '../../components/UI/Input'
 import { resetPassword } from '../../store/slices/authThunk'
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 const ResetPassword = () => {
    const { token } = useParams()
    const dispatch = useDispatch()
    const navigate = useNavigate()
 
+   const {
+      resetPasswordStatus,
+      resetPasswordError,
+      resetPasswordSuccessMessage,
+   } = useSelector((state) => state.auth)
+
    const [newPassword, setNewPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
-   const [success, setSuccess] = useState('')
-   const [error, setError] = useState(null)
 
-   const handleSubmit = async () => {
+   useEffect(() => {
+      if (resetPasswordStatus === 'succeeded') {
+         const timer = setTimeout(() => {
+            navigate('/sign-in')
+         }, 3000)
+         return () => clearTimeout(timer)
+      }
+   }, [resetPasswordStatus, navigate])
+
+   const handleSubmit = () => {
       if (!newPassword || !confirmPassword) {
-         setError('Пожалуйста, заполните оба поля пароля.')
+         toast.error('Пожалуйста, заполните оба поля пароля.', {})
          return
       }
       if (newPassword !== confirmPassword) {
-         setError('Пароли не совпадают.')
+         toast.error('Пароли не совпадают.', {})
          return
       }
-
-      const result = await dispatch(
-         resetPassword({ token, newPassword, confirmPassword })
-      )
-
-      if (resetPassword.fulfilled.match(result)) {
-         setSuccess(
-            'Пароль успешно сброшен! Вы будете перенаправлены на страницу входа.'
-         )
-         setError(null)
-         setTimeout(() => navigate('/sign-in'), 3000)
-      } else {
-         setError(result.payload || 'Произошла ошибка при сбросе пароля.')
-         setSuccess('')
-      }
+      dispatch(resetPassword({ token, newPassword, confirmPassword }))
    }
 
    return (
@@ -57,7 +57,9 @@ const ResetPassword = () => {
                placeholder="Введите новый пароль"
                fullWidth
                margin="dense"
+               disabled={resetPasswordStatus === 'loading'}
             />
+
             <Input
                label="Подтвердите пароль"
                type="password"
@@ -66,10 +68,17 @@ const ResetPassword = () => {
                placeholder="Повторите новый пароль"
                fullWidth
                margin="dense"
+               disabled={resetPasswordStatus === 'loading'}
             />
 
-            {success && <StyledMessage type="success">{success}</StyledMessage>}
-            {error && <StyledMessage type="error">{error}</StyledMessage>}
+            {resetPasswordSuccessMessage && (
+               <StyledMessage type="success">
+                  {resetPasswordSuccessMessage}
+               </StyledMessage>
+            )}
+            {resetPasswordError && (
+               <StyledMessage type="error">{resetPasswordError}</StyledMessage>
+            )}
 
             <StyledSubmitButton
                onClick={handleSubmit}
@@ -77,8 +86,11 @@ const ResetPassword = () => {
                color="primary"
                fullWidth
                size="large"
+               disabled={resetPasswordStatus === 'loading'}
             >
-               Сбросить пароль
+               {resetPasswordStatus === 'loading'
+                  ? 'Загрузка...'
+                  : 'Сбросить пароль'}
             </StyledSubmitButton>
          </StyledFormPaper>
       </StyledPageContainer>

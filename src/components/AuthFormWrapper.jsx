@@ -15,10 +15,10 @@ const AuthFormWrapper = ({ children, value }) => {
 
    return (
       <StyledForm>
-         <Tabs value={value} onChange={handleChange} centered>
-            <Tab label="Войти" />
-            <Tab label="Регистрация" />
-         </Tabs>
+         <StyledTabs value={value} onChange={handleChange} centered>
+            <StyledTab label="Войти" />
+            <StyledTab label="Регистрация" />
+         </StyledTabs>
          <FormContent>{children}</FormContent>
       </StyledForm>
    )
@@ -30,6 +30,21 @@ AuthFormWrapper.propTypes = {
 }
 
 export default AuthFormWrapper
+
+const StyledTabs = styled(Tabs)({
+   '& .MuiTabs-indicator': {
+      display: 'none',
+   },
+})
+
+const StyledTab = styled(Tab)(({ theme }) => ({
+   fontWeight: 400,
+   textTransform: 'none',
+   fontSize: '16px',
+   '&.Mui-selected': {
+      fontWeight: 'bold',
+   },
+}))
 
 const StyledForm = styled(Box)({
    display: 'flex',

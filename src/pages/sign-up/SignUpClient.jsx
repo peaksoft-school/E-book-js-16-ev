@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import AuthFormWrapper from '../../components/AuthFormWrapper'
 import { useNavigate } from 'react-router'
 import { registerUser } from '../../store/slices/authThunk'
-import { clearAuthError } from '../../store/slices/authSlice'
+import { clearAuthError, clearAuthSuccess } from '../../store/slices/authSlice'
 import { toast } from 'react-toastify'
 
 const SignUpClient = () => {
@@ -23,7 +23,7 @@ const SignUpClient = () => {
 
    const navigate = useNavigate()
    const dispatch = useDispatch()
-   const { error } = useSelector((state) => state.auth)
+   const { error, isSuccess } = useSelector((state) => state.auth)
 
    useEffect(() => {
       return () => {
@@ -31,26 +31,21 @@ const SignUpClient = () => {
       }
    }, [dispatch])
 
-   const handleSubmit = async (e) => {
+   useEffect(() => {
+      if (isSuccess) {
+         toast.success(
+            'Регистрация прошла успешно! Теперь вы можете войти.',
+            {}
+         )
+         navigate('/sign-in')
+         dispatch(clearAuthSuccess())
+      }
+   }, [isSuccess, navigate, dispatch])
+
+   const handleSubmit = (e) => {
       e.preventDefault()
       dispatch(clearAuthError())
-
-      const resultAction = await dispatch(
-         registerUser({ firstName, email, password, confirmPassword })
-      )
-
-      if (registerUser.fulfilled.match(resultAction)) {
-         toast.success('Регистрация прошла успешно! Теперь вы можете войти.', {
-            position: 'top-right',
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-         })
-         navigate('/sign-in')
-      }
+      dispatch(registerUser({ firstName, email, password, confirmPassword }))
    }
 
    const handleInputChange = (setter) => (e) => {
