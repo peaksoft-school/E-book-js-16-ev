@@ -24,7 +24,7 @@ const SignIn = () => {
          const resultAction = await dispatch(loginUser({ email, password }))
 
          if (loginUser.fulfilled.match(resultAction)) {
-            const { role } = resultAction.payload // Получаем роль из payload успешного ответа
+            const { role } = resultAction.payload
             switch (role?.toUpperCase()) {
                case 'ADMIN':
                   navigate('/admin')
@@ -102,7 +102,7 @@ const StyledButton = styled(Button)({
 const TypographyStyled = styled(Typography)({
    marginTop: '10px',
    cursor: 'pointer',
-   color: '#007bff',
+   color: '#9e9e9e',
    '&:hover': {
       textDecoration: 'underline',
    },

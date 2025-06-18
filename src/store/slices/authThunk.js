@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
 import { axiosInstance } from '../../configs/axiosInstance'
 
 export const registerUser = createAsyncThunk(
@@ -17,7 +16,12 @@ export const registerUser = createAsyncThunk(
          })
          return response.data
       } catch (error) {
-         return rejectWithValue(error.response.data.message)
+         if (error.response && error.response.data) {
+            return rejectWithValue(error.response.data)
+         }
+         return rejectWithValue(
+            error.message || 'Произошла непредвиденная ошибка регистрации.'
+         )
       }
    }
 )
@@ -39,7 +43,12 @@ export const registerVendor = createAsyncThunk(
          })
          return response.data
       } catch (error) {
-         return rejectWithValue(error.response.data.message)
+         if (error.response && error.response.data) {
+            return rejectWithValue(error.response.data)
+         }
+         return rejectWithValue(
+            error.message || 'Произошла непредвиденная ошибка регистрации.'
+         )
       }
    }
 )
@@ -58,24 +67,6 @@ export const loginUser = createAsyncThunk(
       }
    }
 )
-// export const loginUser = createAsyncThunk(
-//    'auth/login',
-//    async ({ email, password }, { rejectWithValue }) => {
-//       try {
-//          const response = await axios.post(
-//             `http://35.159.168.248/api/auth/signIn`,
-//             {
-//                email,
-//                password,
-//             }
-//          )
-//          return response.data
-//       } catch (error) {
-//          // Убедитесь, что error.response.data существует
-//          return rejectWithValue(error.response?.data?.message || 'Login failed')
-//       }
-//    }
-// )
 
 export const forgotPassword = createAsyncThunk(
    'auth/forgotPassword',
@@ -114,16 +105,13 @@ export const resetPassword = createAsyncThunk(
    }
 )
 
-// authThunk.js
-
 export const googleSignIn = createAsyncThunk(
    'auth/googleSignIn',
    async (accessToken, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.post(
-            `/auth/signInGoogle`, // Your Google sign-in endpoint
-            { accessToken: accessToken } // Sending access_token in the request body
-         )
+         const response = await axiosInstance.post(`/auth/signInGoogle`, {
+            accessToken: accessToken,
+         })
          return response.data
       } catch (error) {
          console.error(

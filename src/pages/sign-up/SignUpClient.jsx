@@ -30,6 +30,7 @@ const SignUpClient = () => {
          dispatch(clearAuthError())
       }
    }, [dispatch])
+
    const handleSubmit = async (e) => {
       e.preventDefault()
       dispatch(clearAuthError())
@@ -54,7 +55,20 @@ const SignUpClient = () => {
 
    const handleInputChange = (setter) => (e) => {
       setter(e.target.value)
-      // dispatch(clearAuthError()) // Опционально: очищать ошибку при каждом изменении поля
+   }
+
+   const errorMessages = () => {
+      if (!error) return []
+
+      if (typeof error === 'string') {
+         return [error]
+      }
+
+      if (typeof error === 'object' && error !== null) {
+         return Object.values(error)
+      }
+
+      return []
    }
 
    return (
@@ -88,11 +102,15 @@ const SignUpClient = () => {
                onChange={handleInputChange(setConfirmPassword)}
                label="Подтвердите пароль"
             />
-            {error && (
-               <Typography color="error" mt={2}>
-                  {error}
+
+            {errorMessages().length > 0 && (
+               <Typography color="error" mt={2} component="div">
+                  {errorMessages().map((msg, index) => (
+                     <div key={index}>{msg}</div>
+                  ))}
                </Typography>
             )}
+
             <FormControlLabel
                control={
                   <Checkbox

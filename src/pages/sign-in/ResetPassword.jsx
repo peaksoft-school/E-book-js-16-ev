@@ -1,4 +1,5 @@
-import { Button, Typography, Box } from '@mui/material'
+import { Button, Typography, Box, Paper } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import { useDispatch } from 'react-redux'
 import { useParams, useNavigate } from 'react-router'
 import { useState } from 'react'
@@ -16,61 +17,108 @@ const ResetPassword = () => {
    const [error, setError] = useState(null)
 
    const handleSubmit = async () => {
+      if (!newPassword || !confirmPassword) {
+         setError('Пожалуйста, заполните оба поля пароля.')
+         return
+      }
+      if (newPassword !== confirmPassword) {
+         setError('Пароли не совпадают.')
+         return
+      }
+
       const result = await dispatch(
          resetPassword({ token, newPassword, confirmPassword })
       )
 
       if (resetPassword.fulfilled.match(result)) {
-         setSuccess('Пароль успешно сброшен! Перенаправление...')
-         setTimeout(() => navigate('/sign-in'), 2000)
+         setSuccess(
+            'Пароль успешно сброшен! Вы будете перенаправлены на страницу входа.'
+         )
+         setError(null)
+         setTimeout(() => navigate('/sign-in'), 3000)
       } else {
-         setError(result.payload)
+         setError(result.payload || 'Произошла ошибка при сбросе пароля.')
+         setSuccess('')
       }
    }
 
    return (
-      <Box
-         display="flex"
-         flexDirection="column"
-         alignItems="center"
-         justifyContent="center"
-         minHeight="100vh"
-         gap={2}
-         px={2}
-      >
-         <Typography variant="h4">Сброс пароля</Typography>
+      <StyledPageContainer>
+         <StyledFormPaper elevation={6}>
+            <StyledTitle variant="h5" component="h1" align="center">
+               Сброс пароля
+            </StyledTitle>
 
-         <Box
-            width="100%"
-            maxWidth="400px"
-            display="flex"
-            flexDirection="column"
-            gap={2}
-         >
             <Input
                label="Новый пароль"
                type="password"
                value={newPassword}
                onChange={(e) => setNewPassword(e.target.value)}
                placeholder="Введите новый пароль"
+               fullWidth
+               margin="dense"
             />
             <Input
-               label="Подтверждение пароля"
+               label="Подтвердите пароль"
                type="password"
                value={confirmPassword}
                onChange={(e) => setConfirmPassword(e.target.value)}
                placeholder="Повторите новый пароль"
+               fullWidth
+               margin="dense"
             />
 
-            {success && <Typography color="green">{success}</Typography>}
-            {error && <Typography color="red">{error}</Typography>}
+            {success && <StyledMessage type="success">{success}</StyledMessage>}
+            {error && <StyledMessage type="error">{error}</StyledMessage>}
 
-            <Button onClick={handleSubmit} variant="contained" fullWidth>
+            <StyledSubmitButton
+               onClick={handleSubmit}
+               variant="contained"
+               color="primary"
+               fullWidth
+               size="large"
+            >
                Сбросить пароль
-            </Button>
-         </Box>
-      </Box>
+            </StyledSubmitButton>
+         </StyledFormPaper>
+      </StyledPageContainer>
    )
 }
 
 export default ResetPassword
+
+const StyledPageContainer = styled(Box)({
+   display: 'flex',
+   flexDirection: 'column',
+   alignItems: 'center',
+   justifyContent: 'center',
+   minHeight: '100vh',
+   backgroundColor: '#f5f5f5',
+   padding: '16px',
+})
+
+const StyledFormPaper = styled(Paper)({
+   width: '100%',
+   maxWidth: '600px',
+   padding: '32px',
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '10px',
+   borderRadius: '8px',
+})
+
+const StyledTitle = styled(Typography)({
+   marginBottom: '16px',
+})
+
+const StyledMessage = styled(Typography)(({ type }) => ({
+   textAlign: 'center',
+   marginTop: '3px',
+   color: type === 'success' ? '#4caf50' : '#f44336',
+}))
+
+const StyledSubmitButton = styled(Button)({
+   marginTop: '16px',
+   width: '520px',
+   borderRadius: 0,
+})

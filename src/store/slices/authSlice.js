@@ -1,4 +1,3 @@
-// authSlice.js
 import { createSlice } from '@reduxjs/toolkit'
 import {
    forgotPassword,
@@ -31,7 +30,7 @@ const authSlice = createSlice({
          state.isAuth = false
          state.role = 'GUEST'
          state.email = null
-         state.error = null // <-- Также обнуляем ошибку при выходе
+         state.error = null
       },
       clearAuthError: (state) => {
          state.error = null
@@ -44,7 +43,7 @@ const authSlice = createSlice({
       builder
          .addCase(registerUser.pending, (state) => {
             state.isLoading = true
-            state.error = null // <-- ДОБАВЬТЕ ЭТУ СТРОКУ
+            state.error = null
          })
          .addCase(registerUser.fulfilled, (state, action) => {
             state.isLoading = false
@@ -52,7 +51,7 @@ const authSlice = createSlice({
             state.role = action.payload.role
             state.token = action.payload.token
             state.email = action.payload.email
-            state.error = null // <-- Убедитесь, что ошибка очищена при успехе
+            state.error = null
          })
          .addCase(registerUser.rejected, (state, action) => {
             state.isLoading = false
@@ -60,7 +59,7 @@ const authSlice = createSlice({
          })
          .addCase(registerVendor.pending, (state) => {
             state.isLoading = true
-            state.error = null // <-- ДОБАВЬТЕ ЭТУ СТРОКУ
+            state.error = null
          })
          .addCase(registerVendor.fulfilled, (state, action) => {
             state.isLoading = false
@@ -68,7 +67,7 @@ const authSlice = createSlice({
             state.role = action.payload.role
             state.token = action.payload.token
             state.email = action.payload.email
-            state.error = null // <-- Убедитесь, что ошибка очищена при успехе
+            state.error = null
          })
          .addCase(registerVendor.rejected, (state, action) => {
             state.isLoading = false
@@ -76,7 +75,7 @@ const authSlice = createSlice({
          })
          .addCase(loginUser.pending, (state) => {
             state.isLoading = true
-            state.error = null // <-- ДОБАВЬТЕ ЭТУ СТРОКУ
+            state.error = null
          })
          .addCase(loginUser.fulfilled, (state, action) => {
             state.isLoading = false
@@ -84,7 +83,7 @@ const authSlice = createSlice({
             state.role = action.payload.role
             state.token = action.payload.token
             state.email = action.payload.email
-            state.error = null // <-- Убедитесь, что ошибка очищена при успехе
+            state.error = null
          })
          .addCase(loginUser.rejected, (state, action) => {
             state.isLoading = false
