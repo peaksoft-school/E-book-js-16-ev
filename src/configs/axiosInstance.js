@@ -1,9 +1,6 @@
 import axios from 'axios'
 
-// const BASE_URL = 'http://35.159.168.248'
-
-const BASE_URL = 'http://10.10.11.161:8080'
-
+const BASE_URL = 'http://35.159.168.248'
 
 export const axiosInstance = axios.create({
    baseURL: BASE_URL,
@@ -31,7 +28,7 @@ axiosInstance.interceptors.request.use(
       console.log('👉 Токен:', token)
 
       if (token) {
-         updateConfig.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTAwNjgxODIsImV4cCI6MTc1MDEwNDE4Mn0.WoXiK-ghEXl9WEh-iU1KGSH3KRpEOVUJ4TG4jBYeyMc`
+         updateConfig.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTAzOTg3NTAsImV4cCI6MTc1MDQzNDc1MH0.IVgx08aN-9hCu-bD34X0GyZwWBrjylo9bONDevkZipQ`
       }
 
       return updateConfig
