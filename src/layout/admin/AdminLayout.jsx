@@ -1,4 +1,3 @@
-// import { Outlet } from 'react-router'
 import { Outlet, useNavigate } from 'react-router'
 import PersonIcon from '@mui/icons-material/Person'
 import { Box, Typography, styled, Avatar , Button, Menu, MenuItem} from '@mui/material'
@@ -81,12 +80,12 @@ const PageWrapper = styled(Box)({
 })
 
 const ContentBox = styled(Box)({
-   marginLeft: '250px',
-   width: 'calc(100vw - 250px)',
+   marginLeft: '270px',
+   width: 'calc(100vw - 270px)',
    height: '100vh',
    display: 'flex',
    flexDirection: 'column',
-   padding: '20px',
+   padding: '30px',
    boxSizing: 'border-box',
    overflowX: 'hidden',
 })

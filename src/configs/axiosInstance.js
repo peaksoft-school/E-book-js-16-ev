@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://10.10.11.161:8080'
+const BASE_URL = 'http://35.159.168.248'
 
 export const axiosInstance = axios.create({
-   baseUrl: BASE_URL,
+   baseURL: BASE_URL,
 
    headers: {
       'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(
       const { token } = customStore.getState()?.auth
 
       if (token) {
-         updateConfig.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTAwNjUwMTYsImV4cCI6MTc1MDEwMTAxNn0.fnwx2Hxf48t88cSxwTjXHy_yJSApnbhiKUHIloCzNh8`
+         updateConfig.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTAzOTg3NTAsImV4cCI6MTc1MDQzNDc1MH0.IVgx08aN-9hCu-bD34X0GyZwWBrjylo9bONDevkZipQ`
       }
 
       return updateConfig
