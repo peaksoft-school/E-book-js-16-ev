@@ -31,7 +31,7 @@ const ApplicationCard = forwardRef(({ book, micon }, ref) => {
 
    const handleEdit = () => {
       console.log('Редактировать:', book)
-      navigate(`/admin`)
+      navigate(`/admin/books/addbook`)
    }
 
    const handleReject = () => {

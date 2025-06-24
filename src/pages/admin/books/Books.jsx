@@ -6,6 +6,8 @@ import {
    MenuItem,
    FormControl,
    styled,
+   Pagination,
+   useTheme,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllBooks } from '../../../store/admin/books/cardAllBooksThunk'
@@ -17,62 +19,64 @@ import {
 import ApplicationCard from '../../../components/UI/cards/ApplicationCard'
 import { Icons } from '../../../assets/icons/index'
 import Button from '../../../components/UI/buttons/Button'
-
-const GENRES = [
-   { label: 'Художественная литература', value: 'FICTION' },
-   { label: 'Детские книги', value: 'CHILDRENS' },
-   { label: 'Наука и технологии', value: 'SCIENCE_AND_TECHNOLOGY' },
-   { label: 'Общество', value: 'SOCIETY' },
-   { label: 'Бизнес', value: 'BUSINESS' },
-   { label: 'Здоровье и спорт', value: 'HEALTH_BEAUTY_SPORT' },
-   { label: 'Хобби', value: 'HOBBIES' },
-   { label: 'Психология', value: 'PSYCHOLOGY' },
-   { label: 'Учебная литература', value: 'EDUCATION' },
-]
-
-const FORMATS = [
-   { label: 'Аудио', value: 'AUDIO' },
-   { label: 'Бумажные', value: 'PAPER' },
-   { label: 'Электронные', value: 'ELECTRONIC' },
-]
+import { useNavigate, useSearchParams } from 'react-router'
+import { FORMATS, GENRES } from '../../../utils/helpers'
 
 const BookFilterPage = () => {
    const dispatch = useDispatch()
+   const [searchParams, setSearchParams] = useSearchParams()
+   const currentPage = Number(searchParams.get('page')) || 1
+
    const format = useSelector((state) => state.allBooks.selectedFormat)
    const genre = useSelector((state) => state.allBooks.selectedGenre)
    const allBooks = useSelector((state) => state.allBooks.allBooks) || []
    const isLoading = useSelector((state) => state.allBooks.loading)
    const total = useSelector((state) => state.allBooks.totalElements)
-
+   const pageNumber = useSelector((state) => state.allBooks.pageNumber)
+   const pageSize = 8
+   const totalPages = Math.ceil(total / pageSize)
+   const theme = useTheme()
+   const navigate = useNavigate()
    const [openGenre, setOpenGenre] = useState(false)
    const [openFormat, setOpenFormat] = useState(false)
 
-   const pageNumber = useSelector((state) => state.allBooks.pageNumber)
-const pageSize = 8
-const totalPages = Math.ceil(total / pageSize)
+   useEffect(() => {
+      dispatch(setPageNumber(currentPage))
+   }, [currentPage, dispatch])
 
-useEffect(() => {
-   dispatch(
-      fetchAllBooks({
-         type: format && format !== '' ? format : null,
-         genre: genre && genre !== '' ? genre : null,
-         pageNumber,
-         pageSize,
-      })
-   )
-}, [genre, format, pageNumber, dispatch])
+   useEffect(() => {
+      dispatch(
+         fetchAllBooks({
+            type: format || null,
+            genre: genre || null,
+            pageNumber,
+            pageSize,
+         })
+      )
+   }, [format, genre, pageNumber, dispatch])
+
+   const handleGenreChange = (event) => {
+      dispatch(setGenre(event.target.value))
+      setSearchParams({ page: 1 })
+   }
+
+   const handleFormatChange = (event) => {
+      dispatch(setFormat(event.target.value))
+      setSearchParams({ page: 1 })
+   }
+
+   const handlePageChange = (event, value) => {
+      setSearchParams({ page: value.toString() })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+   }
 
    const getLabelByValue = (arr, val) => {
       const found = arr.find((item) => item.value === val)
       return found ? found.label : ''
    }
 
-   const handleGenreChange = (event) => {
-      dispatch(setGenre(event.target.value))
-   }
-
-   const handleFormatChange = (event) => {
-      dispatch(setFormat(event.target.value))
+   const handleClick = () => {
+      navigate(`/admin/books/addbook`)
    }
 
    const DownIcon = () => (
@@ -90,7 +94,7 @@ useEffect(() => {
    return (
       <Box>
          <StyledBox>
-            <Box className='pops'>
+            <Box className="pops">
                <NoBorderFormControl>
                   <CustomSelect
                      value={genre || ''}
@@ -137,63 +141,56 @@ useEffect(() => {
                   </CustomSelect>
                </NoBorderFormControl>
             </Box>
-            <Button variant="add" icon>
+            <Button variant="add" onClick={handleClick} icon>
                Добавить книгу
             </Button>
          </StyledBox>
-         <Box>
-          <Typography>
-            Всего: {total}
-          </Typography>
-         </Box>
+
+         <StyledTotal>Всего: {total}</StyledTotal>
 
          <StyledCardBox>
             {isLoading ? (
                <Typography>Загрузка...</Typography>
-            ) : !Array.isArray(allBooks) || allBooks.length === 0 ? (
+            ) : allBooks.length === 0 ? (
                <Typography>Нет книг по выбранному фильтру</Typography>
             ) : (
                allBooks.map((book) => (
-                  <ApplicationCard key={book.bookItemId} book={book} micon={true}/>
+                  <ApplicationCard key={book.bookItemId} book={book} micon />
                ))
             )}
          </StyledCardBox>
-         <Box mt={4} display="flex" justifyContent="center" gap={2}>
-   <Button
-      variant="outlined"
-      disabled={pageNumber === 1}
-      onClick={() => dispatch(setPageNumber(pageNumber - 1))}
-   >
-      Назад
-   </Button>
-   <Typography>
-      Страница {pageNumber} из {totalPages}
-   </Typography>
-   <Button
-      variant="outlined"
-      disabled={pageNumber === totalPages}
-      onClick={() => dispatch(setPageNumber(pageNumber + 1))}
-   >
-      Вперёд
-   </Button>
-</Box>
-
+         {totalPages > 1 && !isLoading && (
+            <PaginationWrapper>
+               <Pagination
+                  count={totalPages}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                  color="primary"
+               />
+            </PaginationWrapper>
+         )}
       </Box>
    )
 }
 
 export default BookFilterPage
 
-const StyledBox = styled(Box)({
+const StyledTotal = styled(Typography)(({ theme }) => ({
+   marginBottom: 25,
+   color: theme.palette.primary.darkGray,
+}))
+
+const StyledBox = styled(Box)(({ theme }) => ({
    display: 'flex',
    justifyContent: 'space-between',
    alignItems: 'center',
    marginBottom: 10,
-   '& .pops' : {
-    display: 'flex',
-    gap: 50,
-   }
-})
+
+   '& .pops': {
+      display: 'flex',
+      gap: 50,
+   },
+}))
 
 const StyledCardBox = styled(Box)({
    display: 'flex',
@@ -211,7 +208,6 @@ const CustomSelect = styled(Select)(() => ({
    '& .MuiSelect-select': {
       paddingRight: '7px !important',
       fontSize: 18,
-
       width: 'auto',
       display: 'inline-flex',
       alignItems: 'center',
@@ -236,3 +232,9 @@ const NoBorderFormControl = styled(FormControl)(() => ({
    minWidth: 100,
    borderBottom: 'none',
 }))
+
+const PaginationWrapper = styled(Box)({
+   marginTop: '2rem',
+   display: 'flex',
+   justifyContent: 'center',
+})

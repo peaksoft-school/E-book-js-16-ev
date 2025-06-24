@@ -1,32 +1,35 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef, useRef, useState } from 'react'
 import { Box, Button, styled } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import { Icons } from '../../../assets/icons'
 
-const UploadButton = forwardRef(({ label, fileName, disabled }) => {
+const UploadButton = forwardRef(({ label, fileName, accept = '*', onFileSelect }, ref) => {
+   const fileInputRef = useRef()
    const [status, setStatus] = useState('default')
+   const [selectedName, setSelectedName] = useState('')
 
-   const loading = false
+   const handleClick = () => {
+      fileInputRef.current.click()
+   }
 
-   const handleUpload = () => {
-      setStatus('loading')
-
-      setTimeout(() => {
+   const handleFileChange = (event) => {
+      const file = event.target.files[0]
+      if (file) {
+         setSelectedName(file.name)
          setStatus('uploaded')
-      }, 2000)
+         if (onFileSelect) onFileSelect(file)
+      }
    }
 
    const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1)
 
    const getButtonText = () => {
       if (status === 'uploaded') return `${capitalizeFirst(fileName)} загружен`
-      return `Загрузить ${label}`
+      return `Загрузить ${label == 'PDF' ? 'PDF' : 'аудиозапись' }`
    }
 
    const getIcon = () => {
       switch (status) {
-         case 'loading':
-            return
          case 'uploaded':
             return <CheckIcon />
          default:
@@ -37,17 +40,23 @@ const UploadButton = forwardRef(({ label, fileName, disabled }) => {
    return (
       <Container>
          <Label>Загрузите {label}</Label>
+         <input
+            ref={fileInputRef}
+            type="file"
+            accept={accept}
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+         />
          <StyledButton
-            onClick={handleUpload}
-            disabled={disabled}
+            onClick={handleClick}
             startIcon={getIcon()}
             variant={status === 'uploaded' ? 'contained' : 'outlined'}
-            status={status}
-            loading={loading}
-            loadingPosition="start"
          >
             {getButtonText()}
          </StyledButton>
+         {selectedName && (
+            <Box sx={{ fontSize: 12, color: '#888', mt: 1 }}>{selectedName}</Box>
+         )}
       </Container>
    )
 })
@@ -61,10 +70,11 @@ const Container = styled(Box)({
 })
 
 const Label = styled(Box)({
-   marginBottom: '8px',
+   marginBottom: '4px',
+   fontSize: 14,
 })
 
-const StyledButton = styled(Button)(({ theme, status }) => ({
+const StyledButton = styled(Button)(({ status }) => ({
    width: 220,
    height: 40,
    color: status === 'uploaded' ? '#fff' : '#000',

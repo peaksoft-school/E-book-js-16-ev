@@ -6,26 +6,28 @@ export const addBook = createAsyncThunk(
   async ({ type, language, formData }, { rejectWithValue }) => {
     try {
       const data = new FormData()
+
       Object.entries(formData).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-          value.forEach((item) => data.append(key, item))
-        } else {
+          value.forEach((item) => {
+            data.append(key, item)
+          })
+        } else if (value !== undefined && value !== null) {
           data.append(key, value)
         }
       })
 
       const response = await axiosInstance.post(
         `/api/book/saveBook?type=${type}&language=${language}`,
-        data,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        }
+        data
       )
 
       return response.data
     } catch (error) {
       const message =
-        error.response?.data?.message || error.message || 'Ошибка при добавлении книги'
+        error.response?.data?.message ||
+        error.message ||
+        'Ошибка при добавлении книги'
       return rejectWithValue(message)
     }
   }
