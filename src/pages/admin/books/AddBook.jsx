@@ -123,16 +123,17 @@ const AddBook = () => {
    return match ? match[0] : null
 }
 
-const uploadedImages = await dispatch(uploadImages(photos)).unwrap()
+const uploadedImages = await dispatch(uploadImages(photos)).unwrap();
+      const imageUrls = uploadedImages
+        .flatMap((i) => (Array.isArray(i) ? i.map((x) => extractUrl(x.message)) : [extractUrl(i.message)]))
+        .filter(Boolean);
 
-const imageUrls = uploadedImages
-   .flatMap((i) => {
-      if (Array.isArray(i)) {
-         return i.map((x) => extractUrl(x.message))
+      if (imageUrls.length !== 3) {
+        setModalMessage('Ошибка при загрузке изображений. Убедитесь, что все изображения загружены.');
+        setModalOpen(true);
+        setLoading(false);
+        return;
       }
-      return [extractUrl(i.message)] // 👈 оборачиваем в массив!
-   })
-   .filter(Boolean)
 
 
          const dataToSend = {
