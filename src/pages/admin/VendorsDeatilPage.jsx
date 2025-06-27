@@ -12,7 +12,6 @@ import {
    Menu,
    CircularProgress,
    Pagination,
-   Button,
 } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Modal from '../../components/UI/Modal'
@@ -23,6 +22,7 @@ import {
    getAllVendorBooks,
 } from '../../store/slices/vendorThunk'
 import { toast } from 'react-toastify'
+import Button from '../../components/UI/buttons/Button'
 
 const VendorsDetailtPage = () => {
    const { id } = useParams()
@@ -179,9 +179,7 @@ const VendorsDetailtPage = () => {
                               </Typography>
                            </ProfileRow>
                         </ProfileDetailsGrid>
-                        <DeleteProfileText onClick={handleDeleteProfileClick}>
-                           Удалить профиль
-                        </DeleteProfileText>
+
                         <DeleteProfileText onClick={handleDeleteProfileClick}>
                            Удалить профиль
                         </DeleteProfileText>
@@ -191,10 +189,9 @@ const VendorsDetailtPage = () => {
                   {tabValue === 1 && (
                      <BooksTabContentWrapper>
                         <BooksHeader>
-                           <Typography variant="body1" fontWeight={500}>
-                              Всего {vendorBooks?.totalElements || 0}
-                              книг
-                           </Typography>
+                           <StyledTypography variant="body1" fontWeight={500}>
+                              Всего {vendorBooks?.totalElements || 0} книг
+                           </StyledTypography>
                            <FilterButton onClick={handleFilterMenuClick}>
                               <Typography variant="body1" fontWeight={500}>
                                  Все
@@ -269,6 +266,9 @@ const VendorsDetailtPage = () => {
                               )}
                            </>
                         )}
+                        <DeleteProfileText onClick={handleDeleteProfileClick}>
+                           Удалить профиль
+                        </DeleteProfileText>
                      </BooksTabContentWrapper>
                   )}
                </>
@@ -276,21 +276,13 @@ const VendorsDetailtPage = () => {
 
             <Modal open={isModalOpen} handleClose={handleCloseModal}>
                <ModalContentWrapper>
-                  <Typography variant="h6" component="h2" gutterBottom>
-                     Подтверждение удаления
-                  </Typography>
                   <Typography sx={{ mt: 2 }}>
-                     Вы уверены, что хотите удалить профиль вендора{' '}
-                     <strong>
-                        {selectedVendor?.firstName || ''}{' '}
-                        {selectedVendor?.lastName || ''}
-                     </strong>
-                     ? Это действие необратимо.
+                     Вы уверены, что хотите удалить профиль?
                   </Typography>
                   <ModalActions>
-                     <Button onClick={handleCloseModal} color="primary">
+                     <StyledButton variant="notbor" onClick={handleCloseModal}>
                         Отмена
-                     </Button>
+                     </StyledButton>
                      <Button
                         onClick={handleConfirmDelete}
                         color="error"
@@ -318,6 +310,10 @@ const PageWrapper = styled(Box)({
    boxSizing: 'border-box',
 })
 
+const StyledTypography = styled(Typography)({
+   color: 'gray',
+   fontSize: '16px',
+})
 const ContentBox = styled(Box)({
    marginLeft: '0px',
    width: '100%',
@@ -385,7 +381,7 @@ const DeleteProfileText = styled(Typography)({
    color: '#FF0000',
    fontWeight: 500,
    cursor: 'pointer',
-   marginTop: 'auto',
+   marginTop: '30px',
 })
 
 const BooksTabContentWrapper = styled(Box)({
@@ -466,7 +462,14 @@ const ModalContentWrapper = styled(Box)({
 
 const ModalActions = styled(Box)({
    display: 'flex',
-   justifyContent: 'flex-end',
-   gap: '10px',
+   flexDirection: 'row', // Explicitly set to row, though it's the default
+   justifyContent: 'flex-end', // Aligns buttons to the right side of the modal
+   gap: '10px', // Provides spacing between the "Отмена" and "Удалить" buttons
    marginTop: '20px',
+   alignItems: 'center', // Vertically centers the buttons if they have different heights (though usually they're the same)
+})
+const StyledButton = styled(Button)({
+   '& .MuiButtonBase-root': {
+      marginTop: '100px',
+   },
 })

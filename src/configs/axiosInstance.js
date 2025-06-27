@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://35.159.168.248/api'
+const BASE_URL = 'http://10.10.11.161:8080/api'
 
 export const axiosInstance = axios.create({
    baseURL: BASE_URL,
@@ -11,7 +11,7 @@ export const axiosInstance = axios.create({
 })
 
 const TEMPORARY_HARDCODED_TOKEN =
-   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTEwMTQ4NDQsImV4cCI6MTc1NDYxNDg0NH0.P5gYfffXq7FjLzswgg0yxrzUSZNX8WaVdbJ-Dd-MsCY'
+   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTEwMzIwNTQsImV4cCI6MTc1NDYzMjA1NH0.NPfPlv4AgBAM4sc1EPgkbd2IeRLtW0QJ0dp51zcXuWI'
 
 let customStore
 export const injectStore = (store) => {

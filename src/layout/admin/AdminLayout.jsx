@@ -1,25 +1,69 @@
-import { Outlet } from 'react-router'
+import { Outlet, useNavigate } from 'react-router'
 import PersonIcon from '@mui/icons-material/Person'
-import { Box, Typography, styled, Avatar } from '@mui/material'
+import {
+   Box,
+   Typography,
+   styled,
+   Avatar,
+   Button,
+   Menu,
+   MenuItem,
+} from '@mui/material'
 import SideBar from '../../components/SideBar'
 import Input from '../../components/UI/Input'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 const AdminLayout = () => {
+   const [anchorEl, setAnchorEl] = useState(null)
+   const open = Boolean(anchorEl)
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+
+   const handleMenuOpen = (event) => {
+      setAnchorEl(event.currentTarget)
+   }
+
+   const handleMenuClose = () => {
+      setAnchorEl(null)
+   }
+
+   const handleLogout = () => {
+      dispatch(logout())
+      navigate('/login')
+   }
    return (
       <PageWrapper>
          <SideBar />
          <ContentBox>
             <StyledHeaderBox>
                <Input
-                  placeholder="Искать жанр, книги, авторов, издательства..."
                   type="search"
+                  placeholder="Искать жанр, книги, авторов, издательства..."
                />
-               <Avatar sx={{ bgcolor: '#ddd', width: 40, height: 40 }}>
-                  <PersonIcon sx={{ color: '#777' }} />
-               </Avatar>
-               <Typography variant="h6" fontWeight={500}>
-                  Администратор
-               </Typography>
+
+               <Box sx={{ position: 'relative' }}>
+                  <StyledButton
+                     aria-label="settings"
+                     size="small"
+                     onClick={handleMenuOpen}
+                  >
+                     <Avatar sx={{ bgcolor: '#ddd', width: 40, height: 40 }}>
+                        <PersonIcon sx={{ color: '#777' }} />
+                     </Avatar>
+                     <Typography>Администратор</Typography>
+                  </StyledButton>
+
+                  <Menu
+                     anchorEl={anchorEl}
+                     open={open}
+                     onClose={handleMenuClose}
+                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  >
+                     <MenuItem onClick={handleLogout}>Выйти</MenuItem>
+                  </Menu>
+               </Box>
             </StyledHeaderBox>
             <Box>
                <Outlet />
@@ -42,14 +86,14 @@ const PageWrapper = styled(Box)({
 })
 
 const ContentBox = styled(Box)({
-   marginLeft: '250px',
-   width: 'calc(100vw - 250px)',
+   marginLeft: '270px',
+   width: 'calc(100vw - 270px)',
    height: '100vh',
    display: 'flex',
    flexDirection: 'column',
-   padding: '20px',
+   padding: '30px',
    boxSizing: 'border-box',
-   overflow: 'hidden',
+   overflowX: 'hidden',
 })
 
 const StyledHeaderBox = styled(Box)({
@@ -60,4 +104,12 @@ const StyledHeaderBox = styled(Box)({
    minHeight: '50px',
    flexShrink: 0,
    gap: '8px',
+})
+
+const StyledButton = styled(Button)({
+   color: '#B4B4B4',
+   textTransform: 'none',
+   display: 'flex',
+   alignItems: 'center',
+   gap: 8,
 })

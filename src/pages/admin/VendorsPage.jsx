@@ -35,7 +35,7 @@ const VendorsPage = () => {
    }, [dispatch, currentPage, rowsPerPage])
 
    return (
-      <Box sx={{ padding: '20px' }}>
+      <Box>
          <ScrollableTableBox>
             {isLoading ? (
                <LoadingContainer>
@@ -79,13 +79,14 @@ const VendorsPage = () => {
 export default VendorsPage
 
 const ScrollableTableBox = styled(Box)({
-   marginTop: '97px',
+   marginTop: '10px',
    flex: 1,
    overflowY: 'auto',
    minHeight: 0,
-   maxHeight: 'calc(100vh - 200px)',
+   maxHeight: 'calc(200vh - 200px)',
    display: 'flex',
    flexDirection: 'column',
+   marginLeft: '-15px',
 })
 
 const LoadingContainer = styled(Box)({
