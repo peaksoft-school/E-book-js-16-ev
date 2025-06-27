@@ -19,7 +19,11 @@ const initialState = {
    isSuccess: false,
    forgotPasswordStatus: 'idle',
    resetPasswordStatus: 'idle',
-   forgotPasswordMessage: null,
+   forgotPasswordSuccess: null,
+   forgotPasswordError: null,
+   resetPasswordSuccessMessage: null,
+   resetPasswordError: null,
+   user: null,
 }
 
 const authSlice = createSlice({
@@ -33,20 +37,39 @@ const authSlice = createSlice({
          state.email = null
          state.error = null
          state.isSuccess = false
+         state.user = null
+         state.forgotPasswordStatus = 'idle'
+         state.resetPasswordStatus = 'idle'
+         state.forgotPasswordSuccess = null
+         state.forgotPasswordError = null
+         state.resetPasswordSuccessMessage = null
+         state.resetPasswordError = null
       },
       clearAuthError: (state) => {
          state.error = null
          state.forgotPasswordStatus = 'idle'
          state.resetPasswordStatus = 'idle'
-         state.forgotPasswordMessage = null
+         state.forgotPasswordSuccess = null
+         state.forgotPasswordError = null
+         state.resetPasswordSuccessMessage = null
+         state.resetPasswordError = null
       },
       clearAuthSuccess: (state) => {
          state.isSuccess = false
+         state.forgotPasswordSuccess = null
+         state.resetPasswordSuccessMessage = null
+      },
+      clearForgotPasswordSuccess: (state) => {
+         state.forgotPasswordSuccess = null
+         state.forgotPasswordStatus = 'idle'
+      },
+      clearResetPasswordSuccess: (state) => {
+         state.resetPasswordSuccessMessage = null
+         state.resetPasswordStatus = 'idle'
       },
    },
    extraReducers: (builder) => {
       builder
-         // Регистрация пользователя
          .addCase(registerUser.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -54,8 +77,6 @@ const authSlice = createSlice({
          })
          .addCase(registerUser.fulfilled, (state, action) => {
             state.isLoading = false
-            // state.isAuth = true
-            // state.role = action.payload.role
             state.token = action.payload.token
             state.email = action.payload.email
             state.error = null
@@ -67,25 +88,23 @@ const authSlice = createSlice({
             state.isSuccess = false
          })
 
-         // Регистрация продавца
          .addCase(registerVendor.pending, (state) => {
             state.isLoading = true
             state.error = null
+            state.isSuccess = false
          })
          .addCase(registerVendor.fulfilled, (state, action) => {
             state.isLoading = false
-            state.isAuth = true
-            state.role = action.payload.role
             state.token = action.payload.token
             state.email = action.payload.email
             state.error = null
+            state.isSuccess = true
          })
          .addCase(registerVendor.rejected, (state, action) => {
             state.isLoading = false
             state.error = action.payload
          })
 
-         // Логин пользователя
          .addCase(loginUser.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -97,13 +116,23 @@ const authSlice = createSlice({
             state.token = action.payload.token
             state.email = action.payload.email
             state.error = null
+            state.user = {
+               id: action.payload.id || null,
+               role: action.payload.role,
+               email: action.payload.email,
+            }
+            saveStateToLocalStorage(
+               state.token,
+               state.role,
+               state.email,
+               state.user
+            )
          })
          .addCase(loginUser.rejected, (state, action) => {
             state.isLoading = false
             state.error = action.payload
          })
 
-         // Восстановление пароля
          .addCase(forgotPassword.pending, (state) => {
             state.forgotPasswordStatus = 'loading'
             state.forgotPasswordError = null
@@ -112,6 +141,7 @@ const authSlice = createSlice({
          .addCase(forgotPassword.fulfilled, (state, action) => {
             state.forgotPasswordStatus = 'succeeded'
             state.forgotPasswordSuccess =
+               action.payload?.message ||
                'Инструкции по сбросу пароля отправлены на ваш email.'
             state.forgotPasswordError = null
          })
@@ -122,7 +152,6 @@ const authSlice = createSlice({
             state.forgotPasswordSuccess = null
          })
 
-         // Сброс пароля
          .addCase(resetPassword.pending, (state) => {
             state.resetPasswordStatus = 'loading'
             state.resetPasswordError = null
@@ -131,6 +160,7 @@ const authSlice = createSlice({
          .addCase(resetPassword.fulfilled, (state, action) => {
             state.resetPasswordStatus = 'succeeded'
             state.resetPasswordSuccessMessage =
+               action.payload?.message ||
                'Пароль успешно сброшен! Перенаправляем на вход...'
             state.resetPasswordError = null
          })
@@ -141,7 +171,6 @@ const authSlice = createSlice({
             state.resetPasswordSuccessMessage = null
          })
 
-         // Вход через Google
          .addCase(googleSignIn.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -177,5 +206,11 @@ const authSlice = createSlice({
    },
 })
 
-export const { logOut, clearAuthError, clearAuthSuccess } = authSlice.actions
+export const {
+   logOut,
+   clearAuthError,
+   clearAuthSuccess,
+   clearForgotPasswordSuccess,
+   clearResetPasswordSuccess,
+} = authSlice.actions
 export default authSlice.reducer

@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../configs/axiosInstance'
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { auth } from '../../configs/firebase'
 
 export const registerUser = createAsyncThunk(
    'auth/registerUser',
@@ -63,7 +65,11 @@ export const loginUser = createAsyncThunk(
          })
          return response.data
       } catch (error) {
-         return rejectWithValue(error.response.data.message)
+         const message =
+            error.response?.data?.message ||
+            error.message ||
+            'Ошибка входа: неизвестная ошибка.'
+         return rejectWithValue(message)
       }
    }
 )
@@ -107,20 +113,44 @@ export const resetPassword = createAsyncThunk(
 
 export const googleSignIn = createAsyncThunk(
    'auth/googleSignIn',
-   async (accessToken, { rejectWithValue }) => {
+   async (_, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.post(`/auth/signInGoogle`, {
-            accessToken: accessToken,
+         const provider = new GoogleAuthProvider()
+         const result = await signInWithPopup(auth, provider)
+
+         const idToken = await result.user.getIdToken()
+
+         const response = await axiosInstance.post('/auth/signInGoogle', null, {
+            params: {
+               idToken: idToken,
+            },
          })
+
          return response.data
       } catch (error) {
-         console.error(
-            'Error in googleSignIn thunk:',
-            error.response?.data || error.message
-         )
-         return rejectWithValue(
-            error.response?.data?.message || 'Google Sign-In failed'
-         )
+         if (error.code) {
+            switch (error.code) {
+               case 'auth/popup-closed-by-user':
+                  return rejectWithValue(
+                     'Вход через Google отменен пользователем.'
+                  )
+               case 'auth/cancelled-popup-request':
+                  return rejectWithValue('Запрос на вход через Google отменен.')
+               default:
+                  return rejectWithValue(
+                     error.message ||
+                        'Произошла ошибка Firebase при входе через Google.'
+                  )
+            }
+         }
+         if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+         ) {
+            return rejectWithValue(error.response.data.message)
+         }
+         return rejectWithValue('Неизвестная ошибка при входе через Google.')
       }
    }
 )

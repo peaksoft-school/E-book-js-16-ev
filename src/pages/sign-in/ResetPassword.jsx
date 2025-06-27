@@ -1,11 +1,10 @@
 import { Button, Typography, Box, Paper, styled } from '@mui/material'
 import { useParams, useNavigate } from 'react-router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Input from '../../components/UI/Input'
 import { resetPassword } from '../../store/slices/authThunk'
 import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
-import { toast } from 'react-toastify'
+import * as Yup from 'yup'
 
 const ResetPassword = () => {
    const { token } = useParams()
@@ -20,6 +19,7 @@ const ResetPassword = () => {
 
    const [newPassword, setNewPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
+   const [validationErrors, setValidationErrors] = useState({})
 
    useEffect(() => {
       if (resetPasswordStatus === 'succeeded') {
@@ -30,16 +30,35 @@ const ResetPassword = () => {
       }
    }, [resetPasswordStatus, navigate])
 
+   const validationSchema = Yup.object({
+      newPassword: Yup.string()
+         .min(6, 'Новый пароль должен содержать не менее 6 символов')
+         .required('Новый пароль обязателен для заполнения'),
+      confirmPassword: Yup.string()
+         .oneOf([Yup.ref('newPassword'), null], 'Пароли не совпадают')
+         .required('Подтвердите новый пароль'),
+   })
+
    const handleSubmit = () => {
-      if (!newPassword || !confirmPassword) {
-         toast.error('Пожалуйста, заполните оба поля пароля.', {})
-         return
+      setValidationErrors({})
+
+      const formData = {
+         newPassword,
+         confirmPassword,
       }
-      if (newPassword !== confirmPassword) {
-         toast.error('Пароли не совпадают.', {})
-         return
-      }
-      dispatch(resetPassword({ token, newPassword, confirmPassword }))
+
+      validationSchema
+         .validate(formData, { abortEarly: false })
+         .then(() => {
+            dispatch(resetPassword({ token, newPassword, confirmPassword }))
+         })
+         .catch((validationErr) => {
+            const errors = {}
+            validationErr.inner.forEach((err) => {
+               errors[err.path] = err.message
+            })
+            setValidationErrors(errors)
+         })
    }
 
    return (
@@ -58,6 +77,8 @@ const ResetPassword = () => {
                fullWidth
                margin="dense"
                disabled={resetPasswordStatus === 'loading'}
+               error={Boolean(validationErrors.newPassword)}
+               helperText={validationErrors.newPassword}
             />
 
             <Input
@@ -69,6 +90,8 @@ const ResetPassword = () => {
                fullWidth
                margin="dense"
                disabled={resetPasswordStatus === 'loading'}
+               error={Boolean(validationErrors.confirmPassword)}
+               helperText={validationErrors.confirmPassword}
             />
 
             {resetPasswordSuccessMessage && (
@@ -78,6 +101,11 @@ const ResetPassword = () => {
             )}
             {resetPasswordError && (
                <StyledMessage type="error">{resetPasswordError}</StyledMessage>
+            )}
+            {Object.keys(validationErrors).length > 0 && (
+               <StyledMessage type="error">
+                  Пожалуйста, исправьте ошибки в форме.
+               </StyledMessage>
             )}
 
             <StyledSubmitButton

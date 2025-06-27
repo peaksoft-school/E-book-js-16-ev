@@ -5,23 +5,47 @@ import { forgotPassword } from '../../store/slices/authThunk'
 import { clearAuthError } from '../../store/slices/authSlice'
 import { Button, Typography, styled, Stack } from '@mui/material'
 import Input from '../../components/UI/Input'
+import * as Yup from 'yup'
 
 const ForgotPassword = ({ onClose }) => {
    const dispatch = useDispatch()
    const [email, setEmail] = useState('')
+
+   const [validationErrors, setValidationErrors] = useState({})
 
    const { forgotPasswordStatus, forgotPasswordError, forgotPasswordSuccess } =
       useSelector((state) => state.auth)
 
    const handleCloseModal = () => {
       dispatch(clearAuthError())
+      setValidationErrors({})
       setEmail('')
       onClose()
    }
 
+   const validationSchema = Yup.object({
+      email: Yup.string()
+         .email('Введите корректный email')
+         .required('Email обязателен для заполнения'),
+   })
+
    const handleSendEmail = () => {
-      if (!email) return
-      dispatch(forgotPassword({ email }))
+      setValidationErrors({})
+
+      const formData = { email }
+
+      validationSchema
+         .validate(formData, { abortEarly: false })
+         .then(() => {
+            dispatch(forgotPassword({ email }))
+         })
+         .catch((validationErr) => {
+            const errors = {}
+            validationErr.inner.forEach((err) => {
+               errors[err.path] = err.message
+            })
+            setValidationErrors(errors)
+         })
    }
 
    return (
@@ -44,16 +68,18 @@ const ForgotPassword = ({ onClose }) => {
                   onChange={(e) => setEmail(e.target.value)}
                   label="Email"
                   fullWidth
+                  error={Boolean(validationErrors.email)}
+                  helperText={validationErrors.email}
                />
             </StyledInputWrapper>
 
-            {forgotPasswordSuccess && (
-               <StyledMessage type="success">
-                  {forgotPasswordSuccess}
-               </StyledMessage>
-            )}
             {forgotPasswordError && (
                <StyledMessage type="error">{forgotPasswordError}</StyledMessage>
+            )}
+            {Object.keys(validationErrors).length > 0 && (
+               <StyledMessage type="error">
+                  Пожалуйста, исправьте ошибки в форме.
+               </StyledMessage>
             )}
 
             <StyledButton

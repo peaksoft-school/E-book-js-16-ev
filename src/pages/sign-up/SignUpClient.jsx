@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router'
 import { registerUser } from '../../store/slices/authThunk'
 import { clearAuthError, clearAuthSuccess } from '../../store/slices/authSlice'
 import { toast } from 'react-toastify'
+import * as Yup from 'yup'
 
 const SignUpClient = () => {
    const [email, setEmail] = useState('')
@@ -20,6 +21,8 @@ const SignUpClient = () => {
    const [password, setPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
    const [subscribe, setSubscribe] = useState(false)
+
+   const [validationErrors, setValidationErrors] = useState({})
 
    const navigate = useNavigate()
    const dispatch = useDispatch()
@@ -42,28 +45,70 @@ const SignUpClient = () => {
       }
    }, [isSuccess, navigate, dispatch])
 
+   const validationSchema = Yup.object({
+      firstName: Yup.string()
+         .trim()
+         .min(2, 'Имя должно содержать не менее 2 символов')
+         .required('Имя обязательно для заполнения'),
+      email: Yup.string()
+         .email('Введите корректный email')
+         .required('Email обязателен для заполнения'),
+      password: Yup.string()
+         .min(6, 'Пароль должен содержать не менее 6 символов')
+         .required('Пароль обязателен для заполнения'),
+      confirmPassword: Yup.string()
+         .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
+         .required('Подтвердите пароль'),
+   })
+
    const handleSubmit = (e) => {
       e.preventDefault()
+      setValidationErrors({})
       dispatch(clearAuthError())
-      dispatch(registerUser({ firstName, email, password, confirmPassword }))
+
+      const formData = {
+         firstName,
+         email,
+         password,
+         confirmPassword,
+      }
+
+      validationSchema
+         .validate(formData, { abortEarly: false })
+         .then(() => {
+            dispatch(registerUser(formData))
+         })
+         .catch((validationErr) => {
+            const errors = {}
+            validationErr.inner.forEach((err) => {
+               errors[err.path] = err.message
+            })
+            setValidationErrors(errors)
+         })
    }
 
-   const handleInputChange = (setter) => (e) => {
-      setter(e.target.value)
-   }
-
-   const errorMessages = () => {
-      if (!error) return []
+   const renderServerErrors = () => {
+      if (!error) return null
 
       if (typeof error === 'string') {
-         return [error]
+         return (
+            <Typography color="error" mt={2}>
+               {error}
+            </Typography>
+         )
       }
 
       if (typeof error === 'object' && error !== null) {
-         return Object.values(error)
+         const errorMessages = Object.values(error).flat()
+         return (
+            <Typography color="error" mt={2} component="div">
+               {errorMessages.map((msg, index) => (
+                  <div key={index}>{msg}</div>
+               ))}
+            </Typography>
+         )
       }
-
-      return []
+      return null
    }
 
    return (
@@ -73,38 +118,40 @@ const SignUpClient = () => {
                type="info"
                placeholder="Напишите ваше имя"
                value={firstName}
-               onChange={handleInputChange(setFirstName)}
+               onChange={(e) => setFirstName(e.target.value)}
                label="Ваше имя*"
+               error={Boolean(validationErrors.firstName)}
+               helperText={validationErrors.firstName}
             />
             <Input
                type="info"
                placeholder="Напишите email"
                value={email}
-               onChange={handleInputChange(setEmail)}
-               label="Email"
+               onChange={(e) => setEmail(e.target.value)}
+               label="Email*"
+               error={Boolean(validationErrors.email)}
+               helperText={validationErrors.email}
             />
             <Input
                type="password"
                placeholder="Напишите пароль"
                value={password}
-               onChange={handleInputChange(setPassword)}
-               label="Пароль"
+               onChange={(e) => setPassword(e.target.value)}
+               label="Пароль*"
+               error={Boolean(validationErrors.password)}
+               helperText={validationErrors.password}
             />
             <Input
                type="password"
                placeholder="Подтвердите пароль"
                value={confirmPassword}
-               onChange={handleInputChange(setConfirmPassword)}
-               label="Подтвердите пароль"
+               onChange={(e) => setConfirmPassword(e.target.value)}
+               label="Подтвердите пароль*"
+               error={Boolean(validationErrors.confirmPassword)}
+               helperText={validationErrors.confirmPassword}
             />
 
-            {errorMessages().length > 0 && (
-               <Typography color="error" mt={2} component="div">
-                  {errorMessages().map((msg, index) => (
-                     <div key={index}>{msg}</div>
-                  ))}
-               </Typography>
-            )}
+            {renderServerErrors()}
 
             <FormControlLabel
                control={
