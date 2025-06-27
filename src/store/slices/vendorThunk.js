@@ -8,19 +8,68 @@ export const getAllVendors = createAsyncThunk(
          const response = await axiosInstance.get('/user/findAllVendor', {
             params: { pageNumber, pageSize },
          })
-
-         const mapped = response.data.content.map((v) => ({
-            id: v.vendorId,
-            name: v.name,
-            phone: v.phoneNumber,
-            email: v.email,
-            books: v.countBook,
-         }))
-
-         return mapped
+         return response.data
       } catch (error) {
          return rejectWithValue(
-            error.response?.data?.message || 'Ошибка сервера'
+            error.response?.data?.message ||
+               'Ошибка сервера при получении списка поставщиков.'
+         )
+      }
+   }
+)
+
+export const deleteVendor = createAsyncThunk(
+   'vendor/deleteVendor',
+   async ({ vendorId }, { rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.delete(
+            `/user/deletedVendor/${vendorId}`
+         )
+         return response.data
+      } catch (error) {
+         return rejectWithValue(
+            error.response?.data?.message ||
+               'Ошибка сервера при удалении поставщика.'
+         )
+      }
+   }
+)
+
+export const getVendorById = createAsyncThunk(
+   'vendor/getVendorById',
+   async ({ vendorId }, { rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.get(
+            `/user/findVendorById/${vendorId}`
+         )
+         return response.data
+      } catch (error) {
+         return rejectWithValue(
+            error.response?.data?.message ||
+               'Ошибка сервера при получении данных поставщика.'
+         )
+      }
+   }
+)
+
+export const getAllVendorBooks = createAsyncThunk(
+   'vendor/getAllVendorBooks',
+   async ({ vendorId, pageNumber = 1, pageSize = 8 }, { rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.get(
+            `/book/getAllVendorBooks/${vendorId}`,
+            {
+               params: {
+                  pageNumber,
+                  pageSize,
+               },
+            }
+         )
+         return response.data
+      } catch (error) {
+         return rejectWithValue(
+            error.response?.data?.message ||
+               'Ошибка сервера при получении списка книг продавца.'
          )
       }
    }

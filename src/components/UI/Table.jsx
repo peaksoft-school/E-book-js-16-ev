@@ -15,13 +15,11 @@ import {
    useTheme,
 } from '@mui/material'
 import { Icons } from '../../assets/icons'
-import { SELLERS } from '../../utils/constants'
 import Modal from './Modal'
 import Button from './buttons/Button'
 
-const Table = ({ variant = 'B', onRowClick, sellers, setSellers }) => {
+const Table = ({ variant = 'B', onRowClick, sellers, onDeleteConfirm }) => {
    const theme = useTheme()
-   const [sellers, setSellers] = useState(SELLERS)
    const [modalOpen, setModalOpen] = useState(false)
    const [toDelete, setToDelete] = useState(null)
 
@@ -31,7 +29,9 @@ const Table = ({ variant = 'B', onRowClick, sellers, setSellers }) => {
    }
 
    const handleConfirmDelete = () => {
-      setSellers((prev) => prev.filter((s) => s.id !== toDelete.id))
+      if (toDelete) {
+         onDeleteConfirm(toDelete.id)
+      }
       setModalOpen(false)
       setToDelete(null)
    }
@@ -61,7 +61,6 @@ const Table = ({ variant = 'B', onRowClick, sellers, setSellers }) => {
                {sellers.map((seller, index) => (
                   <StyledTableRow
                      key={seller.id}
-                     // Используем пропс onRowClick, если он предоставлен
                      onClick={
                         onRowClick ? () => onRowClick(seller.id) : undefined
                      }
@@ -89,7 +88,8 @@ const Table = ({ variant = 'B', onRowClick, sellers, setSellers }) => {
 
          <Modal open={modalOpen} handleClose={handleCloseModal}>
             <StyledText>
-               Вы уверены, что хотите удалить <strong>{toDelete?.name}?</strong>
+               Вы уверены, что хотите удалить{' '}
+               <strong>{toDelete?.name || 'этот элемент'}?</strong>
             </StyledText>
             <Stack direction="row" marginLeft="45px" justifyContent="start">
                <StyledButton variant="notbor" onClick={handleCloseModal}>
