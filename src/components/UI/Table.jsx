@@ -91,10 +91,14 @@ const Table = ({ variant = 'B', onRowClick, sellers, onDeleteConfirm }) => {
                Вы уверены, что хотите удалить{' '}
                <strong>{toDelete?.name || 'этот элемент'}?</strong>
             </StyledText>
-            <Stack direction="row" marginLeft="45px" justifyContent="start">
-               <StyledButton variant="notbor" onClick={handleCloseModal}>
-                  Отмена
-               </StyledButton>
+            <Stack
+               direction="row"
+               marginLeft="100px"
+               alignItems="center"
+               justifyContent="start"
+               padding="10px"
+            >
+               <StyledButton onClick={handleCloseModal}>Отмена</StyledButton>
                <Button
                   variant="contained"
                   color="error"
@@ -214,6 +218,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const StyledButton = styled(Button)({
    '& .MuiButtonBase-root': {
-      margin: 0,
+      margin: 20,
    },
+   marginRight: 30,
+   backgroundColor: 'white !important',
+   color: '#afafaf !important',
+   boxShadow: 'none',
 })

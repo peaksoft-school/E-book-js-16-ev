@@ -86,12 +86,12 @@ const PageWrapper = styled(Box)({
 })
 
 const ContentBox = styled(Box)({
-   marginLeft: '270px',
+   marginLeft: '250px',
    width: 'calc(100vw - 270px)',
    height: '100vh',
    display: 'flex',
    flexDirection: 'column',
-   padding: '30px',
+   padding: '20px',
    boxSizing: 'border-box',
    overflowX: 'hidden',
 })

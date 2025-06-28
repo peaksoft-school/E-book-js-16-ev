@@ -280,7 +280,7 @@ const VendorsDetailtPage = () => {
                      Вы уверены, что хотите удалить профиль?
                   </Typography>
                   <ModalActions>
-                     <StyledButton variant="notbor" onClick={handleCloseModal}>
+                     <StyledButton onClick={handleCloseModal}>
                         Отмена
                      </StyledButton>
                      <Button
@@ -354,6 +354,7 @@ const ProfileContentWrapper = styled(Box)({
    display: 'flex',
    flexDirection: 'column',
    paddingBottom: '20px',
+   marginLeft: '-20px',
 })
 
 const ProfileDetailsGrid = styled(Box)({
@@ -361,7 +362,7 @@ const ProfileDetailsGrid = styled(Box)({
    gridTemplateColumns: 'auto 1fr 1fr',
    gap: '45px 140px',
    maxWidth: '600px',
-   padding: '20px 0',
+   padding: '10px 0',
 })
 
 const ProfileRow = styled(Box)({
@@ -389,6 +390,7 @@ const BooksTabContentWrapper = styled(Box)({
    display: 'flex',
    flexDirection: 'column',
    paddingBottom: '20px',
+   marginLeft: '-21px',
 })
 
 const BooksHeader = styled(Box)({
@@ -440,11 +442,11 @@ const ErrorContainer = styled(Box)({
 
 const NoDataContainer = styled(Box)({
    display: 'flex',
-   justifyContent: 'center',
    alignItems: 'center',
    minHeight: '200px',
    color: '#757575',
    fontSize: '1.2rem',
+   marginLeft: '400px',
 })
 
 const PaginationContainer = styled(Box)({
@@ -462,14 +464,14 @@ const ModalContentWrapper = styled(Box)({
 
 const ModalActions = styled(Box)({
    display: 'flex',
-   flexDirection: 'row', // Explicitly set to row, though it's the default
-   justifyContent: 'flex-end', // Aligns buttons to the right side of the modal
-   gap: '10px', // Provides spacing between the "Отмена" and "Удалить" buttons
+   flexDirection: 'row',
+   justifyContent: 'flex-end',
+   gap: '10px',
    marginTop: '20px',
-   alignItems: 'center', // Vertically centers the buttons if they have different heights (though usually they're the same)
+   alignItems: 'center',
 })
 const StyledButton = styled(Button)({
-   '& .MuiButtonBase-root': {
-      marginTop: '100px',
-   },
+   backgroundColor: 'white !important',
+   color: '#afafaf !important',
+   boxShadow: 'none',
 })

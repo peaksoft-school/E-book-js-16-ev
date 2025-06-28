@@ -52,7 +52,7 @@ const BasketCard = forwardRef(({ book }, ref) => {
 export default BasketCard
 const StyledCard = styled(Card)(({ theme }) => ({
    width: 305,
-   height: 450,
+   height: 460,
    padding: '20px 17px 19px 54px',
    background: '#EDEDED',
    borderRadius: '0px',
