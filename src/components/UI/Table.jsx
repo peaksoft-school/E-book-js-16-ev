@@ -18,7 +18,7 @@ import { Icons } from '../../assets/icons'
 import Modal from './Modal'
 import Button from './buttons/Button'
 
-const Table = ({ variant = 'B', onRowClick, sellers, onDeleteConfirm }) => {
+const Table = ({ variant = 'B', sellers, onRowClick, onDeleteConfirm }) => {
    const theme = useTheme()
    const [modalOpen, setModalOpen] = useState(false)
    const [toDelete, setToDelete] = useState(null)
@@ -43,54 +43,79 @@ const Table = ({ variant = 'B', onRowClick, sellers, onDeleteConfirm }) => {
 
    return (
       <StyledTableContainer component={Paper}>
+                  
          <StyledTable>
+                       {' '}
             <StyledTableHead>
-               <StyledTableRowH>
-                  <TableCell>№</TableCell>
-                  <TableCell>Имя</TableCell>
+                              
+               <StyledTableRowH variant={variant}>
+                                    <TableCell>№</TableCell>                 {' '}
+                  <TableCell>Имя</TableCell>                 {' '}
                   <TableCell>
-                     {variant === 'A' ? 'Номер телефона' : 'Почта'}
+                                          
+                     {variant === 'A' ? 'Номер телефона' : 'Почта'}             
+                        {' '}
                   </TableCell>
-                  {variant === 'A' && <TableCell>Почта</TableCell>}
-                  {variant === 'A' && <TableCell>Количество книг</TableCell>}
-                  <TableCell />
+                                   {' '}
+                  {variant === 'A' && <TableCell>Почта</TableCell>}             
+                     {' '}
+                  {variant === 'A' && <TableCell>Количество книг</TableCell>}   
+                                <TableCell></TableCell>               
                </StyledTableRowH>
+                          {' '}
             </StyledTableHead>
-
+                       {' '}
             <StyledTableBody>
+                              
                {sellers.map((seller, index) => (
                   <StyledTableRow
                      key={seller.id}
                      onClick={
                         onRowClick ? () => onRowClick(seller.id) : undefined
                      }
+                     variant={variant}
                   >
-                     <TableCell>{index + 1}</TableCell>
-                     <TableCell>{seller.name}</TableCell>
+                                          <TableCell>{index + 1}</TableCell>   
+                                      <TableCell>{seller.name}</TableCell>     
+                                    
                      <TableCell>
-                        {variant === 'A' ? seller.phone : seller.email}
+                                               {' '}
+                        {variant === 'A' ? seller.phone : seller.email}         
+                                   
                      </TableCell>
-                     {variant === 'A' && <TableCell>{seller.email}</TableCell>}
-                     {variant === 'A' && <TableCell>{seller.books}</TableCell>}
-
+                                          
+                     {variant === 'A' && <TableCell>{seller.email}</TableCell>} 
+                                        
+                     {variant === 'A' && <TableCell>{seller.books}</TableCell>} 
+                                        
                      <TableCell onClick={(e) => e.stopPropagation()}>
+                                               {' '}
                         <IconButton
                            className="iconBtn"
                            onClick={() => handleDeleteClick(seller)}
                         >
-                           <img src={Icons.del} alt="delete" />
+                                                      
+                           <img src={Icons.del} alt="delete" />                 
+                                {' '}
                         </IconButton>
+                                             
                      </TableCell>
+                                      {' '}
                   </StyledTableRow>
                ))}
+                          {' '}
             </StyledTableBody>
+                     
          </StyledTable>
-
+                  
          <Modal open={modalOpen} handleClose={handleCloseModal}>
+                       {' '}
             <StyledText>
-               Вы уверены, что хотите удалить{' '}
-               <strong>{toDelete?.name || 'этот элемент'}?</strong>
+                              Вы уверены, что хотите удалить                
+               <strong>{toDelete?.name || 'этот элемент'}?</strong>         
+                {' '}
             </StyledText>
+                       {' '}
             <Stack
                direction="row"
                marginLeft="100px"
@@ -98,16 +123,21 @@ const Table = ({ variant = 'B', onRowClick, sellers, onDeleteConfirm }) => {
                justifyContent="start"
                padding="10px"
             >
-               <StyledButton onClick={handleCloseModal}>Отмена</StyledButton>
+                              
+               <StyledButton onClick={handleCloseModal}>Отмена</StyledButton>   
+                          
                <Button
                   variant="contained"
                   color="error"
                   onClick={handleConfirmDelete}
                >
-                  Удалить
+                                    Удалить                
                </Button>
+                          {' '}
             </Stack>
+                     
          </Modal>
+              {' '}
       </StyledTableContainer>
    )
 }
@@ -126,7 +156,7 @@ const StyledTableContainer = styled(TableContainer)({
    boxShadow: 'none',
    width: '100%',
    margin: 0,
-   overflowX: 'auto',
+   overflowX: 'hidden',
    maxWidth: '100%',
 })
 
@@ -148,15 +178,19 @@ const StyledTableHead = styled(TableHead)({
    },
 })
 
-const StyledTableRowH = styled(TableRow)(({ theme }) => ({
+const StyledTableRowH = styled(TableRow)(({ theme, variant }) => ({
    display: 'flex',
    width: '100%',
    '& th:nth-of-type(1)': { width: '5%' },
    '& th:nth-of-type(2)': { width: '25%' },
-   '& th:nth-of-type(3)': { width: '20%' },
+   '& th:nth-of-type(3)': { width: variant === 'A' ? '20%' : '50%' },
    '& th:nth-of-type(4)': { width: '25%' },
    '& th:nth-of-type(5)': { width: '15%' },
-   '& th:nth-of-type(6)': { width: '10%' },
+   '& th:nth-of-type(6)': {
+      width: '10%',
+      justifyContent: 'flex-end',
+      paddingRight: '1rem',
+   },
 
    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
@@ -174,7 +208,7 @@ const StyledTableBody = styled(TableBody)({
    width: '100%',
 })
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(({ theme, variant }) => ({
    display: 'flex',
    alignItems: 'center',
    width: '100%',
@@ -193,7 +227,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
    },
    '& td:nth-of-type(1)': { width: '5%' },
    '& td:nth-of-type(2)': { width: '25%' },
-   '& td:nth-of-type(3)': { width: '20%' },
+   '& td:nth-of-type(3)': { width: variant === 'A' ? '20%' : '60%' },
    '& td:nth-of-type(4)': { width: '25%' },
    '& td:nth-of-type(5)': { width: '15%' },
    '& td:nth-of-type(6)': {
