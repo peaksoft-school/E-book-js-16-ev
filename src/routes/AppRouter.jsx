@@ -3,6 +3,8 @@ import { Suspense, lazy } from 'react'
 import { ROLES } from './routes'
 import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
+import UsersPage from '../pages/admin/users/UsersPage'
+import UserProfilePage from '../pages/admin/users/UserProfilePage'
 
 const SignUp = lazy(() => import('../pages/sign-up/SignUp'))
 const SignIn = lazy(() => import('../pages/sign-in/SignIn'))
@@ -59,7 +61,10 @@ const AppRouter = () => (
                fallbackPath={'/'}
             />
          }
-      />
+      >
+         <Route path="users" element={<UsersPage />} />
+         <Route path="users/:id" element={<UserProfilePage />} />
+      </Route>
 
       <Route
          path="/user"
