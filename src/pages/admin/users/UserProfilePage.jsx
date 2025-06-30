@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getUserById } from '../../../store/slices/admin/userProfileThunk'
 import Modal from '../../../components/UI/Modal'
 import Button from '../../../components/UI/buttons/Button'
-
 import { toast } from 'react-toastify'
 import { deleteUser } from '../../../store/slices/admin/usersThunk'
 
@@ -204,9 +203,8 @@ const UserProfilePage = () => {
       setIsModalOpen(false)
    }
 
-   const handleConfirmDelete = (clientId) => {
-      dispatch(deleteUser({ clientId }))
-
+   const handleConfirmDelete = (id) => {
+      dispatch(deleteUser({ id }))
       setIsModalOpen(false)
       navigate('/admin/users')
       toast.success('Успешно удалено', {})
