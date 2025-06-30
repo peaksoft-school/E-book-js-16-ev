@@ -19,11 +19,11 @@ import Modal from './Modal'
 import Button from './buttons/Button'
 import { SELLERS } from '../../utils/constants'
 
-const Table = ({ variant = 'B', onRowClick, onDeleteConfirm }) => {
+const Table = ({ variant = 'B', sellers, onRowClick, onDeleteConfirm }) => {
    const theme = useTheme()
    const [modalOpen, setModalOpen] = useState(false)
    const [toDelete, setToDelete] = useState(null)
-   const [sellers, setSellers] = useState(SELLERS)
+   // const [sellers, setSellers] = useState(SELLERS)
 
    const handleDeleteClick = (seller) => {
       setToDelete(seller)
@@ -45,28 +45,21 @@ const Table = ({ variant = 'B', onRowClick, onDeleteConfirm }) => {
 
    return (
       <StyledTableContainer component={Paper}>
-                  
          <StyledTable>
-                       {' '}
             <StyledTableHead>
-                              
                <StyledTableRowH variant={variant}>
-                                    <TableCell>№</TableCell>                 {' '}
-                  <TableCell>Имя</TableCell>                 {' '}
+                  <TableCell>№</TableCell>
+                  <TableCell>Имя</TableCell>                 
                   <TableCell>
                                           
                      {variant === 'A' ? 'Номер телефона' : 'Почта'}             
-                        {' '}
                   </TableCell>
                                    {' '}
                   {variant === 'A' && <TableCell>Почта</TableCell>}             
-                     {' '}
                   {variant === 'A' && <TableCell>Количество книг</TableCell>}   
                                 <TableCell></TableCell>               
                </StyledTableRowH>
-                          {' '}
             </StyledTableHead>
-                       {' '}
             <StyledTableBody>
                               
                {sellers.map((seller, index) => (
@@ -102,22 +95,17 @@ const Table = ({ variant = 'B', onRowClick, onDeleteConfirm }) => {
                         </IconButton>
                                              
                      </TableCell>
-                                      {' '}
                   </StyledTableRow>
                ))}
-                          {' '}
             </StyledTableBody>
                      
          </StyledTable>
                   
          <Modal open={modalOpen} handleClose={handleCloseModal}>
-                       {' '}
             <StyledText>
                               Вы уверены, что хотите удалить                
                <strong>{toDelete?.name || 'этот элемент'}?</strong>         
-                {' '}
             </StyledText>
-                       {' '}
             <Stack
                direction="row"
                marginLeft="100px"
@@ -135,11 +123,9 @@ const Table = ({ variant = 'B', onRowClick, onDeleteConfirm }) => {
                >
                                     Удалить                
                </Button>
-                          {' '}
             </Stack>
                      
          </Modal>
-              {' '}
       </StyledTableContainer>
    )
 }

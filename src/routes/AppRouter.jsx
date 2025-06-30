@@ -5,6 +5,7 @@ import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
 import UsersPage from '../pages/admin/users/UsersPage'
 import UserProfilePage from '../pages/admin/users/UserProfilePage'
+// import UserHistoryPage from '../pages/admin/users/UserHistoryPage'
 
 const SignUp = lazy(() => import('../pages/sign-up/SignUp'))
 const SignIn = lazy(() => import('../pages/sign-in/SignIn'))
@@ -64,6 +65,7 @@ const AppRouter = () => (
       >
          <Route path="users" element={<UsersPage />} />
          <Route path="users/:id" element={<UserProfilePage />} />
+         {/* <Route path="/users/:id/history" element={<UserHistoryPage />} /> */}
       </Route>
 
       <Route
