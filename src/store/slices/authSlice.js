@@ -45,15 +45,6 @@ const authSlice = createSlice({
          state.resetPasswordSuccessMessage = null
          state.resetPasswordError = null
       },
-      clearAuthError: (state) => {
-         state.error = null
-         state.forgotPasswordStatus = 'idle'
-         state.resetPasswordStatus = 'idle'
-         state.forgotPasswordSuccess = null
-         state.forgotPasswordError = null
-         state.resetPasswordSuccessMessage = null
-         state.resetPasswordError = null
-      },
       clearAuthSuccess: (state) => {
          state.isSuccess = false
          state.forgotPasswordSuccess = null
