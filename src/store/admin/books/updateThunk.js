@@ -1,12 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosInstance'
 
-export const addBook = createAsyncThunk(
-   'books/addBook',
-   async ({ type, language, formData }, { rejectWithValue }) => {
+export const updateBook = createAsyncThunk(
+   'books/updateBook',
+   async ({ type, language, formData, bookItemId }, { rejectWithValue }) => {
       try {
-         const data = new FormData()
-
          const bookData = {
             bookName: formData.bookName,
             description: formData.description,
@@ -41,11 +39,15 @@ export const addBook = createAsyncThunk(
                },
             }),
          }
-         data.append('book', JSON.stringify(bookData))
 
          const response = await axiosInstance.post(
-            `/api/book/saveBook?type=${type}&language=${language}`,
-            JSON.stringify(bookData)
+            `/api/book/updateBook/${bookItemId}?type=${type}&language=${language}`,
+            JSON.stringify(bookData),
+            {
+               headers: {
+                  'Content-Type': 'application/json',
+               },
+            }
          )
 
          return response.data
@@ -53,7 +55,7 @@ export const addBook = createAsyncThunk(
          const message =
             error.response?.data?.message ||
             error.message ||
-            'Ошибка при добавлении книги'
+            'Ошибка при обновлении книги'
          return rejectWithValue(message)
       }
    }

@@ -1,35 +1,22 @@
-import { createAsyncThunk } from "@reduxjs/toolkit"
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { axiosInstance } from '../../../configs/axiosInstance'
 
-export const fetchBooksByGenre = createAsyncThunk(
-  'books/fetchBooksByGenre',
-  async ({ genre, pageNumber = 1, pageSize = 8 }, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get('/api/bookItem/findByGenreBooks', {
-        params: { genre, pageNumber, pageSize },
-      })
-      return {
-        books: response.data.content || [],
-        totalElements: response.data.totalElements,
+export const fetchBooksByGenreAndType = createAsyncThunk(
+   'books/fetchByGenreAndType',
+   async (
+      { genre = false, type = false, pageNumber = 1, pageSize = 8 },
+      { rejectWithValue }
+   ) => {
+      try {
+         const response = await axiosInstance.get(
+            '/api/bookItem/findByGenreAndTypeBooks',
+            {
+               params: { genre, type, pageNumber, pageSize },
+            }
+         )
+         return response.data
+      } catch (error) {
+         return rejectWithValue(error.response?.data || error.message)
       }
-    } catch (err) {
-      return rejectWithValue(err.response?.data || 'Ошибка загрузки книг по жанру')
-    }
-  }
-)
-
-export const fetchBooksByType = createAsyncThunk(
-  'books/fetchBooksByType',
-  async ({ type, pageNumber = 1, pageSize = 8 }, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get('/api/bookItem/findByTypeBooks', {
-        params: { type, pageNumber, pageSize },
-      })
-      return {
-        books: response.data.content || [],
-        totalElements: response.data.totalElements,
-      }
-    } catch (err) {
-      return rejectWithValue(err.response?.data || 'Ошибка загрузки книг по типу')
-    }
-  }
+   }
 )

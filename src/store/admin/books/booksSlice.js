@@ -1,50 +1,66 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchBooksByGenre, fetchBooksByType } from './booksThunk'
+import { fetchBooksByGenreAndType } from './booksThunk'
+import { deleteBook } from './deleteAdminBookThunk'
 
 const initialState = {
-   genres: [],
-   genreBooks: [],
-   typeBooks: [],
-   selectedGenre: null,
-   selectedFormat: null,
+   allBooks: [],
    loading: false,
+   error: null,
+   pageNumber: 1,
+   pageSize: 8,
+   totalElements: 0,
+   selectedGenre: '',
+   selectedFormat: '',
 }
 
-const booksSlice = createSlice({
-   name: 'books',
+const bookSlice = createSlice({
+   name: 'allBooks',
    initialState,
    reducers: {
-      setGenre: (state, action) => {
+      setGenre(state, action) {
          state.selectedGenre = action.payload
+         state.pageNumber = 1
       },
-      setFormat: (state, action) => {
+      setFormat(state, action) {
          state.selectedFormat = action.payload
+         state.pageNumber = 1
+      },
+      setPageNumber(state, action) {
+         state.pageNumber = action.payload
       },
    },
    extraReducers: (builder) => {
       builder
-         .addCase(fetchBooksByGenre.pending, (state) => {
+         .addCase(fetchBooksByGenreAndType.pending, (state) => {
             state.loading = true
+            state.error = null
          })
-         .addCase(fetchBooksByGenre.fulfilled, (state, action) => {
-            state.genreBooks = action.payload.content || []
+         .addCase(fetchBooksByGenreAndType.fulfilled, (state, action) => {
             state.loading = false
+            state.allBooks = action.payload.content || []
+            state.totalElements = action.payload.totalElements || 0
          })
-         .addCase(fetchBooksByGenre.rejected, (state) => {
+         .addCase(fetchBooksByGenreAndType.rejected, (state, action) => {
             state.loading = false
+            state.error = action.payload
          })
-         .addCase(fetchBooksByType.pending, (state) => {
+         .addCase(deleteBook.pending, (state) => {
             state.loading = true
+            state.error = null
          })
-         .addCase(fetchBooksByType.fulfilled, (state, action) => {
-            state.typeBooks = action.payload.content || []
+         .addCase(deleteBook.fulfilled, (state, action) => {
             state.loading = false
+            state.allBooks = state.allBooks.filter(
+               (book) => book.id !== action.payload
+            )
+            state.totalElements -= 1
          })
-         .addCase(fetchBooksByType.rejected, (state) => {
+         .addCase(deleteBook.rejected, (state, action) => {
             state.loading = false
+            state.error = action.payload
          })
    },
 })
 
-export const { setGenre, setFormat } = booksSlice.actions
-export default booksSlice.reducer
+export const { setGenre, setFormat, setPageNumber } = bookSlice.actions
+export default bookSlice.reducer

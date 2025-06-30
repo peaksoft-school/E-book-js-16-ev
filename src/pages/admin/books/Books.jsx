@@ -10,29 +10,29 @@ import {
    useTheme,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllBooks } from '../../../store/admin/books/cardAllBooksThunk'
 import {
    setGenre,
-   setFormat,
    setPageNumber,
-} from '../../../store/admin/books/cardAllBooksSlice'
+   setFormat,
+} from '../../../store/admin/books/booksSlice'
 import ApplicationCard from '../../../components/UI/cards/ApplicationCard'
 import { Icons } from '../../../assets/icons/index'
 import Button from '../../../components/UI/buttons/Button'
 import { useNavigate, useSearchParams } from 'react-router'
 import { FORMATS, GENRES } from '../../../utils/helpers'
+import { fetchBooksByGenreAndType } from '../../../store/admin/books/booksThunk'
 
 const BookFilterPage = () => {
    const dispatch = useDispatch()
    const [searchParams, setSearchParams] = useSearchParams()
    const currentPage = Number(searchParams.get('page')) || 1
 
-   const format = useSelector((state) => state.allBooks.selectedFormat)
    const genre = useSelector((state) => state.allBooks.selectedGenre)
+   const format = useSelector((state) => state.allBooks.selectedFormat)
    const allBooks = useSelector((state) => state.allBooks.allBooks) || []
    const isLoading = useSelector((state) => state.allBooks.loading)
    const total = useSelector((state) => state.allBooks.totalElements)
-   const pageNumber = useSelector((state) => state.allBooks.pageNumber)
+
    const pageSize = 8
    const totalPages = Math.ceil(total / pageSize)
    const theme = useTheme()
@@ -42,27 +42,35 @@ const BookFilterPage = () => {
 
    useEffect(() => {
       dispatch(setPageNumber(currentPage))
-   }, [currentPage, dispatch])
-
-   useEffect(() => {
       dispatch(
-         fetchAllBooks({
-            type: format || null,
+         // filter
+         fetchBooksByGenreAndType({
             genre: genre || null,
-            pageNumber,
+            type: format || null,
+            pageNumber: currentPage,
             pageSize,
          })
       )
-   }, [format, genre, pageNumber, dispatch])
+   }, [format, genre, currentPage, dispatch])
 
    const handleGenreChange = (event) => {
-      dispatch(setGenre(event.target.value))
-      setSearchParams({ page: 1 })
+      const value = event.target.value
+      dispatch(setGenre(value))
+      setSearchParams({
+         page: 1,
+         genre: value,
+         type: format || '',
+      })
    }
 
    const handleFormatChange = (event) => {
-      dispatch(setFormat(event.target.value))
-      setSearchParams({ page: 1 })
+      const value = event.target.value
+      dispatch(setFormat(value))
+      setSearchParams({
+         page: 1,
+         genre: genre || '',
+         type: value,
+      })
    }
 
    const handlePageChange = (event, value) => {

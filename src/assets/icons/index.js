@@ -42,6 +42,7 @@ import plusw from './svgs/wplus.svg'
 import knowledge from './svgs/knowledge.svg'
 import noneChecked from './svgs/none-checked.svg'
 import checked from './svgs/checked.svg'
+import greenOk from './svgs/greenOk.svg'
 
 export const Icons = {
    x,
@@ -88,4 +89,5 @@ export const Icons = {
    knowledge,
    noneChecked,
    checked,
+   greenOk,
 }

@@ -4,7 +4,8 @@ import { ROLES } from './routes'
 import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
 import Books from '../pages/admin/books/Books'
-import AddBook from '../pages/admin/books/Addbook'
+import AddBook from '../pages/admin/books/AddBook'
+import UploadBook from '../pages/admin/books/UploadBook'
 
 const SignUp = lazy(() => import('../pages/sign-up/SignUp'))
 const SignIn = lazy(() => import('../pages/sign-in/SignIn'))
@@ -63,9 +64,8 @@ const AppRouter = () => (
          }
       >
          <Route path="books" element={<Books />} />
-          <Route path="books/addbook" element={<AddBook/>}/>
-         
-        
+         <Route path="books/addbook" element={<AddBook />} />
+         <Route path="books/uploadbook/:bookItemId" element={<UploadBook />} />
       </Route>
 
       <Route

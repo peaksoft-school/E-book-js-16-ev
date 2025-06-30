@@ -1,30 +1,34 @@
 import { useRef, useState, useEffect } from 'react'
-import { Box, Button, Typography } from '@mui/material'
-import { styled, useTheme } from '@mui/system'
+import { Box, Button, Typography, styled } from '@mui/material'
 import { Icons } from '../../assets/icons/index'
 
-const UploadImageBox = ({ onChange }) => {
+const UploadImageBox = ({ file, onChange }) => {
    const inputRef = useRef()
-   const [image, setImage] = useState(null)
-   const theme = useTheme()
+   const [image, setImage] = useState(() =>
+      typeof file === 'string' ? file : file ? URL.createObjectURL(file) : null
+   )
 
    const handleClick = () => inputRef.current.click()
 
    const handleFileChange = (e) => {
-      const file = e.target.files[0]
-      if (file && file.type.startsWith('image/')) {
-         const url = URL.createObjectURL(file)
+      const selectedFile = e.target.files[0]
+      if (selectedFile && selectedFile.type.startsWith('image/')) {
+         const url = URL.createObjectURL(selectedFile)
          setImage(url)
-         onChange(file)
+         onChange(selectedFile)
          e.target.value = null
       }
    }
 
    useEffect(() => {
-      return () => {
-         if (image) URL.revokeObjectURL(image)
+      if (typeof file === 'string') {
+         setImage(file)
+      } else if (file instanceof File) {
+         const url = URL.createObjectURL(file)
+         setImage(url)
+         return () => URL.revokeObjectURL(url)
       }
-   }, [image])
+   }, [file])
 
    return (
       <UploadBox onClick={handleClick}>

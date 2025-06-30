@@ -12,12 +12,27 @@ import {
 } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { useNavigate } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { Icons } from '../../../assets/icons'
+import { deleteBook } from '../../../store/admin/books/deleteAdminBookThunk'
+import { fetchBooksByGenreAndType } from '../../../store/admin/books/booksThunk'
 
 const ApplicationCard = forwardRef(({ book, micon }, ref) => {
-   const { imageUrl, name, price, date, showed, image, dateOfApplication } =
-      book
+   const {
+      imageUrl,
+      name,
+      price,
+      date,
+      showed,
+      image,
+      dateOfApplication,
+      bookItemId,
+   } = book
    const navigate = useNavigate()
-
+   const dispatch = useDispatch()
+   const { pageNumber, pageSize, selectedGenre, selectedFormat } = useSelector(
+      (state) => state.allBooks
+   )
    const [anchorEl, setAnchorEl] = useState(null)
    const open = Boolean(anchorEl)
 
@@ -31,15 +46,25 @@ const ApplicationCard = forwardRef(({ book, micon }, ref) => {
 
    const handleEdit = () => {
       console.log('Редактировать:', book)
-      navigate(`/admin/books/addbook`)
+      navigate(`/admin/books/uploadbook/${book.bookItemId}`)
+   }
+   const handleDelete = async (bookItemId) => {
+      const data = {
+         pageNumber,
+         pageSize,
+         genre: selectedGenre,
+         type: selectedFormat,
+      }
+
+      if (window.confirm('Вы действительно хотите удалить эту книгу?')) {
+         await dispatch(
+            deleteBook({ bookItemId, fetchBooksByGenreAndType, data })
+         )
+      }
    }
 
-   const handleReject = () => {
-      console.log('Отклонить:', book)
-      handleMenuClose()
-   }
    const handleClick = () => {
-      if(micon == null){
+      if (micon == null) {
          navigate(`/admin/application/${book.bookItemId}`)
       }
    }
@@ -70,8 +95,14 @@ const ApplicationCard = forwardRef(({ book, micon }, ref) => {
                      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                   >
-                     <MenuItem onClick={handleEdit}>Редактировать</MenuItem>
-                     <MenuItem onClick={handleReject}>Отклонить</MenuItem>
+                     <StyledMenuItem className="edit" onClick={handleEdit}>
+                        <img src={Icons.edit} alt="" />
+                        Редактировать
+                     </StyledMenuItem>
+                     <StyledMenuItem onClick={() => handleDelete(bookItemId)}>
+                        <img src={Icons.del} alt="delete" />
+                        Удалить
+                     </StyledMenuItem>
                   </Menu>
                </>
             )}
@@ -95,6 +126,21 @@ const ApplicationCard = forwardRef(({ book, micon }, ref) => {
 })
 
 export default ApplicationCard
+
+const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+   width: 173,
+   height: 43,
+   display: 'flex',
+   alignItems: 'center',
+   gap: 10,
+   '&:last-child': {
+      borderBottom: 'none',
+   },
+   '&.edit': {
+      borderBottom: '1px solid #8A8A8A',
+      padding: '6px',
+   },
+}))
 
 const StyledCard = styled(Card)(({ theme, showed }) => ({
    width: 275,
