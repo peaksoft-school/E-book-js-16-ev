@@ -11,7 +11,7 @@ export const axiosInstance = axios.create({
 })
 
 const TEMPORARY_HARDCODED_TOKEN =
-   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTExMDEyMjMsImV4cCI6MTc1NDcwMTIyM30.ucH6MOBJ-JBCY1rCizYNgXEaeSynk15p-V-3cQ3SOW4'
+   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTEyOTM5NTAsImV4cCI6MTc1NDg5Mzk1MH0.8veHRTX29TqbrcigNVAZVLuIb_1wtJ51MS7aMA2j5vQ'
 
 let customStore
 export const injectStore = (store) => {

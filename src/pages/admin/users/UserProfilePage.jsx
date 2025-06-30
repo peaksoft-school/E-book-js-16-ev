@@ -1,43 +1,16 @@
-import {
-   Box,
-   Typography,
-   styled,
-   Tabs,
-   Tab,
-   MenuItem,
-   Menu,
-} from '@mui/material'
+import { Box, Typography, styled, Tabs, Tab } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUserById } from '../../../store/slices/admin/userProfileThunk'
+import Modal from '../../../components/UI/Modal'
+import Button from '../../../components/UI/buttons/Button'
 
-const SELLERS_DATA = [
-   {
-      id: '1',
-      name: 'Мыктыбек Мыктыбеков',
-      phone: '+996 500 345 678',
-      email: 'myky@gmail.com',
-      registrationDate: '21 мая 2019',
-   },
-   {
-      id: '2',
-      name: 'Айжан Асанова',
-      phone: '+996 777 123 456',
-      email: 'aijan@example.com',
-      registrationDate: '10 апреля 2020',
-   },
-   {
-      id: '3',
-      name: 'Нурлан Кадыров',
-      phone: '+996 555 987 654',
-      email: 'nurlan@example.com',
-      registrationDate: '05 марта 2021',
-   },
-]
+import { toast } from 'react-toastify'
+import { deleteUser } from '../../../store/slices/admin/usersThunk'
 
-// Mock API functions
 const fetchPurchaseHistory = async () => {
-   // Simulate API call
    return new Promise((resolve) => {
       setTimeout(() => {
          resolve([
@@ -65,13 +38,25 @@ const fetchPurchaseHistory = async () => {
                status: 'Завершен',
                hasPromo: false,
             },
+            {
+               id: 'p3',
+               title: 'Очень длинное название книги, которое должно переноситься на новую строку, чтобы не обрезаться.',
+               author:
+                  'Автор с очень длинным именем и фамилией, которое также должно переноситься.',
+               image: 'https://i.ibb.co/L84Rgw0/harry-potter-min.png',
+               quantity: 2,
+               originalPrice: 1200,
+               discountedPrice: 1000,
+               date: '01.01.23',
+               status: 'Отменен',
+               hasPromo: true,
+            },
          ])
       }, 500)
    })
 }
 
 const fetchFavoriteHistory = async () => {
-   // Simulate API call
    return new Promise((resolve) => {
       setTimeout(() => {
          resolve([
@@ -99,7 +84,6 @@ const fetchFavoriteHistory = async () => {
                status: 'В избранном',
                hasPromo: false,
             },
-            // Add 10 more to make 12 for demo
             ...Array(10)
                .fill(null)
                .map((_, i) => ({
@@ -120,7 +104,6 @@ const fetchFavoriteHistory = async () => {
 }
 
 const fetchBasketHistory = async () => {
-   // Simulate API call
    return new Promise((resolve) => {
       setTimeout(() => {
          resolve([
@@ -168,20 +151,23 @@ const fetchBasketHistory = async () => {
 const UserProfilePage = () => {
    const { id } = useParams()
    const [tabValue, setTabValue] = useState(0)
-   const [anchorEl, setAnchorEl] = useState(null)
    const [currentUser, setCurrentUser] = useState(null)
-   const [activeFilter, setActiveFilter] = useState('purchased') // 'purchased', 'favorite', 'basket'
+   const [activeFilter, setActiveFilter] = useState('purchased')
    const [books, setBooks] = useState([])
    const [loadingBooks, setLoadingBooks] = useState(true)
+   const [isModalOpen, setIsModalOpen] = useState(false)
 
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+
+   const { selectedUser, error, isLoading } = useSelector(
+      (state) => state.userProfil
+   )
    useEffect(() => {
-      const foundSeller = SELLERS_DATA.find((seller) => seller.id === id)
-      if (foundSeller) {
-         setCurrentUser(foundSeller)
-      } else {
-         console.warn(`Продавец с ID ${id} не найден.`)
+      if (id) {
+         dispatch(getUserById({ clientId: id }))
       }
-   }, [id])
+   }, [dispatch, id])
 
    useEffect(() => {
       const loadBooks = async () => {
@@ -199,20 +185,31 @@ const UserProfilePage = () => {
       }
 
       if (tabValue === 1) {
-         // Only load books if "История операций" tab is active
          loadBooks()
       }
-   }, [tabValue, activeFilter]) // Re-fetch when tab or filter changes
+   }, [tabValue, activeFilter])
 
    const handleTabChange = (event, newValue) => {
       setTabValue(newValue)
    }
 
    const handleClearHistory = () => {
-      // Implement logic to clear history based on activeFilter or a general clear
       console.log('Очистить историю clicked for:', activeFilter)
-      // You might want to make an API call here to clear history
-      // e.g., /api/historyAction/clearPurchaseHistoryAction
+   }
+   const handleDeleteProfileClick = () => {
+      setIsModalOpen(true)
+   }
+
+   const handleCloseModal = () => {
+      setIsModalOpen(false)
+   }
+
+   const handleConfirmDelete = (clientId) => {
+      dispatch(deleteUser({ clientId }))
+
+      setIsModalOpen(false)
+      navigate('/admin/users')
+      toast.success('Успешно удалено', {})
    }
 
    return (
@@ -223,13 +220,13 @@ const UserProfilePage = () => {
                   Пользователи /{' '}
                </Typography>
                <Typography variant="body2" fontWeight={500}>
-                  {currentUser
-                     ? currentUser.name.split(' ')[0]
+                  {selectedUser
+                     ? selectedUser.firstName.split(' ')[0]
                      : 'Загрузка...'}{' '}
                </Typography>
             </Breadcrumbs>
 
-            <TabsContainer>
+            <>
                <StyledTabs
                   value={tabValue}
                   onChange={handleTabChange}
@@ -238,9 +235,9 @@ const UserProfilePage = () => {
                   <Tab label="Профиль" />
                   <Tab label="История операций" />
                </StyledTabs>
-            </TabsContainer>
+            </>
 
-            {tabValue === 0 && currentUser && (
+            {tabValue === 0 && selectedUser && (
                <ProfileContentWrapper>
                   <ProfileDetailsGrid>
                      <ProfileRow>
@@ -248,31 +245,16 @@ const UserProfilePage = () => {
                            Имя
                         </Typography>
                         <Typography variant="body1">
-                           {currentUser.name.split(' ')[0]}
+                           {selectedUser.firstName.split(' ')[0]}
                         </Typography>
                      </ProfileRow>
-                     <ProfileRow>
-                        <Typography variant="body1" fontWeight={500}>
-                           Фамилия
-                        </Typography>
-                        <Typography variant="body1">
-                           {currentUser.name.split(' ')[1]}
-                        </Typography>
-                     </ProfileRow>
-                     <ProfileRow>
-                        <Typography variant="body1" fontWeight={500}>
-                           Номер телефона
-                        </Typography>
-                        <Typography variant="body1">
-                           {currentUser.phone}
-                        </Typography>
-                     </ProfileRow>
+
                      <ProfileRow>
                         <Typography variant="body1" fontWeight={500}>
                            Email
                         </Typography>
                         <Typography variant="body1">
-                           {currentUser.email}
+                           {selectedUser.email}
                         </Typography>
                      </ProfileRow>
                      <ProfileRow>
@@ -280,22 +262,22 @@ const UserProfilePage = () => {
                            Дата регистрации
                         </Typography>
                         <Typography variant="body1">
-                           {currentUser.registrationDate}
+                           {selectedUser.registrationDate}
                         </Typography>
                      </ProfileRow>
                   </ProfileDetailsGrid>
-                  <DeleteProfileText>Удалить профиль</DeleteProfileText>
+                  <DeleteProfileText onClick={handleDeleteProfileClick}>
+                     Удалить профиль
+                  </DeleteProfileText>
                </ProfileContentWrapper>
             )}
-            {tabValue === 0 && !currentUser && (
+            {tabValue === 0 && !selectedUser && (
                <Typography>Загрузка данных профиля...</Typography>
             )}
 
             {tabValue === 1 && (
                <OperationsContentWrapper>
                   <LeftPanel>
-                     {' '}
-                     {/* New wrapper for left side */}
                      <ClearHistoryText onClick={handleClearHistory}>
                         Очистить историю
                      </ClearHistoryText>
@@ -325,7 +307,6 @@ const UserProfilePage = () => {
                            <Typography variant="body2">
                               В избранном (12 книг)
                            </Typography>{' '}
-                           {/* Update this count from API */}
                         </FilterOption>
                         <FilterOption
                            onClick={() => setActiveFilter('basket')}
@@ -339,7 +320,6 @@ const UserProfilePage = () => {
                            <Typography variant="body2">
                               В корзине (3 книг)
                            </Typography>{' '}
-                           {/* Update this count from API */}
                         </FilterOption>
                      </FilterSidebar>
                   </LeftPanel>
@@ -408,6 +388,25 @@ const UserProfilePage = () => {
                   </BookListContainer>
                </OperationsContentWrapper>
             )}
+            <Modal open={isModalOpen} handleClose={handleCloseModal}>
+               <ModalContentWrapper>
+                  <Typography sx={{ mt: 2 }}>
+                     Вы уверены, что хотите удалить профиль?
+                  </Typography>
+                  <ModalActions>
+                     <StyledButton variant="notbor" onClick={handleCloseModal}>
+                        Отмена
+                     </StyledButton>
+                     <Button
+                        onClick={handleConfirmDelete}
+                        color="error"
+                        variant="contained"
+                     >
+                        Удалить
+                     </Button>
+                  </ModalActions>
+               </ModalContentWrapper>
+            </Modal>
          </ContentBox>
       </PageWrapper>
    )
@@ -423,6 +422,7 @@ const PageWrapper = styled(Box)({
    margin: 0,
    padding: 0,
    boxSizing: 'border-box',
+   marginLeft: '-20px',
 })
 
 const ContentBox = styled(Box)({
@@ -443,14 +443,10 @@ const Breadcrumbs = styled(Box)({
    marginBottom: '20px',
 })
 
-const TabsContainer = styled(Box)({
-   display: 'flex',
-   justifyContent: 'center', // Center the tabs
-   width: '100%',
-   marginBottom: '20px',
-})
-
 const StyledTabs = styled(Tabs)({
+   marginBottom: '20px',
+   marginLeft: '400px',
+
    '& .MuiTabs-indicator': {
       backgroundColor: '#F34901',
    },
@@ -474,7 +470,7 @@ const ProfileContentWrapper = styled(Box)({
 
 const ProfileDetailsGrid = styled(Box)({
    display: 'grid',
-   gridTemplateColumns: 'auto 1fr 1fr',
+   gridTemplateColumns: ' 1fr 1fr',
    gap: '45px 140px',
    maxWidth: '600px',
    padding: '20px 0',
@@ -500,8 +496,6 @@ const DeleteProfileText = styled(Typography)({
    marginTop: 'auto',
 })
 
-// New and updated styled components for the "История операций" tab
-
 const OperationsContentWrapper = styled(Box)({
    display: 'flex',
    flexGrow: 1,
@@ -509,21 +503,21 @@ const OperationsContentWrapper = styled(Box)({
 })
 
 const LeftPanel = styled(Box)({
-   width: '200px', // Adjust width as needed for the sidebar
+   width: '150px',
    paddingRight: '20px',
    display: 'flex',
    flexDirection: 'column',
-   // Removed borderRight here
 })
 
 const ClearHistoryText = styled(Typography)({
    color: '#A0A0A0',
    fontWeight: 500,
    cursor: 'pointer',
-   marginBottom: '20px', // Space between "Clear History" and filters
+   marginBottom: '20px',
    '&:hover': {
       color: '#F34901',
    },
+   fontSize: 13,
 })
 
 const FilterSidebar = styled(Box)({
@@ -544,29 +538,38 @@ const FilterOption = styled(Box)({
 })
 
 const BookListContainer = styled(Box)({
-   flexGrow: 1,
-   marginLeft: '20px', // Space between sidebar and book list
+   marginLeft: '10px',
    borderTop: '1px solid #e0e0e0',
+   overflowX: 'auto',
+   boxSizing: 'border-box',
+   width: '1191px',
 })
 
 const BookListHeader = styled(Box)({
    display: 'grid',
-   gridTemplateColumns: '70px 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr', // Removed the first '120px' column
+   gridTemplateColumns: '70px 300px 90px 150px 150px 1fr',
    gap: '20px',
    padding: '10px 0',
    '& > *': {
       fontWeight: 500,
       color: '#A0A0A0',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
    },
 })
 
 const BookItem = styled(Box)({
    display: 'grid',
-   gridTemplateColumns: '70px 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr', // Removed the first '120px' column
+   gridTemplateColumns: '70px 300px 100px 150px 150px 1fr',
    gap: '20px',
    padding: '15px 0',
    borderBottom: '1px solid #e0e0e0',
    alignItems: 'center',
+   '& > *': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+   },
 })
 
 const BookImage = styled('img')({
@@ -579,6 +582,11 @@ const BookImage = styled('img')({
 const BookDetails = styled(Box)({
    display: 'flex',
    flexDirection: 'column',
+   '& .MuiTypography-body1, & .MuiTypography-body2': {
+      whiteSpace: 'normal',
+      overflow: 'visible',
+      textOverflow: 'clip',
+   },
 })
 
 const PriceDetails = styled(Box)({
@@ -596,4 +604,23 @@ const OriginalPrice = styled(Typography)({
    textDecoration: 'line-through',
    color: '#A0A0A0',
    fontSize: '0.85rem',
+})
+const ModalContentWrapper = styled(Box)({
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '15px',
+})
+
+const ModalActions = styled(Box)({
+   display: 'flex',
+   flexDirection: 'row', // Explicitly set to row, though it's the default
+   justifyContent: 'flex-end', // Aligns buttons to the right side of the modal
+   gap: '10px', // Provides spacing between the "Отмена" and "Удалить" buttons
+   marginTop: '20px',
+   alignItems: 'center', // Vertically centers the buttons if they have different heights (though usually they're the same)
+})
+const StyledButton = styled(Button)({
+   '& .MuiButtonBase-root': {
+      marginTop: '100px',
+   },
 })

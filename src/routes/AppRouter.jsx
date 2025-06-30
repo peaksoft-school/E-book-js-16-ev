@@ -65,7 +65,6 @@ const AppRouter = () => (
       >
          <Route path="users" element={<UsersPage />} />
          <Route path="users/:id" element={<UserProfilePage />} />
-         {/* <Route path="/users/:id/history" element={<UserHistoryPage />} /> */}
       </Route>
 
       <Route
