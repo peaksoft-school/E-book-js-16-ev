@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { axiosInstance } from '../../configs/axiosInstance'
+import { axiosInstance } from '../../../configs/axiosInstance'
 
-export const getAllVendors = createAsyncThunk(
+export const findAllVendor = createAsyncThunk(
    'vendor/getAll',
    async ({ pageNumber = 1, pageSize = 15 }, { rejectWithValue }) => {
       try {
@@ -35,7 +35,7 @@ export const deleteVendor = createAsyncThunk(
    }
 )
 
-export const getVendorById = createAsyncThunk(
+export const findVendorById = createAsyncThunk(
    'vendor/getVendorById',
    async ({ vendorId }, { rejectWithValue }) => {
       try {

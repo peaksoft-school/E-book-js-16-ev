@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
-
 import {
    Box,
    Typography,
@@ -10,19 +9,19 @@ import {
    Tab,
    MenuItem,
    Menu,
-   CircularProgress,
    Pagination,
 } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Modal from '../../components/UI/Modal'
-import BasketCard from '../../components/UI/cards/BasketCard'
-import {
-   getVendorById,
-   deleteVendor,
-   getAllVendorBooks,
-} from '../../store/slices/vendorThunk'
-import { toast } from 'react-toastify'
 import Button from '../../components/UI/buttons/Button'
+import SmallBasketCard from '../../components/UI/cards/SmallBasketCard'
+import notify from '../../utils/helpers/notify'
+import Loading from '../../components/UI/Loading'
+import {
+   deleteVendor,
+   findVendorById,
+   getAllVendorBooks,
+} from '../../store/slices/admin/vendorThunk'
 
 const VendorsDetailtPage = () => {
    const { id } = useParams()
@@ -41,7 +40,7 @@ const VendorsDetailtPage = () => {
 
    useEffect(() => {
       if (id) {
-         dispatch(getVendorById({ vendorId: id }))
+         dispatch(findVendorById({ vendorId: id }))
       }
    }, [dispatch, id])
 
@@ -57,7 +56,7 @@ const VendorsDetailtPage = () => {
       }
    }, [dispatch, id, tabValue, currentBookPage, booksPerPage])
 
-   const handleTabChange = (event, newValue) => {
+   const handleTabChange = (newValue) => {
       setTabValue(newValue)
       if (newValue === 1) {
          setCurrentBookPage(1)
@@ -72,7 +71,8 @@ const VendorsDetailtPage = () => {
       setAnchorEl(null)
    }
 
-   const handleDeleteProfileClick = () => {
+   const handleDeleteProfileClick = (vendorId) => {
+      dispatch(deleteVendor({ vendorId: selectedVendor.vendorId }))
       setIsModalOpen(true)
    }
 
@@ -83,7 +83,7 @@ const VendorsDetailtPage = () => {
    const handleConfirmDelete = () => {
       setIsModalOpen(false)
       navigate('/admin/vendors')
-      toast.success('Успешно удалено', {})
+      notify({ message: 'Успешно удалено' })
    }
 
    const handleBookPageChange = (event, value) => {
@@ -108,7 +108,7 @@ const VendorsDetailtPage = () => {
 
             {isLoading && tabValue === 0 && (
                <LoadingContainer>
-                  <CircularProgress />
+                  <Loading />
                   <Typography>Загрузка данных профиля...</Typography>
                </LoadingContainer>
             )}
@@ -226,7 +226,7 @@ const VendorsDetailtPage = () => {
 
                         {vendorBooks?.isLoading ? (
                            <LoadingContainer>
-                              <CircularProgress />
+                              <Loading />
                               <Typography>Загрузка книг...</Typography>
                            </LoadingContainer>
                         ) : vendorBooks?.error ? (
@@ -245,7 +245,7 @@ const VendorsDetailtPage = () => {
                            <>
                               <BookGrid>
                                  {vendorBooks?.content?.map((book) => (
-                                    <BasketCard
+                                    <SmallBasketCard
                                        key={book.bookItemId}
                                        book={book}
                                     />
@@ -415,7 +415,7 @@ const FilterButton = styled(Box)({
 
 const BookGrid = styled(Box)({
    display: 'grid',
-   gridTemplateColumns: 'auto auto auto',
+   gridTemplateColumns: 'auto auto auto auto ',
    gap: '20px',
    justifyContent: 'start',
 })

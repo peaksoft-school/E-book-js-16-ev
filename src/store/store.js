@@ -1,10 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import vendorSlice from './slices/vendorSlice'
+import { vendorSlice } from './slices/admin/vendorSlice'
 
 const rootReducer = combineReducers({
-   vendor: vendorSlice,
+   [vendorSlice.name]: vendorSlice.reducer,
 })
 
 const persistConfig = {

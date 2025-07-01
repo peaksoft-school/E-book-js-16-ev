@@ -1,20 +1,23 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
 import { Box, styled, Pagination, CircularProgress } from '@mui/material'
 import Table from '../../components/UI/Table'
-import { useNavigate } from 'react-router'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getAllVendors, deleteVendor } from '../../store/slices/vendorThunk'
+import {
+   deleteVendor,
+   findAllVendor,
+} from '../../store/slices/admin/vendorThunk'
 
 const VendorsPage = () => {
+   const [currentPage, setCurrentPage] = useState(1)
+   const [rowsPerPage, setRowsPerPage] = useState(15)
+
    const navigate = useNavigate()
    const dispatch = useDispatch()
 
-   const { vendors, isLoading, error, totalPages, totalElements } = useSelector(
+   const { vendors, isLoading, error, totalPages } = useSelector(
       (state) => state.vendor
    )
-
-   const [currentPage, setCurrentPage] = useState(1)
-   const [rowsPerPage, setRowsPerPage] = useState(15)
 
    const handleRowClick = (id) => {
       navigate(`/admin/vendors/${id}`)
@@ -30,7 +33,7 @@ const VendorsPage = () => {
 
    useEffect(() => {
       dispatch(
-         getAllVendors({ pageNumber: currentPage, pageSize: rowsPerPage })
+         findAllVendor({ pageNumber: currentPage, pageSize: rowsPerPage })
       )
    }, [dispatch, currentPage, rowsPerPage])
 

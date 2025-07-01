@@ -43,30 +43,20 @@ const Table = ({ variant = 'B', sellers, onRowClick, onDeleteConfirm }) => {
 
    return (
       <StyledTableContainer component={Paper}>
-                  
          <StyledTable>
-                       {' '}
             <StyledTableHead>
-                              
                <StyledTableRowH variant={variant}>
-                                    <TableCell>№</TableCell>                 {' '}
-                  <TableCell>Имя</TableCell>                 {' '}
+                  <TableCell>№</TableCell>
+                  <TableCell>Имя</TableCell>
                   <TableCell>
-                                          
-                     {variant === 'A' ? 'Номер телефона' : 'Почта'}             
-                        {' '}
+                     {variant === 'A' ? 'Номер телефона' : 'Почта'}
                   </TableCell>
-                                   {' '}
-                  {variant === 'A' && <TableCell>Почта</TableCell>}             
-                     {' '}
-                  {variant === 'A' && <TableCell>Количество книг</TableCell>}   
-                                <TableCell></TableCell>               
+                  {variant === 'A' && <TableCell>Почта</TableCell>}
+                  {variant === 'A' && <TableCell>Количество книг</TableCell>}
+                  <TableCell></TableCell>
                </StyledTableRowH>
-                          {' '}
             </StyledTableHead>
-                       {' '}
             <StyledTableBody>
-                              
                {sellers.map((seller, index) => (
                   <StyledTableRow
                      key={seller.id}
@@ -75,47 +65,31 @@ const Table = ({ variant = 'B', sellers, onRowClick, onDeleteConfirm }) => {
                      }
                      variant={variant}
                   >
-                                          <TableCell>{index + 1}</TableCell>   
-                                      <TableCell>{seller.name}</TableCell>     
-                                    
+                     <TableCell>{index + 1}</TableCell>
+                     <TableCell>{seller.name}</TableCell>
                      <TableCell>
-                                               {' '}
-                        {variant === 'A' ? seller.phone : seller.email}         
-                                   
+                        {variant === 'A' ? seller.phone : seller.email}
                      </TableCell>
-                                          
-                     {variant === 'A' && <TableCell>{seller.email}</TableCell>} 
-                                        
-                     {variant === 'A' && <TableCell>{seller.books}</TableCell>} 
-                                        
+                     {variant === 'A' && <TableCell>{seller.email}</TableCell>}
+                     {variant === 'A' && <TableCell>{seller.books}</TableCell>}
                      <TableCell onClick={(e) => e.stopPropagation()}>
-                                               {' '}
                         <IconButton
                            className="iconBtn"
                            onClick={() => handleDeleteClick(seller)}
                         >
-                                                      
-                           <img src={Icons.del} alt="delete" />                 
-                                {' '}
+                           <img src={Icons.del} alt="delete" />
                         </IconButton>
-                                             
                      </TableCell>
-                                      {' '}
                   </StyledTableRow>
                ))}
-                          {' '}
             </StyledTableBody>
-                     
          </StyledTable>
-                  
+
          <Modal open={modalOpen} handleClose={handleCloseModal}>
-                       {' '}
             <StyledText>
-                              Вы уверены, что хотите удалить                
-               <strong>{toDelete?.name || 'этот элемент'}?</strong>         
-                {' '}
+               Вы уверены, что хотите удалить{' '}
+               <strong>{toDelete?.name || 'этот элемент'}?</strong>
             </StyledText>
-                       {' '}
             <Stack
                direction="row"
                marginLeft="100px"
@@ -123,21 +97,16 @@ const Table = ({ variant = 'B', sellers, onRowClick, onDeleteConfirm }) => {
                justifyContent="start"
                padding="10px"
             >
-                              
-               <StyledButton onClick={handleCloseModal}>Отмена</StyledButton>   
-                          
+               <StyledButton onClick={handleCloseModal}>Отмена</StyledButton>
                <Button
                   variant="contained"
                   color="error"
                   onClick={handleConfirmDelete}
                >
-                                    Удалить                
+                  Удалить
                </Button>
-                          {' '}
             </Stack>
-                     
          </Modal>
-              {' '}
       </StyledTableContainer>
    )
 }
