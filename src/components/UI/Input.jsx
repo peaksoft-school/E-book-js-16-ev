@@ -5,6 +5,8 @@ import {
    IconButton,
    InputLabel,
    styled,
+   Box,
+   Typography,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
@@ -16,20 +18,26 @@ const Input = forwardRef(
          type = 'search',
          withIcon = type !== 'info',
          placeholder,
-         value,
+         value = '',
          onChange,
          iconVariant = 'on',
          label,
+         multiline = false,
+         rows,
+         inputProps,
+         width = '100%',
+         maxLength,
+         error,
+         helperText,
          ...rest
       },
       ref
    ) => {
       const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
-      if (!placeholder)
-         return console.error(
-            'Ошибка: placeholder является обязательным пропсом'
-         )
+      if (!placeholder) {
+         console.error('Ошибка: placeholder является обязательным пропсом')
+      }
 
       const handleTogglePasswordVisibility = () =>
          setIsPasswordVisible((prev) => !prev)
@@ -62,8 +70,16 @@ const Input = forwardRef(
             : 'text'
 
       return (
-         <>
-            {label && <InputLabel>{label}</InputLabel>}
+         <Box
+            width={type === 'description' ? 650 : '100%'}
+            display="flex"
+            flexDirection="column"
+         >
+            {label && (
+               <InputLabel sx={{ color: 'black', marginBottom: 1 }}>
+                  {label}
+               </InputLabel>
+            )}
 
             <StyledInput
                placeholder={placeholder}
@@ -74,6 +90,11 @@ const Input = forwardRef(
                autoComplete="off"
                inputType={type}
                ref={ref}
+               multiline={multiline}
+               rows={rows}
+               sx={{ width }}
+               error={error}
+               helperText={helperText}
                InputProps={{
                   endAdornment: (
                      <InputAdornment position="end">
@@ -81,9 +102,24 @@ const Input = forwardRef(
                      </InputAdornment>
                   ),
                }}
+               inputProps={{ maxLength, ...inputProps }}
                {...rest}
             />
-         </>
+
+            {type === 'description' && maxLength && (
+               <Typography
+                  sx={{
+                     marginTop: '4px',
+                     fontSize: 14,
+                     color: value.length > maxLength * 0.9 ? 'red' : '#9E9E9E',
+                     userSelect: 'none',
+                     alignSelf: 'flex-end',
+                  }}
+               >
+                  {value.length} / {maxLength}
+               </Typography>
+            )}
+         </Box>
       )
    }
 )
@@ -98,40 +134,29 @@ const StyledInput = styled(TextField, {
       '& .MuiOutlinedInput-root': {
          backgroundColor: '#fafafa',
          borderRadius: '4px',
-         height: '50px',
          fontSize: '16px',
-
          '& fieldset': {
             borderColor: '#C4C4C4',
          },
-
          '&:hover fieldset': {
             borderColor: '#C4C4C4',
          },
-
          '&.Mui-focused fieldset': {
             borderColor: '#f26522',
             borderWidth: '2px',
          },
-
          '& input': {
             padding: '12px 14px',
             fontSize: '16px',
             color: '#000',
-
             '&::placeholder': {
                color: '#C4C4C4',
                opacity: 1,
                transition: 'opacity 0.2s ease',
             },
-
             '&:focus::placeholder': {
                opacity: inputType === 'search' ? 0 : 1,
             },
-         },
-
-         '&.Mui-focused .MuiSvgIcon-root': {
-            color: '#f26522',
          },
       },
    }
@@ -139,7 +164,6 @@ const StyledInput = styled(TextField, {
    if (inputType === 'search') {
       return {
          ...common,
-
          '& .MuiOutlinedInput-root': {
             ...common['& .MuiOutlinedInput-root'],
             borderRadius: '0px',
@@ -147,11 +171,9 @@ const StyledInput = styled(TextField, {
             maxWidth: '895px',
             height: '40px',
          },
-
          '& .MuiSvgIcon-root': {
             color: '#C4C4C4',
          },
-
          '&:hover .MuiSvgIcon-root': {
             color: '#C4C4C4',
          },
@@ -167,15 +189,12 @@ const StyledInput = styled(TextField, {
             backgroundColor: '#fff',
             width: '514px',
             height: '38px',
-
             '& .MuiSvgIcon-root': {
                color: '#C4C4C4',
             },
-
             '&.Mui-focused .MuiSvgIcon-root': {
                color: '#C4C4C4',
             },
-
             '&.Mui-focused fieldset': {
                borderColor: '#C4C4C4',
                borderWidth: '2px',
@@ -191,17 +210,39 @@ const StyledInput = styled(TextField, {
             ...common['& .MuiOutlinedInput-root'],
             borderRadius: '0px',
             backgroundColor: '#fff',
-            width: '514px',
-            height: '38px',
-
+            height: '40px',
             '& .MuiSvgIcon-root': {
                color: '#C4C4C4',
             },
-
             '&.Mui-focused .MuiSvgIcon-root': {
                color: '#C4C4C4',
             },
+            '&.Mui-focused fieldset': {
+               borderColor: '#C4C4C4',
+               borderWidth: '2px',
+            },
+         },
+      }
+   }
 
+   if (inputType === 'description') {
+      return {
+         ...common,
+         width: '650px',
+         '& .MuiOutlinedInput-root': {
+            ...common['& .MuiOutlinedInput-root'],
+            backgroundColor: '#fff',
+            borderRadius: '0px',
+            height: 'auto',
+            alignItems: 'flex-start',
+            '& textarea': {
+               padding: '1px',
+               fontSize: '16px',
+               lineHeight: 1.5,
+               height: '200px',
+               resize: 'none',
+               boxSizing: 'border-box',
+            },
             '&.Mui-focused fieldset': {
                borderColor: '#C4C4C4',
                borderWidth: '2px',

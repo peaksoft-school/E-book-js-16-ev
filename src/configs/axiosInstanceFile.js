@@ -2,21 +2,21 @@ import axios from 'axios'
 
 const BASE_URL = 'http://35.159.168.248'
 
-export const axiosInstance = axios.create({
+export const axiosInstanceFile = axios.create({
    baseURL: BASE_URL,
 
    headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
    },
 })
 
 let customStore
 
-export const injectStore = (store) => {
+export const injectStoreFile = (store) => {
    customStore = store
 }
 
-axiosInstance.interceptors.request.use(
+axiosInstanceFile.interceptors.request.use(
    (config) => {
       const updateConfig = { ...config }
 
@@ -34,7 +34,7 @@ axiosInstance.interceptors.request.use(
    }
 )
 
-axiosInstance.interceptors.response.use(
+axiosInstanceFile.interceptors.response.use(
    (response) => {
       return Promise.resolve(response)
    },

@@ -3,6 +3,9 @@ import { Suspense, lazy } from 'react'
 import { ROLES, ROUTES } from './routes'
 import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
+import Books from '../pages/admin/books/Books'
+import AddBook from '../pages/admin/books/AddBook'
+import UploadBook from '../pages/admin/books/UploadBook'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))
@@ -77,7 +80,11 @@ const AppRouter = () => (
                fallbackPath={'/'}
             />
          }
-      />
+      >
+         <Route path="books" element={<Books />} />
+         <Route path="books/addbook" element={<AddBook />} />
+         <Route path="books/uploadbook/:bookItemId" element={<UploadBook />} />
+      </Route>
 
       <Route
          path="/user"
