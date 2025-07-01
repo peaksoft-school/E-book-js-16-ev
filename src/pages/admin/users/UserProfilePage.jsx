@@ -54,7 +54,7 @@ const UserProfilePage = () => {
       const loadBooks = async () => {
          setLoadingBooks(true)
          if (activeFilter === 'purchased') {
-            await dispatch(
+            dispatch(
                getClientPurchaseHistoryAction({
                   userId: id,
                   pageNumber: 1,
@@ -62,7 +62,7 @@ const UserProfilePage = () => {
                })
             )
          } else if (activeFilter === 'favorite') {
-            await dispatch(
+            dispatch(
                getClientFavoriteHistoryAction({
                   userId: id,
                   pageNumber: 1,
@@ -70,7 +70,7 @@ const UserProfilePage = () => {
                })
             )
          } else if (activeFilter === 'basket') {
-            await dispatch(
+            dispatch(
                getClinetBasketHistoryAction({
                   userId: id,
                   pageNumber: 1,
