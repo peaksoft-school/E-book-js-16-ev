@@ -14,6 +14,7 @@ const rootReducer = combineReducers({
    addBook: addBookReducer,
    updateBook: uploadBookReducer,
    findBook: fetchBookByIdReducer,
+
 })
 
 const persistConfig = {

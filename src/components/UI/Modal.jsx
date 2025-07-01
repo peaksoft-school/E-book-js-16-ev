@@ -1,9 +1,9 @@
 import { forwardRef } from 'react'
 import { Modal as MuiModal, Box, styled } from '@mui/material'
 
-const Modal = forwardRef(({ open, handleClose, children }) => (
+const Modal = forwardRef(({ open, handleClose, children }, ref) => (
    <MuiModal open={open} onClose={handleClose}>
-      <StyleBox>{children}</StyleBox>
+      <StyleBox ref={ref}>{children}</StyleBox>
    </MuiModal>
 ))
 
@@ -18,7 +18,7 @@ const StyleBox = styled(Box)({
    boxShadow: 24,
    p: 4,
    borderRadius: 2,
-   width: 500,
+   minwidth: 500,
    padding: 20,
    backgroundColor: 'white',
 })
