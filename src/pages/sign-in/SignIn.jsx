@@ -4,9 +4,9 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router'
 import AuthFormWrapper from '../../components/AuthFormWrapper'
 import ForgotPassword from './ForgotPassword'
-import GoogleSignInButton from '../../components/GoogleSignInButton'
+import GoogleIcon from '@mui/icons-material/Google'
 import { VALIDATION_SCHEMA_SIGN_IN } from '../../utils/helpers/validate'
-import { signIn } from '../../store/slices/authThunk'
+import { authWithGoogle, signIn } from '../../store/slices/authThunk'
 import Input from '../../components/UI/Input'
 
 const SignIn = () => {
@@ -17,7 +17,7 @@ const SignIn = () => {
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const { isAuth, role } = useSelector((state) => state.auth)
+   const { isAuth, role, isLoading } = useSelector((state) => state.auth)
 
    const handleEmailChange = useCallback((e) => {
       setEmail(e.target.value)
@@ -35,6 +35,9 @@ const SignIn = () => {
       setIsForgotModalOpen(false)
    }, [])
 
+   const handleGoogleSignIn = () => {
+      dispatch(authWithGoogle())
+   }
    const handleSubmit = useCallback(
       (e) => {
          e.preventDefault()
@@ -102,7 +105,14 @@ const SignIn = () => {
             </TypographyStyled>
 
             <StyledButton type="submit">Войти</StyledButton>
-            <GoogleSignInButton />
+            <StyledGoogleButton
+               variant="outlined"
+               startIcon={<GoogleIcon />}
+               onClick={handleGoogleSignIn}
+               disabled={isLoading}
+            >
+               {isLoading ? 'Загрузка...' : 'Войти через Google'}
+            </StyledGoogleButton>
 
             {isForgotModalOpen && <ForgotPassword onClose={handleCloseModal} />}
          </StyledForm>
@@ -134,4 +144,26 @@ const StyledForm = styled('form')({
    display: 'flex',
    flexDirection: 'column',
    gap: '7px',
+})
+
+const StyledGoogleButton = styled(Button)({
+   marginTop: '15px',
+   border: '1px solid #000000',
+   color: '#000000',
+   backgroundColor: 'white',
+   '&:hover': {
+      backgroundColor: '#f1f1f1',
+      borderColor: '#000000',
+   },
+   borderRadius: '4px',
+   padding: '2px 10px',
+   fontSize: '1rem',
+   fontWeight: 'bold',
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   gap: '10px',
+   textTransform: 'none',
+   width: '100%',
+   borderRadius: 0,
 })
