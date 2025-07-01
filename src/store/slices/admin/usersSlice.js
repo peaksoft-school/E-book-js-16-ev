@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { deleteUser, getAllUsers } from './usersThunk'
-import { use } from 'react'
+import { deleteUser, getAllUsers, getClientById } from './usersThunk'
 
 const initialState = {
    users: [],
@@ -13,7 +12,7 @@ const initialState = {
    selectedUser: null,
 }
 
-const userSlices = createSlice({
+const usersSlices = createSlice({
    name: 'users',
    initialState,
    reducers: {},
@@ -23,22 +22,22 @@ const userSlices = createSlice({
             state.isLoading = true
             state.error = null
          })
-         .addCase(getAllUsers.fulfilled, (state, action) => {
-            state.users = action.payload.map((u) => ({
+         .addCase(getAllUsers.fulfilled, (state, { payload }) => {
+            state.users = payload.map((u) => ({
                id: u.clientId,
                name: u.firstName,
                email: u.email,
                role: u.role,
             }))
             state.totalPages = 1
-            state.totalElements = action.payload.length
-            state.pageNumber = action.payload.pageNumber
-            state.pageSize = action.payload.pageSize
+            state.totalElements = payload.length
+            state.pageNumber = payload.pageNumber
+            state.pageSize = payload.pageSize
 
             state.isLoading = false
          })
-         .addCase(getAllUsers.rejected, (state, action) => {
-            state.error = action.payload
+         .addCase(getAllUsers.rejected, (state, { payload }) => {
+            state.error = payload
             state.isLoading = false
          })
          .addCase(deleteUser.pending, (state) => {
@@ -54,11 +53,24 @@ const userSlices = createSlice({
             )
             state.totalElements -= 1
          })
-
-         .addCase(deleteUser.rejected, (state, action) => {
-            state.error = action.payload
+         .addCase(deleteUser.rejected, (state, { payload }) => {
+            state.error = payload
+         })
+         .addCase(getClientById.pending, (state) => {
+            state.isLoading = true
+            state.error = null
+         })
+         .addCase(getClientById.fulfilled, (state, { payload }) => {
+            state.isLoading = false
+            state.error = null
+            state.selectedUser = payload
+         })
+         .addCase(getClientById.rejected, (state, { payload }) => {
+            state.isLoading = false
+            state.error = payload
          })
    },
 })
 
-export default userSlices.reducer
+export const ADMIN_USER_ACTION = usersSlices.actions
+export default usersSlices

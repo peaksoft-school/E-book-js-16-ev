@@ -34,3 +34,17 @@ export const deleteUser = createAsyncThunk(
       }
    }
 )
+
+export const getClientById = createAsyncThunk(
+   'user/getById',
+   async ({ clientId }, { rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.get('/user/getClientById', {
+            params: { clientId },
+         })
+         return response.data
+      } catch (error) {
+         return rejectWithValue(error.response?.data?.message || 'error')
+      }
+   }
+)

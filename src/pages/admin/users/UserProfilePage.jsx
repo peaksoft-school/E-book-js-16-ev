@@ -1,192 +1,97 @@
 import { Box, Typography, styled, Tabs, Tab } from '@mui/material'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserById } from '../../../store/slices/admin/userProfileThunk'
 import Modal from '../../../components/UI/Modal'
 import Button from '../../../components/UI/buttons/Button'
 import { toast } from 'react-toastify'
-import { deleteUser } from '../../../store/slices/admin/usersThunk'
+import {
+   deleteUser,
+   getClientById,
+} from '../../../store/slices/admin/usersThunk'
+import {
+   getClientFavoriteHistoryAction,
+   getClientPurchaseHistoryAction,
+   getClinetBasketHistoryAction,
+} from '../../../store/slices/admin/historyActionThunk'
 
-const fetchPurchaseHistory = async () => {
-   return new Promise((resolve) => {
-      setTimeout(() => {
-         resolve([
-            {
-               id: 'p1',
-               title: 'Гарри Поттер и тайна...',
-               author: 'Роулинг Джоан Кэтлин',
-               image: 'https://i.ibb.co/L84Rgw0/harry-potter-min.png',
-               quantity: 1,
-               originalPrice: 545,
-               discountedPrice: 345,
-               date: '12.12.21',
-               status: 'Завершен',
-               hasPromo: true,
-            },
-            {
-               id: 'p2',
-               title: 'Гарри Поттер и тайна...',
-               author: 'Роулинг Джоан Кэтлин',
-               image: 'https://i.ibb.co/L84Rgw0/harry-potter-min.png',
-               quantity: 1,
-               originalPrice: 345,
-               discountedPrice: null,
-               date: '12.12.21',
-               status: 'Завершен',
-               hasPromo: false,
-            },
-            {
-               id: 'p3',
-               title: 'Очень длинное название книги, которое должно переноситься на новую строку, чтобы не обрезаться.',
-               author:
-                  'Автор с очень длинным именем и фамилией, которое также должно переноситься.',
-               image: 'https://i.ibb.co/L84Rgw0/harry-potter-min.png',
-               quantity: 2,
-               originalPrice: 1200,
-               discountedPrice: 1000,
-               date: '01.01.23',
-               status: 'Отменен',
-               hasPromo: true,
-            },
-         ])
-      }, 500)
-   })
-}
+const filterOptionPurchasedStyle = (activeFilter) => ({
+   color: activeFilter === 'purchased' ? '#F34901' : 'inherit',
+})
 
-const fetchFavoriteHistory = async () => {
-   return new Promise((resolve) => {
-      setTimeout(() => {
-         resolve([
-            {
-               id: 'f1',
-               title: 'Фантастические твари и где они обитают',
-               author: 'Дж. К. Роулинг',
-               image: 'https://via.placeholder.com/60x90?text=Favorite1',
-               quantity: 1,
-               originalPrice: 400,
-               discountedPrice: null,
-               date: '10.01.22',
-               status: 'В избранном',
-               hasPromo: false,
-            },
-            {
-               id: 'f2',
-               title: 'Мастер и Маргарита',
-               author: 'Михаил Булгаков',
-               image: 'https://via.placeholder.com/60x90?text=Favorite2',
-               quantity: 1,
-               originalPrice: 300,
-               discountedPrice: null,
-               date: '05.03.22',
-               status: 'В избранном',
-               hasPromo: false,
-            },
-            ...Array(10)
-               .fill(null)
-               .map((_, i) => ({
-                  id: `f${i + 3}`,
-                  title: `Избранная книга ${i + 3}`,
-                  author: `Автор ${i + 3}`,
-                  image: `https://via.placeholder.com/60x90?text=Fav${i + 3}`,
-                  quantity: 1,
-                  originalPrice: 250,
-                  discountedPrice: null,
-                  date: '01.01.23',
-                  status: 'В избранном',
-                  hasPromo: false,
-               })),
-         ])
-      }, 500)
-   })
-}
+const filterOptionFavoriteStyle = (activeFilter) => ({
+   color: activeFilter === 'favorite' ? '#F34901' : 'inherit',
+})
 
-const fetchBasketHistory = async () => {
-   return new Promise((resolve) => {
-      setTimeout(() => {
-         resolve([
-            {
-               id: 'b1',
-               title: '1984',
-               author: 'Джордж Оруэлл',
-               image: 'https://via.placeholder.com/60x90?text=Basket1',
-               quantity: 1,
-               originalPrice: 280,
-               discountedPrice: null,
-               date: '15.02.22',
-               status: 'В корзине',
-               hasPromo: false,
-            },
-            {
-               id: 'b2',
-               title: 'Скотный двор',
-               author: 'Джордж Оруэлл',
-               image: 'https://via.placeholder.com/60x90?text=Basket2',
-               quantity: 1,
-               originalPrice: 150,
-               discountedPrice: null,
-               date: '20.02.22',
-               status: 'В корзине',
-               hasPromo: false,
-            },
-            {
-               id: 'b3',
-               title: 'О дивный новый мир',
-               author: 'Олдос Хаксли',
-               image: 'https://via.placeholder.com/60x90?text=Basket3',
-               quantity: 1,
-               originalPrice: 200,
-               discountedPrice: null,
-               date: '25.02.22',
-               status: 'В корзине',
-               hasPromo: false,
-            },
-         ])
-      }, 500)
-   })
-}
+const filterOptionBasketStyle = (activeFilter) => ({
+   color: activeFilter === 'basket' ? '#F34901' : 'inherit',
+})
 
 const UserProfilePage = () => {
    const { id } = useParams()
    const [tabValue, setTabValue] = useState(0)
-   const [currentUser, setCurrentUser] = useState(null)
    const [activeFilter, setActiveFilter] = useState('purchased')
-   const [books, setBooks] = useState([])
    const [loadingBooks, setLoadingBooks] = useState(true)
    const [isModalOpen, setIsModalOpen] = useState(false)
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
 
-   const { selectedUser, error, isLoading } = useSelector(
-      (state) => state.userProfil
-   )
+   const { selectedUser } = useSelector((state) => state.users)
+   const {
+      basketHistory = [],
+      favoriteHistory = [],
+      purchaseHistory = [],
+   } = useSelector((state) => state.historyActions)
+
    useEffect(() => {
       if (id) {
-         dispatch(getUserById({ clientId: id }))
+         dispatch(getClientById({ clientId: id }))
       }
    }, [dispatch, id])
 
    useEffect(() => {
       const loadBooks = async () => {
          setLoadingBooks(true)
-         let fetchedBooks = []
          if (activeFilter === 'purchased') {
-            fetchedBooks = await fetchPurchaseHistory()
+            await dispatch(
+               getClientPurchaseHistoryAction({
+                  userId: id,
+                  pageNumber: 1,
+                  pageSize: 10,
+               })
+            )
          } else if (activeFilter === 'favorite') {
-            fetchedBooks = await fetchFavoriteHistory()
+            await dispatch(
+               getClientFavoriteHistoryAction({
+                  userId: id,
+                  pageNumber: 1,
+                  pageSize: 10,
+               })
+            )
          } else if (activeFilter === 'basket') {
-            fetchedBooks = await fetchBasketHistory()
+            await dispatch(
+               getClinetBasketHistoryAction({
+                  userId: id,
+                  pageNumber: 1,
+                  pageSize: 10,
+               })
+            )
          }
-         setBooks(fetchedBooks)
          setLoadingBooks(false)
       }
 
-      if (tabValue === 1) {
+      if (tabValue === 1 && id) {
          loadBooks()
       }
-   }, [tabValue, activeFilter])
+   }, [tabValue, activeFilter, dispatch, id])
+
+   const books = (() => {
+      if (activeFilter === 'purchased') return purchaseHistory || []
+      if (activeFilter === 'favorite') return favoriteHistory || []
+      if (activeFilter === 'basket') return basketHistory || []
+      return []
+   })()
 
    const handleTabChange = (event, newValue) => {
       setTabValue(newValue)
@@ -195,6 +100,7 @@ const UserProfilePage = () => {
    const handleClearHistory = () => {
       console.log('Очистить историю clicked for:', activeFilter)
    }
+
    const handleDeleteProfileClick = () => {
       setIsModalOpen(true)
    }
@@ -203,11 +109,13 @@ const UserProfilePage = () => {
       setIsModalOpen(false)
    }
 
-   const handleConfirmDelete = (id) => {
-      dispatch(deleteUser({ id }))
-      setIsModalOpen(false)
-      navigate('/admin/users')
-      toast.success('Успешно удалено', {})
+   const handleConfirmDelete = () => {
+      if (selectedUser && selectedUser.clientId) {
+         dispatch(deleteUser({ clientId: selectedUser.clientId }))
+         setIsModalOpen(false)
+         navigate('/admin/users')
+         toast.success('Успешно удалено')
+      }
    }
 
    return (
@@ -224,16 +132,14 @@ const UserProfilePage = () => {
                </Typography>
             </Breadcrumbs>
 
-            <>
-               <StyledTabs
-                  value={tabValue}
-                  onChange={handleTabChange}
-                  aria-label="profile and books tabs"
-               >
-                  <Tab label="Профиль" />
-                  <Tab label="История операций" />
-               </StyledTabs>
-            </>
+            <StyledTabs
+               value={tabValue}
+               onChange={handleTabChange}
+               aria-label="profile and books tabs"
+            >
+               <Tab label="Профиль" />
+               <Tab label="История операций" />
+            </StyledTabs>
 
             {tabValue === 0 && selectedUser && (
                <ProfileContentWrapper>
@@ -255,6 +161,7 @@ const UserProfilePage = () => {
                            {selectedUser.email}
                         </Typography>
                      </ProfileRow>
+
                      <ProfileRow>
                         <Typography variant="body1" fontWeight={500}>
                            Дата регистрации
@@ -269,6 +176,7 @@ const UserProfilePage = () => {
                   </DeleteProfileText>
                </ProfileContentWrapper>
             )}
+
             {tabValue === 0 && !selectedUser && (
                <Typography>Загрузка данных профиля...</Typography>
             )}
@@ -282,42 +190,27 @@ const UserProfilePage = () => {
                      <FilterSidebar>
                         <FilterOption
                            onClick={() => setActiveFilter('purchased')}
-                           sx={{
-                              color:
-                                 activeFilter === 'purchased'
-                                    ? '#F34901'
-                                    : 'inherit',
-                           }}
+                           sx={filterOptionPurchasedStyle(activeFilter)}
                         >
                            <Typography variant="body2" fontWeight={500}>
-                              Купленные ({books.length} книг)
+                              Купленные ({purchaseHistory.length} книг)
                            </Typography>
                         </FilterOption>
                         <FilterOption
                            onClick={() => setActiveFilter('favorite')}
-                           sx={{
-                              color:
-                                 activeFilter === 'favorite'
-                                    ? '#F34901'
-                                    : 'inherit',
-                           }}
+                           sx={filterOptionFavoriteStyle(activeFilter)}
                         >
                            <Typography variant="body2">
-                              В избранном (12 книг)
-                           </Typography>{' '}
+                              В избранном ({favoriteHistory.length} книг)
+                           </Typography>
                         </FilterOption>
                         <FilterOption
                            onClick={() => setActiveFilter('basket')}
-                           sx={{
-                              color:
-                                 activeFilter === 'basket'
-                                    ? '#F34901'
-                                    : 'inherit',
-                           }}
+                           sx={filterOptionBasketStyle(activeFilter)}
                         >
                            <Typography variant="body2">
-                              В корзине (3 книг)
-                           </Typography>{' '}
+                              В корзине ({basketHistory.length} книг)
+                           </Typography>
                         </FilterOption>
                      </FilterSidebar>
                   </LeftPanel>
@@ -339,46 +232,37 @@ const UserProfilePage = () => {
                      ) : (
                         books.map((book) => (
                            <BookItem key={book.id}>
-                              <BookImage src={book.image} alt={book.title} />
+                              <BookImage src={book.image} alt={book.bookName} />
                               <BookDetails>
                                  <Typography variant="body1" fontWeight={500}>
-                                    {book.title}
+                                    {book.bookName || '-'}
                                  </Typography>
                                  <Typography
                                     variant="body2"
                                     color="text.secondary"
                                  >
-                                    {book.author}
+                                    {book.authorNames?.join(', ') || '-'}
                                  </Typography>
                               </BookDetails>
                               <Typography variant="body1">
-                                 {book.quantity} шт.
+                                 {book.countOfBook !== null &&
+                                 book.countOfBook !== undefined
+                                    ? `${book.countOfBook} шт.`
+                                    : '-'}
                               </Typography>
                               <PriceDetails>
-                                 {book.hasPromo && (
-                                    <Typography
-                                       variant="body2"
-                                       color="error"
-                                       className="promo-text"
-                                    >
-                                       Промокод 20%
-                                    </Typography>
-                                 )}
-                                 {book.originalPrice && book.hasPromo && (
-                                    <OriginalPrice variant="body2">
-                                       {book.originalPrice} с
-                                    </OriginalPrice>
-                                 )}
                                  <Typography variant="body1" fontWeight={500}>
-                                    {book.discountedPrice || book.originalPrice}{' '}
-                                    с
+                                    {book.price !== null &&
+                                    book.price !== undefined
+                                       ? `${book.price} с`
+                                       : '-'}
                                  </Typography>
                               </PriceDetails>
                               <Typography variant="body1">
-                                 {book.date}
+                                 {book.date || '-'}
                               </Typography>
                               <Typography variant="body1">
-                                 {book.status}
+                                 {book.bookStatus || '-'}
                               </Typography>
                            </BookItem>
                         ))
@@ -386,6 +270,7 @@ const UserProfilePage = () => {
                   </BookListContainer>
                </OperationsContentWrapper>
             )}
+
             <Modal open={isModalOpen} handleClose={handleCloseModal}>
                <ModalContentWrapper>
                   <Typography sx={{ mt: 2 }}>
@@ -420,7 +305,7 @@ const PageWrapper = styled(Box)({
    margin: 0,
    padding: 0,
    boxSizing: 'border-box',
-   marginLeft: '-20px',
+   marginLeft: '-30px',
 })
 
 const ContentBox = styled(Box)({
@@ -537,17 +422,19 @@ const FilterOption = styled(Box)({
 
 const BookListContainer = styled(Box)({
    marginLeft: '10px',
-   borderTop: '1px solid #e0e0e0',
+   borderLeft: '1px solid #e0e0e0',
+   paddingLeft: '20px',
    overflowX: 'auto',
    boxSizing: 'border-box',
-   width: '1191px',
+   width: '1181px',
 })
 
 const BookListHeader = styled(Box)({
    display: 'grid',
-   gridTemplateColumns: '70px 300px 90px 150px 150px 1fr',
+   gridTemplateColumns: '70px 200px 90px 150px 130px 1fr',
    gap: '20px',
    padding: '10px 0',
+   borderBottom: '1px solid #e0e0e0',
    '& > *': {
       fontWeight: 500,
       color: '#A0A0A0',
@@ -559,7 +446,7 @@ const BookListHeader = styled(Box)({
 
 const BookItem = styled(Box)({
    display: 'grid',
-   gridTemplateColumns: '70px 300px 100px 150px 150px 1fr',
+   gridTemplateColumns: '70px 200px 90px 150px 130px 1fr',
    gap: '20px',
    padding: '15px 0',
    borderBottom: '1px solid #e0e0e0',
@@ -611,12 +498,13 @@ const ModalContentWrapper = styled(Box)({
 
 const ModalActions = styled(Box)({
    display: 'flex',
-   flexDirection: 'row', // Explicitly set to row, though it's the default
-   justifyContent: 'flex-end', // Aligns buttons to the right side of the modal
-   gap: '10px', // Provides spacing between the "Отмена" and "Удалить" buttons
+   flexDirection: 'row',
+   justifyContent: 'flex-end',
+   gap: '10px',
    marginTop: '20px',
-   alignItems: 'center', // Vertically centers the buttons if they have different heights (though usually they're the same)
+   alignItems: 'center',
 })
+
 const StyledButton = styled(Button)({
    '& .MuiButtonBase-root': {
       marginTop: '100px',
