@@ -1,8 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+import { authSlice } from './slices/authSlice'
 
-const rootReducer = combineReducers({})
+const rootReducer = combineReducers({
+   [authSlice.name]: authSlice.reducer,
+})
 
 const persistConfig = {
    key: 'E-BOOK',

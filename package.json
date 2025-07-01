@@ -14,8 +14,10 @@
       "@emotion/styled": "^11.14.0",
       "@mui/icons-material": "^7.0.2",
       "@mui/material": "^7.0.2",
+      "@react-oauth/google": "^0.12.2",
       "@reduxjs/toolkit": "^2.8.2",
       "axios": "^1.9.0",
+      "firebase": "^11.9.1",
       "persist": "^0.2.7",
       "react": "^18.3.1",
       "react-dom": "^18.3.1",
@@ -26,7 +28,8 @@
       "react-toastify": "^11.0.5",
       "redux-persist": "^6.0.0",
       "redux-toolkit": "^1.1.2",
-      "styled-components": "^6.1.17"
+      "styled-components": "^6.1.17",
+      "yup": "^1.6.1"
    },
    "devDependencies": {
       "@eslint/js": "^9.24.0",
