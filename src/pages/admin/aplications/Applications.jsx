@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, styled, Typography, Pagination } from '@mui/material'
 import { useSearchParams } from 'react-router'
 import ApplicationCard from '../../../components/UI/cards/ApplicationCard.jsx'
-import { fetchBooks } from '../../../store/applications/applicationThunk.js'
+import { fetchBooks } from '../../../store/admin/applications/applicationThunk.js'
 
 const PAGE_SIZE = 12
 

@@ -18,17 +18,11 @@ export const injectStore = (store) => {
 axiosInstance.interceptors.request.use(
    (config) => {
       const updateConfig = { ...config }
-      if (!customStore) {
-         console.warn('🚨 Store not injected yet!')
-         return config
-      }
 
       const { token } = customStore.getState()?.auth
 
-      console.log('👉 Токен:', token)
-
       if (token) {
-         updateConfig.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTAzOTg3NTAsImV4cCI6MTc1MDQzNDc1MH0.IVgx08aN-9hCu-bD34X0GyZwWBrjylo9bONDevkZipQ`
+         updateConfig.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTEzNDg5ODcsImV4cCI6MTc1NDk0ODk4N30.8oEVV-7CLi3YghiOnh2j7FSXF0AgKljoI7ivzI2flts`
       }
 
       return updateConfig

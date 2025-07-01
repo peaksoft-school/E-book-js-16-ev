@@ -1,19 +1,26 @@
 import { Outlet, useNavigate } from 'react-router'
 import PersonIcon from '@mui/icons-material/Person'
-import { Box, Typography, styled, Avatar , Button, Menu, MenuItem} from '@mui/material'
+import {
+   Box,
+   Typography,
+   styled,
+   Avatar,
+   Button,
+   Menu,
+   MenuItem,
+} from '@mui/material'
 import SideBar from '../../components/SideBar'
 import Input from '../../components/UI/Input'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { logout } from '../../store/authSlice'
 
 const AdminLayout = () => {
-    const [anchorEl, setAnchorEl] = useState(null)
-    const open = Boolean(anchorEl)
-     const dispatch = useDispatch()
-     const navigate = useNavigate()
+   const [anchorEl, setAnchorEl] = useState(null)
+   const open = Boolean(anchorEl)
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
 
-      const handleMenuOpen = (event) => {
+   const handleMenuOpen = (event) => {
       setAnchorEl(event.currentTarget)
    }
 
@@ -30,17 +37,6 @@ const AdminLayout = () => {
          <SideBar />
          <ContentBox>
             <StyledHeaderBox>
-               {/* <Input
-                  placeholder="Искать жанр, книги, авторов, издательства..."
-                  type="search"
-               />
-               <Avatar sx={{ bgcolor: '#ddd', width: 40, height: 40 }}>
-                  <PersonIcon sx={{ color: '#777' }} />
-               </Avatar>
-               <Typography variant="h6" fontWeight={500}>
-                  Администратор
-               </Typography> */}
-
                <Input
                   type="search"
                   placeholder="Искать жанр, книги, авторов, издательства..."
@@ -53,8 +49,8 @@ const AdminLayout = () => {
                      onClick={handleMenuOpen}
                   >
                      <Avatar sx={{ bgcolor: '#ddd', width: 40, height: 40 }}>
-                  <PersonIcon sx={{ color: '#777' }} />
-               </Avatar>
+                        <PersonIcon sx={{ color: '#777' }} />
+                     </Avatar>
                      <Typography>Администратор</Typography>
                   </StyledButton>
 
@@ -90,12 +86,12 @@ const PageWrapper = styled(Box)({
 })
 
 const ContentBox = styled(Box)({
-   marginLeft: '250px',
-   width: 'calc(100vw - 250px)',
+   marginLeft: '270px',
+   width: 'calc(100vw - 270px)',
    height: '100vh',
    display: 'flex',
    flexDirection: 'column',
-   padding: '20px',
+   padding: '30px',
    boxSizing: 'border-box',
    overflowX: 'hidden',
 })
@@ -109,11 +105,6 @@ const StyledHeaderBox = styled(Box)({
    flexShrink: 0,
    gap: '8px',
 })
-
-// const StyledInput = styled(Input)({
-//    width: '100%',
-//    maxWidth: 600,
-// })
 
 const StyledButton = styled(Button)({
    color: '#B4B4B4',

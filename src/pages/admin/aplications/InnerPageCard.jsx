@@ -5,7 +5,7 @@ import {
    infoBook,
    acceptBook,
    rejectBook,
-} from '../../../store/applications/innerpage/bookThunk'
+} from '../../../store/admin/applications/innerpage/bookThunk'
 import { Link, useParams } from 'react-router'
 import Button from '../../../components/UI/buttons/Button'
 import Modal from '../../../components/UI/Modal'
