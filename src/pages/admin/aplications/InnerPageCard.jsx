@@ -7,10 +7,11 @@ import {
    rejectBook,
 } from '../../../store/admin/applications/innerpage/bookThunk'
 import { Link, useParams } from 'react-router'
+import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Button from '../../../components/UI/buttons/Button'
 import Modal from '../../../components/UI/Modal'
 import { Icons } from '../../../assets/icons'
-import AudioPlayer from '../../../components/UI/AudioPlayer'
+import SimpleAudioPlayerColumn from '../../../components/UI/AudioPlayer'
 
 const InnerPageCard = () => {
    const dispatch = useDispatch()
@@ -35,7 +36,7 @@ const InnerPageCard = () => {
 
    const baseFields = [
       { label: 'Автор', value: book.authors },
-      { label: 'Жанр', value: `${book.genres[0]}, ${book.genres[1]}` },
+      { label: 'Жанр', value: book.genres?.join(', ') || '—' },
       { label: 'Язык', value: book.language },
       { label: 'Издательство', value: book.publisher },
       { label: 'Год выпуска', value: book.year },
@@ -51,18 +52,6 @@ const InnerPageCard = () => {
    } else if (book.type === 'AUDIO') {
       infoFields.push({ label: 'Длительность', value: `${book.audioDuration}` })
    }
-   // else if (book.type === 'AUDIO') {
-   //    infoFields.push({ label: 'Длительность', value: book.audioDuration })
-   //    infoFields.push({ label: 'Аудио', value: book.audioUrl })
-   //    infoFields.push({ label: 'Фрагмент', value: book.fragmentUrl })
-   //    if (book.fragmentDuration) {
-   //       infoFields.push({
-   //          label: 'Длительность фрагмента',
-   //          value: book.fragmentDuration,
-   //       })
-   //    }
-   // }
-
    const handleCancelSubmit = () => {
       dispatch(rejectBook({ bookItemId, reason: cancelReason })).then(() => {
          setOpenCancelModal(false)
@@ -72,7 +61,13 @@ const InnerPageCard = () => {
 
    return (
       <StyledContainer>
-         <Typography variant="h6">Заявки / {book.bookName}</Typography>
+         <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 3, marginTop: '20px' }}>
+            <StyledLink to="/admin/application">Заявки</StyledLink>
+            <Typography sx={{ fontWeight: 500 }} color="text.primary">
+               {book.bookName}
+            </Typography>
+         </Breadcrumbs>
+
          <StyledBlock1>
             <StyledBox>
                {[0, 1].map((index) => (
@@ -102,9 +97,15 @@ const InnerPageCard = () => {
                   </LabelsColumn>
                   <ValuesColumn>
                      {infoFields.map(({ label, value }) => (
-                        <ValueText key={label} sx={{
-         color: label === 'Смотреть PDF' ? '#969696' : theme.palette.primary.main,
-      }}>
+                        <ValueText
+                           key={label}
+                           sx={{
+                              color:
+                                 label === 'Смотреть PDF'
+                                    ? '#969696'
+                                    : theme.palette.primary.main,
+                           }}
+                        >
                            {label === 'Смотреть PDF' && book.pdfUrl ? (
                               <a
                                  href={book.pdfUrl}
@@ -114,7 +115,6 @@ const InnerPageCard = () => {
                                     color: '#1976d2',
                                     textDecoration: 'none',
                                     fontWeight: 500,
-
                                  }}
                               >
                                  Document.pdf
@@ -130,14 +130,10 @@ const InnerPageCard = () => {
                      ))}
                   </ValuesColumn>
                </InfoGrid>
+{book.audioUrl || book.fragmentUrl ? (
+  <SimpleAudioPlayerColumn audioUrl={book.audioUrl} fragmentUrl={book.fragmentUrl} />
+) : null}
 
-               {book.audioUrl && (
-                  <AudioPlayer
-                     audioUrl={book.audioUrl}
-                     fragmentUrl={book.fragmentUrl}
-                     // fragmentDuration={book.fragmentDuration}
-                  />
-               )}
 
                <Box className="btnCont">
                   <Button
@@ -164,14 +160,14 @@ const InnerPageCard = () => {
             <Box>
                <Tabs>
                   <TabItem
-                     active={activeTab === 'description'}
+                     $active={activeTab === 'description'}
                      onClick={() => setActiveTab('description')}
                   >
                      О книге
                   </TabItem>
                   {(book.type === 'ELECTRONIC' || book.type === 'PAPER') && (
                      <TabItem
-                        active={activeTab === 'fragment'}
+                        $active={activeTab === 'fragment'}
                         onClick={() => setActiveTab('fragment')}
                      >
                         Читать фрагмент
@@ -248,6 +244,15 @@ const InnerPageCard = () => {
 }
 
 export default InnerPageCard
+
+const StyledLink = styled(Link)(({ theme }) => ({
+   textDecoration: 'none',
+   color: theme.palette.primary.darkGray,
+   fontWeight: 400,
+   '&:hover': {
+      textDecoration: 'underline',
+   },
+}))
 
 const CenteredModalBox = styled(Box)(() => ({
    display: 'flex',
@@ -331,7 +336,7 @@ const StyledImg = styled('img')({
 const StyledBlock1 = styled(Box)({
    display: 'flex',
    gap: 40,
-   marginTop: 72,
+   marginTop: 25,
 })
 
 const InfoGrid = styled(Box)({
@@ -359,7 +364,7 @@ const LabelText = styled(Typography)({
    fontWeight: 600,
 })
 
-const ValueText = styled(Typography)(({ theme}) => ({
+const ValueText = styled(Typography)(({ theme }) => ({
    color: theme.palette.primary.main,
    fontWeight: 400,
    fontSize: '14px',
@@ -373,9 +378,9 @@ const Tabs = styled(Box)({
    marginTop: 185,
 })
 
-const TabItem = styled(Typography)(({ active, theme }) => ({
+const TabItem = styled(Typography)(({ $active, theme }) => ({
    cursor: 'pointer',
-   color: active
+   color: $active
       ? theme.palette.secondary.main
       : theme.palette.secondary.strokeGray,
    fontWeight: 600,

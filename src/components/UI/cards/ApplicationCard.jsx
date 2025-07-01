@@ -84,9 +84,9 @@ const handleClick = () => {
 export default ApplicationCard
 
 const StyledCard = styled(Card)(({ theme, showed }) => ({
-   width: 270,
+   width: 275,
    height: 410,
-   padding: '35px 35px 20px 35px',
+   padding: '36px 35px 20px 35px',
    background: showed === false ? 'rgba(255, 76, 0, 0.08)' : '#EDEDED',
    border: showed === false ? '1px solid #FF4C00' : '',
    borderRadius: '0px',
@@ -101,7 +101,7 @@ const StyledCard = styled(Card)(({ theme, showed }) => ({
 
 const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
    height: 297,
-   width: 197,
+   width: 205,
 }))
 
 const StyledSubTitleWrapper = styled(Box)(({ theme }) => ({

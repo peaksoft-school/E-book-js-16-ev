@@ -89,6 +89,7 @@ const StyledStats = styled(Box)({
    gap: 30,
    flexWrap: 'wrap',
    color: '#B5B5B5',
+   marginTop: 30,
 })
 
 const UnseenText = styled(Typography)({
@@ -98,9 +99,10 @@ const UnseenText = styled(Typography)({
 const StyledBox = styled(Box)({
    display: 'flex',
    flexWrap: 'wrap',
-   gap: 20,
+   gap: 30,
    overflowX: 'hidden',
    width: '100%',
+   marginTop: 30,
 })
 
 const PaginationWrapper = styled(Box)({

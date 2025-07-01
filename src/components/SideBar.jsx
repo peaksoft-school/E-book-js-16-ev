@@ -61,7 +61,7 @@ export default SideBar
 
 const StyledSideBarBox = styled(Box)(({ theme }) => ({
    backgroundColor: theme.palette.secondary.main,
-   width: 250,
+   width: 270,
    height: '100%',
    display: 'flex',
    flexDirection: 'column',
@@ -91,7 +91,7 @@ const NavItem = styled(NavLink)(({ theme }) => ({
    textDecoration: 'none',
    color: theme.palette.primary.white,
    fontWeight: 500,
-   fontSize: 16,
+   fontSize: 18,
    gap: '10px',
    background: theme.palette.secondary.main,
 
