@@ -2,73 +2,95 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../configs/axiosInstance'
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { auth } from '../../configs/firebase'
+import notify from '../../utils/helpers/notify'
 
-export const registerUser = createAsyncThunk(
+export const signUpForUser = createAsyncThunk(
    'auth/registerUser',
+
    async (
       { email, password, confirmPassword, firstName },
       { rejectWithValue }
    ) => {
       try {
-         const response = await axiosInstance.post(`/auth/signUpForClient`, {
+         const { data } = await axiosInstance.post(`/auth/signUpForClient`, {
             email,
             password,
             confirmPassword,
             firstName,
          })
-         return response.data
+
+         notify({
+            message: 'Регистрация прошла успешно! Теперь вы можете войти.',
+         })
+
+         navigate('/sign-in')
+
+         return data
       } catch (error) {
          if (error.response && error.response.data) {
             return rejectWithValue(error.response.data)
          }
-         return rejectWithValue(
-            error.message || 'Произошла непредвиденная ошибка регистрации.'
-         )
       }
    }
 )
 
-export const registerVendor = createAsyncThunk(
+export const signUpForVendor = createAsyncThunk(
    'auth/registerVendor',
+
    async (
-      { email, password, confirmPassword, firstName, lastName, phoneNumber },
+      {
+         firstName,
+         lastName,
+         phoneNumber,
+         email,
+         password,
+         confirmPassword,
+         navigate,
+      },
       { rejectWithValue }
    ) => {
       try {
-         const response = await axiosInstance.post(`/auth/signUpForVendor`, {
-            email,
-            password,
-            confirmPassword,
+         const { data } = await axiosInstance.post(`/auth/signUpForVendor`, {
             firstName,
             lastName,
             phoneNumber,
+            email,
+            password,
+            confirmPassword,
          })
-         return response.data
+
+         notify({
+            message: 'Регистрация прошла успешно! Теперь вы можете войти.',
+         })
+
+         navigate('/sign-in')
+
+         return data
       } catch (error) {
          if (error.response && error.response.data) {
             return rejectWithValue(error.response.data)
          }
-         return rejectWithValue(
-            error.message || 'Произошла непредвиденная ошибка регистрации.'
-         )
       }
    }
 )
 
-export const loginUser = createAsyncThunk(
+export const signIn = createAsyncThunk(
    'auth/login',
+
    async ({ email, password }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.post(`/auth/signIn`, {
+         const { data } = await axiosInstance.post(`/auth/signIn`, {
             email,
             password,
          })
-         return response.data
+
+         return data
       } catch (error) {
          const message =
             error.response?.data?.message ||
             error.message ||
             'Ошибка входа: неизвестная ошибка.'
+
          return rejectWithValue(message)
       }
    }
@@ -76,14 +98,17 @@ export const loginUser = createAsyncThunk(
 
 export const forgotPassword = createAsyncThunk(
    'auth/forgotPassword',
+
    async ({ email }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.post(
+         const { data } = await axiosInstance.post(
             `/auth/forgot-password?email=${encodeURIComponent(email)}`
          )
-         return response.data
+
+         return data
       } catch (error) {
          const message = error.response?.data?.message || 'Что-то пошло не так'
+
          return rejectWithValue(message)
       }
    }
@@ -91,9 +116,10 @@ export const forgotPassword = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
    'auth/resetPassword',
+
    async ({ token, newPassword, confirmPassword }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.post(
+         const { data } = await axiosInstance.post(
             `/auth/ResetPassword/${token}`,
             null,
             {
@@ -103,30 +129,34 @@ export const resetPassword = createAsyncThunk(
                },
             }
          )
-         return response.data
+
+         return data
       } catch (error) {
          const message = error.response?.data?.message || 'Что-то пошло не так'
+
          return rejectWithValue(message)
       }
    }
 )
 
-export const googleSignIn = createAsyncThunk(
+export const authWithGoogle = createAsyncThunk(
    'auth/googleSignIn',
+
    async (_, { rejectWithValue }) => {
       try {
          const provider = new GoogleAuthProvider()
+
          const result = await signInWithPopup(auth, provider)
 
          const idToken = await result.user.getIdToken()
 
-         const response = await axiosInstance.post('/auth/signInGoogle', null, {
+         const { data } = await axiosInstance.post('/auth/signInGoogle', null, {
             params: {
                idToken: idToken,
             },
          })
 
-         return response.data
+         return data
       } catch (error) {
          if (error.code) {
             switch (error.code) {
@@ -134,8 +164,10 @@ export const googleSignIn = createAsyncThunk(
                   return rejectWithValue(
                      'Вход через Google отменен пользователем.'
                   )
+
                case 'auth/cancelled-popup-request':
                   return rejectWithValue('Запрос на вход через Google отменен.')
+
                default:
                   return rejectWithValue(
                      error.message ||
@@ -143,6 +175,7 @@ export const googleSignIn = createAsyncThunk(
                   )
             }
          }
+
          if (
             error.response &&
             error.response.data &&
@@ -150,6 +183,7 @@ export const googleSignIn = createAsyncThunk(
          ) {
             return rejectWithValue(error.response.data.message)
          }
+
          return rejectWithValue('Неизвестная ошибка при входе через Google.')
       }
    }

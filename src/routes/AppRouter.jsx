@@ -41,7 +41,7 @@ const AppRouter = () => (
          }
       />
       <Route
-         path="/ResetPassword/:token"
+         path="/resetPassword/:token"
          element={
             <Suspense fallback={<Loading />}>
                <ResetPassword />

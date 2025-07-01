@@ -1,31 +1,22 @@
-import React, { useEffect } from 'react'
 import { Button, styled } from '@mui/material'
 import GoogleIcon from '@mui/icons-material/Google'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearAuthError } from '../store/slices/authSlice'
-import { toast } from 'react-toastify'
-import { googleSignIn } from '../store/slices/authThunk'
+import { authWithGoogle } from '../store/slices/authThunk'
 
 const GoogleSignInButton = () => {
    const dispatch = useDispatch()
+
    const { isLoading, error } = useSelector((state) => state.auth)
 
-   useEffect(() => {
-      if (error) {
-         toast.error(error)
-         dispatch(clearAuthError())
-      }
-   }, [error, dispatch])
-
    const handleGoogleSignIn = () => {
-      dispatch(googleSignIn())
+      dispatch(authWithGoogle())
    }
 
    return (
       <StyledGoogleButton
          variant="outlined"
          startIcon={<GoogleIcon />}
-         onClick={handleGoogleSignIn}
+         onClick={() => handleGoogleSignIn}
          disabled={isLoading}
       >
          {isLoading ? 'Загрузка...' : 'Войти через Google'}
