@@ -1,58 +1,61 @@
 import { Button, Typography, styled } from '@mui/material'
-import Input from '../../components/UI/Input'
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router'
 import AuthFormWrapper from '../../components/AuthFormWrapper'
-import { loginUser } from '../../store/slices/authThunk'
 import ForgotPassword from './ForgotPassword'
-import * as Yup from 'yup'
 import GoogleSignInButton from '../../components/GoogleSignInButton'
+import { VALIDATION_SCHEMA_SIGN_IN } from '../../utils/helpers/validate'
+import { signIn } from '../../store/slices/authThunk'
+import Input from '../../components/UI/Input'
 
 const SignIn = () => {
    const [email, setEmail] = useState('')
    const [password, setPassword] = useState('')
    const [isForgotModalOpen, setIsForgotModalOpen] = useState(false)
-
    const [validationErrors, setValidationErrors] = useState({})
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
+   const { isAuth, role } = useSelector((state) => state.auth)
 
-   const { isLoading, error, isAuth, role } = useSelector((state) => state.auth)
+   const handleEmailChange = useCallback((e) => {
+      setEmail(e.target.value)
+   }, [])
 
-   const validationSchema = Yup.object({
-      email: Yup.string()
-         .email('Введите корректный email')
-         .required('Email обязателен для заполнения'),
-      password: Yup.string()
-         .min(6, 'Пароль должен быть не менее 6 символов')
-         .required('Пароль обязателен для заполнения'),
-   })
+   const handlePasswordChange = useCallback((e) => {
+      setPassword(e.target.value)
+   }, [])
 
-   const handleSubmit = (e) => {
-      e.preventDefault()
-      setValidationErrors({})
-
-      const formData = { email, password }
-
-      validationSchema
-         .validate(formData, { abortEarly: false })
-         .then(() => {
-            dispatch(loginUser(formData))
-         })
-         .catch((validationErr) => {
-            const errors = {}
-            validationErr.inner.forEach((err) => {
-               errors[err.path] = err.message
-            })
-            setValidationErrors(errors)
-         })
-   }
-
-   const handleForgotPassword = () => {
+   const handleForgotPassword = useCallback(() => {
       setIsForgotModalOpen(true)
-   }
+   }, [])
+
+   const handleCloseModal = useCallback(() => {
+      setIsForgotModalOpen(false)
+   }, [])
+
+   const handleSubmit = useCallback(
+      (e) => {
+         e.preventDefault()
+         setValidationErrors({})
+
+         const formData = { email, password }
+
+         VALIDATION_SCHEMA_SIGN_IN.validate(formData, { abortEarly: false })
+            .then(() => {
+               dispatch(signIn(formData))
+            })
+            .catch((validationErr) => {
+               const errors = {}
+               validationErr.inner.forEach((err) => {
+                  errors[err.path] = err.message
+               })
+               setValidationErrors(errors)
+            })
+      },
+      [dispatch, email, password]
+   )
 
    useEffect(() => {
       if (isAuth && role) {
@@ -74,12 +77,12 @@ const SignIn = () => {
 
    return (
       <AuthFormWrapper value={0}>
-         <StyledForm onSubmit={handleSubmit} style={{ width: '100%' }}>
+         <StyledForm onSubmit={handleSubmit}>
             <Input
                type="info"
                placeholder="Напишите email"
                value={email}
-               onChange={(e) => setEmail(e.target.value)}
+               onChange={handleEmailChange}
                label="Email"
                error={Boolean(validationErrors.email)}
                helperText={validationErrors.email}
@@ -88,7 +91,7 @@ const SignIn = () => {
                type="password"
                placeholder="Напишите пароль"
                value={password}
-               onChange={(e) => setPassword(e.target.value)}
+               onChange={handlePasswordChange}
                label="Пароль"
                error={Boolean(validationErrors.password)}
                helperText={validationErrors.password}
@@ -98,14 +101,10 @@ const SignIn = () => {
                Забыли пароль?
             </TypographyStyled>
 
-            <StyledButton type="submit" disabled={isLoading}>
-               Войти
-            </StyledButton>
+            <StyledButton type="submit">Войти</StyledButton>
             <GoogleSignInButton />
 
-            {isForgotModalOpen && (
-               <ForgotPassword onClose={() => setIsForgotModalOpen(false)} />
-            )}
+            {isForgotModalOpen && <ForgotPassword onClose={handleCloseModal} />}
          </StyledForm>
       </AuthFormWrapper>
    )

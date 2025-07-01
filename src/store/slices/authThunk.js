@@ -8,7 +8,7 @@ export const signUpForUser = createAsyncThunk(
    'auth/registerUser',
 
    async (
-      { email, password, confirmPassword, firstName },
+      { email, password, confirmPassword, firstName, navigate },
       { rejectWithValue }
    ) => {
       try {
@@ -105,6 +105,10 @@ export const forgotPassword = createAsyncThunk(
             `/auth/forgot-password?email=${encodeURIComponent(email)}`
          )
 
+         notify({
+            message: 'Успешно отправлено в почту',
+         })
+
          return data
       } catch (error) {
          const message = error.response?.data?.message || 'Что-то пошло не так'
@@ -117,7 +121,10 @@ export const forgotPassword = createAsyncThunk(
 export const resetPassword = createAsyncThunk(
    'auth/resetPassword',
 
-   async ({ token, newPassword, confirmPassword }, { rejectWithValue }) => {
+   async (
+      { token, newPassword, confirmPassword, navigate },
+      { rejectWithValue }
+   ) => {
       try {
          const { data } = await axiosInstance.post(
             `/auth/ResetPassword/${token}`,
@@ -129,6 +136,11 @@ export const resetPassword = createAsyncThunk(
                },
             }
          )
+         notify({
+            message: 'Пароль успешно изменен',
+         })
+
+         navigate('/sign-in')
 
          return data
       } catch (error) {

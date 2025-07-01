@@ -30,6 +30,9 @@ const authSlice = createSlice({
          state.error = null
          state.user = null
       },
+      clearError: (state) => {
+         state.error = null
+      },
    },
 
    extraReducers: (builder) => {
@@ -97,8 +100,9 @@ const authSlice = createSlice({
             state.isLoading = false
          })
 
-         .addCase(forgotPassword.rejected, (state) => {
+         .addCase(forgotPassword.rejected, (state, { payload }) => {
             state.isLoading = false
+            state.error = payload
          })
 
          .addCase(resetPassword.pending, (state) => {

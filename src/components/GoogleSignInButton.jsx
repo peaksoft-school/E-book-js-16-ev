@@ -6,7 +6,7 @@ import { authWithGoogle } from '../store/slices/authThunk'
 const GoogleSignInButton = () => {
    const dispatch = useDispatch()
 
-   const { isLoading, error } = useSelector((state) => state.auth)
+   const { isLoading } = useSelector((state) => state.auth)
 
    const handleGoogleSignIn = () => {
       dispatch(authWithGoogle())
@@ -16,7 +16,7 @@ const GoogleSignInButton = () => {
       <StyledGoogleButton
          variant="outlined"
          startIcon={<GoogleIcon />}
-         onClick={() => handleGoogleSignIn}
+         onClick={handleGoogleSignIn}
          disabled={isLoading}
       >
          {isLoading ? 'Загрузка...' : 'Войти через Google'}

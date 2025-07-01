@@ -1,16 +1,12 @@
 import { useDispatch } from 'react-redux'
-import { Outlet, useNavigate } from 'react-router'
-import { logOut } from '../../store/slices/authSlice'
+import { Outlet } from 'react-router'
+import { AUTH_ACTION } from '../../store/slices/authSlice'
 
 const VendorLayout = () => {
    const dispatch = useDispatch()
-   const navigate = useNavigate()
 
    const handleLogout = () => {
-      dispatch(logOut())
-      localStorage.removeItem('token')
-      localStorage.removeItem('role')
-      navigate('/sign-in')
+      dispatch(AUTH_ACTION.logOut())
    }
 
    return (

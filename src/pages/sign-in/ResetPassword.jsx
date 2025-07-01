@@ -1,56 +1,41 @@
 import { Button, Typography, Box, Paper, styled } from '@mui/material'
 import { useParams, useNavigate } from 'react-router'
-import { useState, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import Input from '../../components/UI/Input'
 import { resetPassword } from '../../store/slices/authThunk'
 import { useSelector, useDispatch } from 'react-redux'
-import * as Yup from 'yup'
+import { VALIDATION_SCHEMA_RESET } from '../../utils/helpers/validate'
 
 const ResetPassword = () => {
-   const { token } = useParams()
-   const dispatch = useDispatch()
-   const navigate = useNavigate()
-
-   const {
-      resetPasswordStatus,
-      resetPasswordError,
-      resetPasswordSuccessMessage,
-   } = useSelector((state) => state.auth)
-
    const [newPassword, setNewPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
    const [validationErrors, setValidationErrors] = useState({})
 
-   useEffect(() => {
-      if (resetPasswordStatus === 'succeeded') {
-         const timer = setTimeout(() => {
-            navigate('/sign-in')
-         }, 3000)
-         return () => clearTimeout(timer)
-      }
-   }, [resetPasswordStatus, navigate])
+   const { token } = useParams()
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
 
-   const validationSchema = Yup.object({
-      newPassword: Yup.string()
-         .min(6, 'Новый пароль должен содержать не менее 6 символов')
-         .required('Новый пароль обязателен для заполнения'),
-      confirmPassword: Yup.string()
-         .oneOf([Yup.ref('newPassword'), null], 'Пароли не совпадают')
-         .required('Подтвердите новый пароль'),
-   })
+   const { error } = useSelector((state) => state.auth)
 
-   const handleSubmit = () => {
+   const handleNewPasswordChange = useCallback(
+      (e) => setNewPassword(e.target.value),
+      []
+   )
+   const handleConfirmPasswordChange = useCallback(
+      (e) => setConfirmPassword(e.target.value),
+      []
+   )
+   const handleSubmit = useCallback(() => {
       setValidationErrors({})
 
-      const formData = {
-         newPassword,
-         confirmPassword,
-      }
-
-      validationSchema
-         .validate(formData, { abortEarly: false })
+      VALIDATION_SCHEMA_RESET.validate(
+         { newPassword, confirmPassword },
+         { abortEarly: false }
+      )
          .then(() => {
-            dispatch(resetPassword({ token, newPassword, confirmPassword }))
+            dispatch(
+               resetPassword({ token, newPassword, confirmPassword, navigate })
+            )
          })
          .catch((validationErr) => {
             const errors = {}
@@ -59,7 +44,7 @@ const ResetPassword = () => {
             })
             setValidationErrors(errors)
          })
-   }
+   }, [newPassword, confirmPassword, dispatch, token])
 
    return (
       <StyledPageContainer>
@@ -72,11 +57,10 @@ const ResetPassword = () => {
                label="Новый пароль"
                type="password"
                value={newPassword}
-               onChange={(e) => setNewPassword(e.target.value)}
+               onChange={handleNewPasswordChange}
                placeholder="Введите новый пароль"
                fullWidth
                margin="dense"
-               disabled={resetPasswordStatus === 'loading'}
                error={Boolean(validationErrors.newPassword)}
                helperText={validationErrors.newPassword}
             />
@@ -85,23 +69,15 @@ const ResetPassword = () => {
                label="Подтвердите пароль"
                type="password"
                value={confirmPassword}
-               onChange={(e) => setConfirmPassword(e.target.value)}
+               onChange={handleConfirmPasswordChange}
                placeholder="Повторите новый пароль"
                fullWidth
                margin="dense"
-               disabled={resetPasswordStatus === 'loading'}
                error={Boolean(validationErrors.confirmPassword)}
                helperText={validationErrors.confirmPassword}
             />
 
-            {resetPasswordSuccessMessage && (
-               <StyledMessage type="success">
-                  {resetPasswordSuccessMessage}
-               </StyledMessage>
-            )}
-            {resetPasswordError && (
-               <StyledMessage type="error">{resetPasswordError}</StyledMessage>
-            )}
+            {error && <StyledMessage type="error">{error}</StyledMessage>}
             {Object.keys(validationErrors).length > 0 && (
                <StyledMessage type="error">
                   Пожалуйста, исправьте ошибки в форме.
@@ -114,11 +90,8 @@ const ResetPassword = () => {
                color="primary"
                fullWidth
                size="large"
-               disabled={resetPasswordStatus === 'loading'}
             >
-               {resetPasswordStatus === 'loading'
-                  ? 'Загрузка...'
-                  : 'Сбросить пароль'}
+               Сбросить пароль
             </StyledSubmitButton>
          </StyledFormPaper>
       </StyledPageContainer>
@@ -159,6 +132,5 @@ const StyledMessage = styled(Typography)(({ type }) => ({
 
 const StyledSubmitButton = styled(Button)({
    marginTop: '16px',
-   width: '520px',
    borderRadius: 0,
 })

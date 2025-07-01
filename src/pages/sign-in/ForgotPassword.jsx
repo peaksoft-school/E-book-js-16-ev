@@ -1,40 +1,37 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Modal from '../../components/UI/Modal'
 import { forgotPassword } from '../../store/slices/authThunk'
 import { Button, Typography, styled, Stack } from '@mui/material'
 import Input from '../../components/UI/Input'
-import * as Yup from 'yup'
+import { VALIDATION_SCHEMA_FORGOT } from '../../utils/helpers/validate'
+import { AUTH_ACTION } from '../../store/slices/authSlice'
 
 const ForgotPassword = ({ onClose }) => {
-   const dispatch = useDispatch()
    const [email, setEmail] = useState('')
-
    const [validationErrors, setValidationErrors] = useState({})
 
-   const { forgotPasswordStatus, forgotPasswordError, forgotPasswordSuccess } =
-      useSelector((state) => state.auth)
+   const dispatch = useDispatch()
+   const { error } = useSelector((state) => state.auth)
 
-   const handleCloseModal = () => {
-      dispatch(clearAuthError())
+   const handleCloseModal = useCallback(() => {
       setValidationErrors({})
+      dispatch(AUTH_ACTION.clearError())
       setEmail('')
       onClose()
-   }
+   }, [dispatch, onClose])
 
-   const validationSchema = Yup.object({
-      email: Yup.string()
-         .email('Введите корректный email')
-         .required('Email обязателен для заполнения'),
-   })
+   const handleEmailChange = useCallback((e) => {
+      setEmail(e.target.value)
+   }, [])
 
-   const handleSendEmail = () => {
+   const handleSendEmail = useCallback(() => {
       setValidationErrors({})
+      dispatch(AUTH_ACTION.clearError())
 
       const formData = { email }
 
-      validationSchema
-         .validate(formData, { abortEarly: false })
+      VALIDATION_SCHEMA_FORGOT.validate(formData, { abortEarly: false })
          .then(() => {
             dispatch(forgotPassword({ email }))
          })
@@ -45,7 +42,7 @@ const ForgotPassword = ({ onClose }) => {
             })
             setValidationErrors(errors)
          })
-   }
+   }, [dispatch, email])
 
    return (
       <Modal open={true} handleClose={handleCloseModal}>
@@ -64,7 +61,7 @@ const ForgotPassword = ({ onClose }) => {
                   type="email"
                   placeholder="ваш@email.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
                   label="Email"
                   fullWidth
                   error={Boolean(validationErrors.email)}
@@ -72,24 +69,14 @@ const ForgotPassword = ({ onClose }) => {
                />
             </StyledInputWrapper>
 
-            {forgotPasswordError && (
-               <StyledMessage type="error">{forgotPasswordError}</StyledMessage>
-            )}
-            {Object.keys(validationErrors).length > 0 && (
-               <StyledMessage type="error">
-                  Пожалуйста, исправьте ошибки в форме.
-               </StyledMessage>
-            )}
+            {error && <StyledMessage type="error">{error}</StyledMessage>}
 
             <StyledButton
                variant="contained"
                onClick={handleSendEmail}
                color="primary"
-               disabled={forgotPasswordStatus === 'loading'}
             >
-               {forgotPasswordStatus === 'loading'
-                  ? 'Отправка...'
-                  : 'Отправить'}
+               Отправить
             </StyledButton>
          </StyledModalContent>
       </Modal>

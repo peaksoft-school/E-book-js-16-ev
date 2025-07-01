@@ -5,7 +5,7 @@ import { Button, styled } from '@mui/material'
 import { signUpForVendor } from '../../store/slices/authThunk'
 import Input from '../../components/UI/Input'
 import AuthFormWrapper from '../../components/AuthFormWrapper'
-import { VALIDATION_SCHEMA } from '../../utils/helpers/validate'
+import { VALIDATION_SCHEMA_VENDOR } from '../../utils/helpers/validate'
 
 const SignUpVendor = () => {
    const [email, setEmail] = useState('')
@@ -30,7 +30,7 @@ const SignUpVendor = () => {
       e.preventDefault()
       setValidationErrors({})
 
-      VALIDATION_SCHEMA.validate(
+      VALIDATION_SCHEMA_VENDOR.validate(
          {
             firstName,
             lastName,
