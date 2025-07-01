@@ -37,7 +37,7 @@ const UploadBook = () => {
             valuePages,
             language,
             type,
-            isNew,
+            bestseller,
             audio,
             pdf,
          } = bookData
@@ -55,7 +55,7 @@ const UploadBook = () => {
             hours: '',
             minutes: '',
             seconds: '',
-            bestSeller: isNew || false,
+            bestSeller: bestseller || false,
          }
 
          setInitialData({

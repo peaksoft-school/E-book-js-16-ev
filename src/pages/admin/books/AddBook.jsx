@@ -32,6 +32,8 @@ import NumericInput from '../../../components/UI/NumericalInput'
 import SelectField from '../../../components/UI/SelectField'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import { Breadcrumbs, Link as MuiLink } from '@mui/material'
+import { Link } from 'react-router'
 
 const AddBook = ({
    isEdit = false,
@@ -272,6 +274,22 @@ const AddBook = ({
    }
    return (
       <StyledBox>
+         <Box sx={{ marginBottom: 3 }}>
+            <Breadcrumbs aria-label="breadcrumb">
+               <MuiLink
+                  component={Link}
+                  to="/admin/books"
+                  underline="hover"
+                  color="inherit"
+               >
+                  Книги
+               </MuiLink>
+               <Typography color="text.primary">
+                  {isEdit ? 'Редактировать' : 'Добавить книгу'}
+               </Typography>
+            </Breadcrumbs>
+         </Box>
+
          <Typography className="imageT">Загрузите 3 фото *</Typography>
          <StyledImageBox>
             {photos.map((photo, i) => (
