@@ -1,11 +1,10 @@
 import { Box, Tab, Tabs, styled } from '@mui/material'
 import { useNavigate } from 'react-router'
-import PropTypes from 'prop-types'
 
 const AuthFormWrapper = ({ children, value }) => {
    const navigate = useNavigate()
 
-   const handleChange = (event, newValue) => {
+   const handleChange = (_, newValue) => {
       if (newValue === 0) {
          navigate('/sign-in')
       } else if (newValue === 1) {
@@ -22,11 +21,6 @@ const AuthFormWrapper = ({ children, value }) => {
          <FormContent>{children}</FormContent>
       </StyledForm>
    )
-}
-
-AuthFormWrapper.propTypes = {
-   children: PropTypes.node.isRequired,
-   value: PropTypes.number.isRequired,
 }
 
 export default AuthFormWrapper

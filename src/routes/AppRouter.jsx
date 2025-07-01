@@ -53,7 +53,7 @@ const AppRouter = () => (
          path="/"
          element={
             <PrivateRouter
-               roles={[ROLES.GUEST, ROLES.USER]}
+               roles={[ROLES.GUEST, ROLES.CLIENT]}
                Component={
                   <Suspense fallback={<Loading />}>
                      <Home />
