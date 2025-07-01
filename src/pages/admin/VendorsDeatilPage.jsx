@@ -56,7 +56,7 @@ const VendorsDetailtPage = () => {
       }
    }, [dispatch, id, tabValue, currentBookPage, booksPerPage])
 
-   const handleTabChange = (newValue) => {
+   const handleTabChange = (event, newValue) => {
       setTabValue(newValue)
       if (newValue === 1) {
          setCurrentBookPage(1)
