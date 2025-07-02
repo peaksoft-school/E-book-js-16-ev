@@ -14,4 +14,10 @@ const NAV_LINKS = [
    { label: 'Начать продавать на eBook', to: '/sell' },
 ]
 
-export { CATEGORIES, NAV_LINKS }
+const BOOK_FILTER = [
+   { value: 'избранное', label: 'Избранное' },
+   { value: 'корзина', label: 'В корзине' },
+   { value: 'продано', label: 'Продано' },
+   { value: 'со скидкой', label: 'Со скидкой' },
+]
+export { CATEGORIES, NAV_LINKS, BOOK_FILTER }

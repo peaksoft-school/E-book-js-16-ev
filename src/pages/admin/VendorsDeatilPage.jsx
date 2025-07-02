@@ -10,6 +10,8 @@ import {
    MenuItem,
    Menu,
    Pagination,
+   Select,
+   FormControl,
 } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Modal from '../../components/UI/Modal'
@@ -17,11 +19,13 @@ import Button from '../../components/UI/buttons/Button'
 import SmallBasketCard from '../../components/UI/cards/SmallBasketCard'
 import notify from '../../utils/helpers/notify'
 import Loading from '../../components/UI/Loading'
+import { Icons } from '../../assets/icons/index'
 import {
    deleteVendor,
    findVendorById,
    getAllVendorBooks,
 } from '../../store/slices/admin/vendorThunk'
+import { BOOK_FILTER } from '../../utils/helpers'
 
 const VendorsDetailtPage = () => {
    const { id } = useParams()
@@ -37,6 +41,8 @@ const VendorsDetailtPage = () => {
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [currentBookPage, setCurrentBookPage] = useState(1)
    const [booksPerPage] = useState(8)
+   const [openFormat, setOpenFormat] = useState(false)
+   const [format, setFormat] = useState('')
 
    useEffect(() => {
       if (id) {
@@ -88,6 +94,19 @@ const VendorsDetailtPage = () => {
 
    const handleBookPageChange = (event, value) => {
       setCurrentBookPage(value)
+   }
+   const handleFormatChange = (event) => {
+      const value = event.target.value
+      setFormat(value)
+
+      dispatch(
+         getAllVendorBooks({
+            vendorId: id,
+            pageNumber: 1,
+            pageSize: booksPerPage,
+            type: value || undefined,
+         })
+      )
    }
 
    return (
@@ -192,36 +211,31 @@ const VendorsDetailtPage = () => {
                            <StyledTypography variant="body1" fontWeight={500}>
                               Всего {vendorBooks?.totalElements || 0} книг
                            </StyledTypography>
-                           <FilterButton onClick={handleFilterMenuClick}>
-                              <Typography variant="body1" fontWeight={500}>
-                                 Все
-                              </Typography>
-                              <MoreVertIcon />
-                           </FilterButton>
-                           <Menu
-                              anchorEl={anchorEl}
-                              open={Boolean(anchorEl)}
-                              onClose={handleFilterMenuClose}
-                              PaperProps={{
-                                 style: {
-                                    maxHeight: 48 * 4.5,
-                                    width: '20ch',
-                                 },
-                              }}
-                           >
-                              <MenuItem onClick={handleFilterMenuClose}>
-                                 Опубликовано
-                              </MenuItem>
-                              <MenuItem onClick={handleFilterMenuClose}>
-                                 В черновике
-                              </MenuItem>
-                              <MenuItem onClick={handleFilterMenuClose}>
-                                 На модерации
-                              </MenuItem>
-                              <MenuItem onClick={handleFilterMenuClose}>
-                                 Отклонено
-                              </MenuItem>
-                           </Menu>
+                           <NoBorderFormControl>
+                              <CustomSelect
+                                 value={format}
+                                 onChange={handleFormatChange}
+                                 displayEmpty
+                                 onOpen={() => setOpenFormat(true)}
+                                 onClose={() => setOpenFormat(false)}
+                                 renderValue={(selected) => {
+                                    if (selected === '') return <>Все</>
+                                    const found = BOOK_FILTER.find(
+                                       (f) => f.value === selected
+                                    )
+                                    return found ? found.label : 'Тип'
+                                 }}
+                              >
+                                 <MenuItem value="">Все</MenuItem>
+                                 {BOOK_FILTER.map((f) => (
+                                    <MenuItem key={f.value} value={f.value}>
+                                       {f.label}
+                                    </MenuItem>
+                                 ))}
+                              </CustomSelect>
+                           </NoBorderFormControl>
+
+                           <MoreVertIcon />
                         </BooksHeader>
 
                         {vendorBooks?.isLoading ? (
@@ -398,19 +412,7 @@ const BooksHeader = styled(Box)({
    justifyContent: 'space-between',
    alignItems: 'center',
    marginBottom: '20px',
-})
-
-const FilterButton = styled(Box)({
-   display: 'flex',
-   alignItems: 'center',
-   gap: '4px',
-   cursor: 'pointer',
-   padding: '4px 8px',
-   borderRadius: '4px',
-   border: '1px solid #e0e0e0',
-   '&:hover': {
-      backgroundColor: '#f5f5f5',
-   },
+   backgroundColor: 'red',
 })
 
 const BookGrid = styled(Box)({
@@ -475,3 +477,37 @@ const StyledButton = styled(Button)({
    color: '#afafaf !important',
    boxShadow: 'none',
 })
+const CustomSelect = styled(Select)(() => ({
+   '&.MuiInputBase-root': {
+      border: 'none',
+      backgroundColor: 'transparent',
+      padding: 0,
+      position: 'relative',
+   },
+   '& .MuiSelect-select': {
+      paddingRight: '9px !important',
+      fontSize: 16,
+      width: 'auto',
+      display: 'inline-flex',
+      alignItems: 'center',
+      fontWeight: 500,
+   },
+   '& fieldset': {
+      border: 'none',
+   },
+   '&:hover fieldset': {
+      border: 'none',
+   },
+   '&.Mui-focused fieldset': {
+      border: 'none',
+   },
+   '& svg': {
+      color: '#000',
+      position: 'absolute',
+   },
+}))
+
+const NoBorderFormControl = styled(FormControl)(() => ({
+   minWidth: 100,
+   borderBottom: 'none',
+}))
