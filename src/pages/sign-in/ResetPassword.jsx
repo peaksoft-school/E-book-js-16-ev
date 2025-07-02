@@ -1,6 +1,6 @@
 import { Button, Typography, Box, Paper, styled } from '@mui/material'
 import { useParams, useNavigate } from 'react-router'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Input from '../../components/UI/Input'
 import { resetPassword } from '../../store/slices/authThunk'
 import { useSelector, useDispatch } from 'react-redux'
