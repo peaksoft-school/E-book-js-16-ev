@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, styled } from '@mui/material'
 import { signUpForVendor } from '../../store/slices/authThunk'
 import Input from '../../components/UI/Input'
 import AuthFormWrapper from '../../components/AuthFormWrapper'
 import { VALIDATION_SCHEMA_VENDOR } from '../../utils/helpers/validate'
+import notify from '../../utils/helpers/notify'
 
 const SignUpVendor = () => {
    const [email, setEmail] = useState('')
@@ -18,6 +19,8 @@ const SignUpVendor = () => {
 
    const navigate = useNavigate()
    const dispatch = useDispatch()
+
+   const { error } = useSelector((state) => state.auth)
 
    const handleFirstNameChange = (e) => setFirstName(e.target.value)
    const handleLastNameChange = (e) => setLastName(e.target.value)
@@ -62,6 +65,12 @@ const SignUpVendor = () => {
             setValidationErrors(errors)
          })
    }
+
+   useEffect(() => {
+      if (error) {
+         notify({ type: 'error', message: error })
+      }
+   }, [error])
 
    return (
       <AuthFormWrapper value={1}>

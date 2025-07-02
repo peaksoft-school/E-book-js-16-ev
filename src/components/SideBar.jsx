@@ -9,7 +9,7 @@ const SideBar = () => (
       </LogoText>
 
       <StyledContBar>
-         <NavItem to="/w">
+         <NavItem to="/admin/applications">
             {({ isActive }) => (
                <>
                   <img
@@ -20,7 +20,7 @@ const SideBar = () => (
                </>
             )}
          </NavItem>
-         <NavItem to="/2">
+         <NavItem to="/admin/vendors">
             {({ isActive }) => (
                <>
                   <img
@@ -31,7 +31,7 @@ const SideBar = () => (
                </>
             )}
          </NavItem>
-         <NavItem to="3">
+         <NavItem to="/admin/users">
             {({ isActive }) => (
                <>
                   <img
