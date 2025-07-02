@@ -81,7 +81,7 @@ const Wrapper = styled(Box)({
 const LoadingWrapper = styled(Box)({
    display: 'flex',
    justifyContent: 'center',
-   marginTop: '-50px',
+   marginTop: '-49px',
    marginLeft: '-60px',
 })
 
