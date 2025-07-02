@@ -184,9 +184,9 @@ const UserProfilePage = () => {
             {tabValue === 1 && (
                <OperationsContentWrapper>
                   <LeftPanel>
-                     <ClearHistoryText onClick={handleClearHistory}>
-                        Очистить историю
-                     </ClearHistoryText>
+                     <ClearHistoryText
+                        onClick={handleClearHistory}
+                     ></ClearHistoryText>
                      <FilterSidebar>
                         <FilterOption
                            onClick={() => setActiveFilter('purchased')}
