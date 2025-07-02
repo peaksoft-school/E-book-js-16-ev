@@ -7,14 +7,15 @@ import resetFileState from './admin/books/fileSlice'
 import addBookReducer from './admin/books/addBookSlice'
 import uploadBookReducer from './admin/books/updateSlice'
 import fetchBookByIdReducer from './admin/books/fetchBookByIdSlice'
+import { authSlice } from './slices/authSlice'
 
 const rootReducer = combineReducers({
+   [authSlice.name]: authSlice.reducer,
    allBooks: booksReducer,
    [resetFileState.name]: resetFileState.reducer,
    addBook: addBookReducer,
    updateBook: uploadBookReducer,
    findBook: fetchBookByIdReducer,
-
 })
 
 const persistConfig = {
