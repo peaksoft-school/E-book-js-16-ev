@@ -6,6 +6,7 @@ import { Button, Typography, styled, Stack } from '@mui/material'
 import Input from '../../components/UI/Input'
 import { VALIDATION_SCHEMA_FORGOT } from '../../utils/helpers/validate'
 import { AUTH_ACTION } from '../../store/slices/authSlice'
+import notify from '../../utils/helpers/notify'
 
 const ForgotPassword = ({ onClose }) => {
    const [email, setEmail] = useState('')
@@ -44,6 +45,13 @@ const ForgotPassword = ({ onClose }) => {
          })
    }, [dispatch, email])
 
+   useEffect(() => {
+   if (error) {
+      notify({ type:'error',message: error })
+   }
+}, [error])
+
+
    return (
       <Modal open={true} handleClose={handleCloseModal}>
          <StyledModalContent>
@@ -68,8 +76,6 @@ const ForgotPassword = ({ onClose }) => {
                   helperText={validationErrors.email}
                />
             </StyledInputWrapper>
-
-            {error && <StyledMessage type="error">{error}</StyledMessage>}
 
             <StyledButton
                variant="contained"

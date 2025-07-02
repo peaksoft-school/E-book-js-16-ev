@@ -8,6 +8,7 @@ import GoogleIcon from '@mui/icons-material/Google'
 import { VALIDATION_SCHEMA_SIGN_IN } from '../../utils/helpers/validate'
 import { authWithGoogle, signIn } from '../../store/slices/authThunk'
 import Input from '../../components/UI/Input'
+import notify from '../../utils/helpers/notify'
 
 const SignIn = () => {
    const [email, setEmail] = useState('')
@@ -17,7 +18,7 @@ const SignIn = () => {
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const { isAuth, role, isLoading } = useSelector((state) => state.auth)
+   const { isAuth, role, isLoading,error } = useSelector((state) => state.auth)
 
    const handleEmailChange = useCallback((e) => {
       setEmail(e.target.value)
@@ -78,6 +79,13 @@ const SignIn = () => {
       }
    }, [isAuth, role, navigate])
 
+   useEffect(() => {
+   if (error) {
+      notify({ type:'error',message: error })
+   }
+}, [error])
+
+
    return (
       <AuthFormWrapper value={0}>
          <StyledForm onSubmit={handleSubmit}>
@@ -113,6 +121,7 @@ const SignIn = () => {
             >
                {isLoading ? 'Загрузка...' : 'Войти через Google'}
             </StyledGoogleButton>
+            
 
             {isForgotModalOpen && <ForgotPassword onClose={handleCloseModal} />}
          </StyledForm>

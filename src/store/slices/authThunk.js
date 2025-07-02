@@ -12,7 +12,7 @@ export const signUpForUser = createAsyncThunk(
       { rejectWithValue }
    ) => {
       try {
-         const { data } = await axiosInstance.post(`/auth/signUpForClient`, {
+         const { data } = await axiosInstance.post(`/api/auth/signUpForClient`, {
             email,
             password,
             confirmPassword,
@@ -23,7 +23,7 @@ export const signUpForUser = createAsyncThunk(
             message: 'Регистрация прошла успешно! Теперь вы можете войти.',
          })
 
-         navigate('/sign-in')
+         navigate('/user')
 
          return data
       } catch (error) {
@@ -50,7 +50,7 @@ export const signUpForVendor = createAsyncThunk(
       { rejectWithValue }
    ) => {
       try {
-         const { data } = await axiosInstance.post(`/auth/signUpForVendor`, {
+         const { data } = await axiosInstance.post(`/api/auth/signUpForVendor`, {
             firstName,
             lastName,
             phoneNumber,
@@ -63,7 +63,7 @@ export const signUpForVendor = createAsyncThunk(
             message: 'Регистрация прошла успешно! Теперь вы можете войти.',
          })
 
-         navigate('/sign-in')
+         navigate('/vendor')
 
          return data
       } catch (error) {
@@ -79,7 +79,7 @@ export const signIn = createAsyncThunk(
 
    async ({ email, password }, { rejectWithValue }) => {
       try {
-         const { data } = await axiosInstance.post(`/auth/signIn`, {
+         const { data } = await axiosInstance.post(`/api/auth/signIn`, {
             email,
             password,
          })
@@ -102,7 +102,7 @@ export const forgotPassword = createAsyncThunk(
    async ({ email }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.post(
-            `/auth/forgot-password?email=${encodeURIComponent(email)}`
+            `/api/auth/forgot-password?email=${encodeURIComponent(email)}`
          )
 
          notify({
@@ -127,7 +127,7 @@ export const resetPassword = createAsyncThunk(
    ) => {
       try {
          const { data } = await axiosInstance.post(
-            `/auth/ResetPassword/${token}`,
+            `/api/auth/ResetPassword/${token}`,
             null,
             {
                params: {
@@ -162,7 +162,7 @@ export const authWithGoogle = createAsyncThunk(
 
          const idToken = await result.user.getIdToken()
 
-         const { data } = await axiosInstance.post('/auth/signInGoogle', null, {
+         const { data } = await axiosInstance.post('/api/auth/signInGoogle', null, {
             params: {
                idToken: idToken,
             },
