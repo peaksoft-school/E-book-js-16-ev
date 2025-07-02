@@ -14,4 +14,22 @@ const NAV_LINKS = [
    { label: 'Начать продавать на eBook', to: '/sell' },
 ]
 
-export { CATEGORIES, NAV_LINKS }
+const GENRES = [
+   { label: 'Художественная литература', value: 'FICTION' },
+   { label: 'Детские книги', value: 'CHILDRENS' },
+   { label: 'Наука и технологии', value: 'SCIENCE_AND_TECHNOLOGY' },
+   { label: 'Общество', value: 'SOCIETY' },
+   { label: 'Бизнес', value: 'BUSINESS' },
+   { label: 'Здоровье и спорт', value: 'HEALTH_BEAUTY_SPORT' },
+   { label: 'Хобби', value: 'HOBBIES' },
+   { label: 'Психология', value: 'PSYCHOLOGY' },
+   { label: 'Учебная литература', value: 'EDUCATION' },
+]
+
+const FORMATS = [
+   { label: 'Аудио', value: 'AUDIO' },
+   { label: 'Бумажные', value: 'PAPER' },
+   { label: 'Электронные', value: 'ELECTRONIC' },
+]
+
+export { CATEGORIES, NAV_LINKS, GENRES, FORMATS }

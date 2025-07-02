@@ -2,27 +2,25 @@ import axios from 'axios'
 
 const BASE_URL = 'http://35.159.168.248'
 
-export const axiosInstance = axios.create({
+export const axiosInstanceFile = axios.create({
    baseURL: BASE_URL,
 
    headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
    },
 })
 
 let customStore
 
-export const injectStore = (store) => {
+export const injectStoreFile = (store) => {
    customStore = store
 }
 
-axiosInstance.interceptors.request.use(
+axiosInstanceFile.interceptors.request.use(
    (config) => {
       const updateConfig = { ...config }
 
-      // const { token } = customStore.getState()?.auth
-
-      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZlbmRvckBnbWFpbC5jb20iLCJpZCI6Nywicm9sZSI6IlZFTkRPUiIsImlhdCI6MTc1MTM3NzUyOCwiZXhwIjoxNzU0OTc3NTI4fQ.LxZWmC2qLni10PFcgolNqKWWNf5ELgALzS8qfvUTCno'
+      const { token } = customStore.getState()?.auth
 
       if (token) {
          updateConfig.headers.Authorization = `Bearer ${token}`
@@ -36,7 +34,7 @@ axiosInstance.interceptors.request.use(
    }
 )
 
-axiosInstance.interceptors.response.use(
+axiosInstanceFile.interceptors.response.use(
    (response) => {
       return Promise.resolve(response)
    },

@@ -16,8 +16,8 @@ const Checkbox = forwardRef(
                   checked={checked}
                   onChange={onChange}
                   ref={ref}
-                  checkedIcon={<img src={Icons.noneChecked} />}
-                  icon={<img src={Icons.checked} />}
+                  checkedIcon={<img src={Icons.checked} />}
+                  icon={<img src={Icons.noneChecked} />}
                   {...rest}
                />
             }
