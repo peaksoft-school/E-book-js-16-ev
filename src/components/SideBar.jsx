@@ -107,5 +107,5 @@ const StyledContBar = styled(Box)(({ theme }) => ({
    flexDirection: 'column',
    background: theme.palette.secondary.main,
    width: '100%',
-   marginTop: 59,
+   marginTop: 58,
 }))
