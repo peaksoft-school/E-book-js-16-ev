@@ -1,56 +1,86 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Box, Button, styled } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import { Icons } from '../../../assets/icons'
 
-const UploadButton = forwardRef(({ label, fileName, disabled }) => {
-   const [status, setStatus] = useState('default')
+const UploadButton = forwardRef(
+   ({ label, fileName, accept = '*', onFileSelect, initialFile }, ref) => {
+      const fileInputRef = useRef()
+      const [status, setStatus] = useState(initialFile ? 'uploaded' : 'default')
+      const [selectedName, setSelectedName] = useState(
+         initialFile ? initialFile.split('/').pop() : ''
+      )
 
-   const loading = false
-
-   const handleUpload = () => {
-      setStatus('loading')
-
-      setTimeout(() => {
-         setStatus('uploaded')
-      }, 2000)
-   }
-
-   const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1)
-
-   const getButtonText = () => {
-      if (status === 'uploaded') return `${capitalizeFirst(fileName)} загружен`
-      return `Загрузить ${label}`
-   }
-
-   const getIcon = () => {
-      switch (status) {
-         case 'loading':
-            return
-         case 'uploaded':
-            return <CheckIcon />
-         default:
-            return <IconImage component="img" alt="icon" src={Icons.download} />
+      const handleClick = () => {
+         fileInputRef.current.click()
       }
-   }
 
-   return (
-      <Container>
-         <Label>Загрузите {label}</Label>
-         <StyledButton
-            onClick={handleUpload}
-            disabled={disabled}
-            startIcon={getIcon()}
-            variant={status === 'uploaded' ? 'contained' : 'outlined'}
-            status={status}
-            loading={loading}
-            loadingPosition="start"
-         >
-            {getButtonText()}
-         </StyledButton>
-      </Container>
-   )
-})
+      const handleFileChange = (event) => {
+         const file = event.target.files[0]
+         if (file) {
+            setSelectedName(file.name)
+            setStatus('uploaded')
+            if (onFileSelect) onFileSelect(file, fileName)
+         }
+      }
+
+      useEffect(() => {
+         if (initialFile) {
+            setSelectedName(getFileName(initialFile))
+            setStatus('uploaded')
+         }
+      }, [initialFile])
+
+      const getFileName = (url) => {
+         try {
+            return decodeURIComponent(url.split('/').pop())
+         } catch {
+            return ''
+         }
+      }
+
+      const capitalizeFirst = (str) =>
+         str.charAt(0).toUpperCase() + str.slice(1)
+
+      const getButtonText = () => {
+         if (status === 'uploaded') {
+            return `${capitalizeFirst(fileName)} загружен`
+         }
+         return `Загрузить ${label === 'PDF' ? 'PDF' : 'аудиозапись'}`
+      }
+
+      const getIcon = () => {
+         switch (status) {
+            case 'uploaded':
+               return <CheckIcon />
+            default:
+               return (
+                  <IconImage component="img" alt="icon" src={Icons.download} />
+               )
+         }
+      }
+
+      return (
+         <Container>
+            <Label>Загрузите {label}</Label>
+            <input
+               ref={fileInputRef}
+               type="file"
+               accept={accept}
+               onChange={handleFileChange}
+               style={{ display: 'none' }}
+            />
+            <StyledButton
+               onClick={handleClick}
+               startIcon={getIcon()}
+               variant={status === 'uploaded' ? 'contained' : 'outlined'}
+            >
+               {getButtonText()}
+            </StyledButton>
+         </Container>
+      )
+   }
+)
 
 export default UploadButton
 
@@ -61,10 +91,11 @@ const Container = styled(Box)({
 })
 
 const Label = styled(Box)({
-   marginBottom: '8px',
+   marginBottom: '4px',
+   fontSize: 14,
 })
 
-const StyledButton = styled(Button)(({ theme, status }) => ({
+const StyledButton = styled(Button)(({ status }) => ({
    width: 220,
    height: 40,
    color: status === 'uploaded' ? '#fff' : '#000',

@@ -13,6 +13,7 @@ import SideBar from '../../components/SideBar'
 import Input from '../../components/UI/Input'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { AUTH_ACTION } from '../../store/slices/authSlice'
 
 const AdminLayout = () => {
    const [anchorEl, setAnchorEl] = useState(null)
@@ -29,7 +30,7 @@ const AdminLayout = () => {
    }
 
    const handleLogout = () => {
-      dispatch(logout())
+      dispatch(AUTH_ACTION.logOut())
       navigate('/login')
    }
    return (
@@ -86,12 +87,12 @@ const PageWrapper = styled(Box)({
 })
 
 const ContentBox = styled(Box)({
-   marginLeft: '250px',
+   marginLeft: '270px',
    width: 'calc(100vw - 270px)',
    height: '100vh',
    display: 'flex',
    flexDirection: 'column',
-   padding: '20px',
+   padding: '30px',
    boxSizing: 'border-box',
    overflowX: 'hidden',
 })

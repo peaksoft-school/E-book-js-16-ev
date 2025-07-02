@@ -1,9 +1,22 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from 'redux-persist'
+import persistReducer from 'redux-persist/es/persistReducer'
+import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import { vendorSlice } from './slices/admin/vendorSlice'
+import booksReducer from './admin/books/booksSlice'
+import resetFileState from './admin/books/fileSlice'
+import addBookReducer from './admin/books/addBookSlice'
+import uploadBookReducer from './admin/books/updateSlice'
+import fetchBookByIdReducer from './admin/books/fetchBookByIdSlice'
+import { authSlice } from './slices/authSlice'
 
 const rootReducer = combineReducers({
+   [authSlice.name]: authSlice.reducer,
+   allBooks: booksReducer,
+   [resetFileState.name]: resetFileState.reducer,
+   addBook: addBookReducer,
+   updateBook: uploadBookReducer,
+   findBook: fetchBookByIdReducer,
    [vendorSlice.name]: vendorSlice.reducer,
 })
 

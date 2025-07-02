@@ -9,8 +9,10 @@ import { persistor, store } from './store/store.js'
 import Notification from './components/Notification.jsx'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+import { injectStoreFile } from './configs/axiosInstanceFile.js'
 
 injectStore(store)
+injectStoreFile(store)
 
 createRoot(document.getElementById('root')).render(
    <StrictMode>
@@ -19,7 +21,6 @@ createRoot(document.getElementById('root')).render(
             <BrowserRouter>
                <Themes>
                   <App />
-
                   <Notification />
                </Themes>
             </BrowserRouter>

@@ -5,7 +5,7 @@ export const findAllVendor = createAsyncThunk(
    'vendor/getAll',
    async ({ pageNumber = 1, pageSize = 15 }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get('/user/findAllVendor', {
+         const response = await axiosInstance.get('/api/user/findAllVendor', {
             params: { pageNumber, pageSize },
          })
          return response.data
@@ -23,7 +23,7 @@ export const deleteVendor = createAsyncThunk(
    async ({ vendorId }, { rejectWithValue }) => {
       try {
          const response = await axiosInstance.delete(
-            `/user/deletedVendor/${vendorId}`
+            `/api/user/deletedVendor/${vendorId}`
          )
          return response.data
       } catch (error) {
@@ -40,7 +40,7 @@ export const findVendorById = createAsyncThunk(
    async ({ vendorId }, { rejectWithValue }) => {
       try {
          const response = await axiosInstance.get(
-            `/user/findVendorById/${vendorId}`
+            `/api/user/findVendorById/${vendorId}`
          )
          return response.data
       } catch (error) {
@@ -57,7 +57,7 @@ export const getAllVendorBooks = createAsyncThunk(
    async ({ vendorId, pageNumber = 1, pageSize = 8 }, { rejectWithValue }) => {
       try {
          const response = await axiosInstance.get(
-            `/book/getAllVendorBooks/${vendorId}`,
+            `/api/book/getAllVendorBooks/${vendorId}`,
             {
                params: {
                   pageNumber,
