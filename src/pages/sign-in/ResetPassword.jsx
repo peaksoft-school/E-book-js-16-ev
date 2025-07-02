@@ -1,10 +1,11 @@
 import { Button, Typography, Box, Paper, styled } from '@mui/material'
 import { useParams, useNavigate } from 'react-router'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import Input from '../../components/UI/Input'
 import { resetPassword } from '../../store/slices/authThunk'
 import { useSelector, useDispatch } from 'react-redux'
 import { VALIDATION_SCHEMA_RESET } from '../../utils/helpers/validate'
+import notify from '../../utils/helpers/notify'
 
 const ResetPassword = () => {
    const [newPassword, setNewPassword] = useState('')
@@ -46,6 +47,12 @@ const ResetPassword = () => {
          })
    }, [newPassword, confirmPassword, dispatch, token])
 
+   useEffect(() => {
+      if (error) {
+         notify({ type: 'error', message: error })
+      }
+   }, [error])
+
    return (
       <StyledPageContainer>
          <StyledFormPaper elevation={6}>
@@ -76,13 +83,6 @@ const ResetPassword = () => {
                error={Boolean(validationErrors.confirmPassword)}
                helperText={validationErrors.confirmPassword}
             />
-
-            {error && <StyledMessage type="error">{error}</StyledMessage>}
-            {Object.keys(validationErrors).length > 0 && (
-               <StyledMessage type="error">
-                  Пожалуйста, исправьте ошибки в форме.
-               </StyledMessage>
-            )}
 
             <StyledSubmitButton
                onClick={handleSubmit}

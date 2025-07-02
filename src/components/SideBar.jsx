@@ -20,7 +20,7 @@ const SideBar = () => (
                </>
             )}
          </NavItem>
-         <NavItem to="/2">
+         <NavItem to="/admin/vendors">
             {({ isActive }) => (
                <>
                   <img
@@ -31,7 +31,7 @@ const SideBar = () => (
                </>
             )}
          </NavItem>
-         <NavItem to="3">
+         <NavItem to="/admin/users">
             {({ isActive }) => (
                <>
                   <img
@@ -107,5 +107,5 @@ const StyledContBar = styled(Box)(({ theme }) => ({
    flexDirection: 'column',
    background: theme.palette.secondary.main,
    width: '100%',
-   marginTop: 59,
+   marginTop: 58,
 }))

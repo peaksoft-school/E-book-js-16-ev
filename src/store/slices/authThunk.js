@@ -12,18 +12,21 @@ export const signUpForUser = createAsyncThunk(
       { rejectWithValue }
    ) => {
       try {
-         const { data } = await axiosInstance.post(`/api/auth/signUpForClient`, {
-            email,
-            password,
-            confirmPassword,
-            firstName,
-         })
+         const { data } = await axiosInstance.post(
+            `/api/auth/signUpForClient`,
+            {
+               email,
+               password,
+               confirmPassword,
+               firstName,
+            }
+         )
 
          notify({
             message: 'Регистрация прошла успешно! Теперь вы можете войти.',
          })
 
-         navigate('/sign-in')
+         navigate('/user')
 
          return data
       } catch (error) {
@@ -50,20 +53,23 @@ export const signUpForVendor = createAsyncThunk(
       { rejectWithValue }
    ) => {
       try {
-         const { data } = await axiosInstance.post(`/api/auth/signUpForVendor`, {
-            firstName,
-            lastName,
-            phoneNumber,
-            email,
-            password,
-            confirmPassword,
-         })
+         const { data } = await axiosInstance.post(
+            `/api/auth/signUpForVendor`,
+            {
+               firstName,
+               lastName,
+               phoneNumber,
+               email,
+               password,
+               confirmPassword,
+            }
+         )
 
          notify({
             message: 'Регистрация прошла успешно! Теперь вы можете войти.',
          })
 
-         navigate('/sign-in')
+         navigate('/vendor')
 
          return data
       } catch (error) {
@@ -162,11 +168,15 @@ export const authWithGoogle = createAsyncThunk(
 
          const idToken = await result.user.getIdToken()
 
-         const { data } = await axiosInstance.post('/api/auth/signInGoogle', null, {
-            params: {
-               idToken: idToken,
-            },
-         })
+         const { data } = await axiosInstance.post(
+            '/api/auth/signInGoogle',
+            null,
+            {
+               params: {
+                  idToken: idToken,
+               },
+            }
+         )
 
          return data
       } catch (error) {

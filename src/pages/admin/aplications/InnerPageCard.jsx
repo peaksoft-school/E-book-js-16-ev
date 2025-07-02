@@ -291,7 +291,8 @@ const StyledCont = styled(Box)(() => ({
    },
    '& .btnCont': {
       display: 'flex',
-      gap: 50,
+      gap: 47,
+      marginTop: '50px',
    },
 }))
 

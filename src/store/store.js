@@ -12,8 +12,8 @@ import fetchBookByIdReducer from './admin/books/fetchBookByIdSlice'
 import { authSlice } from './slices/authSlice'
 
 const rootReducer = combineReducers({
+   [authSlice.name]: authSlice.reducer,
    allBooks: booksReducer,
-    [authSlice.name]: authSlice.reducer,
    [resetFileState.name]: resetFileState.reducer,
    addBook: addBookReducer,
    updateBook: uploadBookReducer,
