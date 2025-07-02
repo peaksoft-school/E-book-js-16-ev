@@ -123,12 +123,12 @@ const UserProfilePage = () => {
          <ContentBox>
             <Breadcrumbs>
                <Typography variant="body2" color="text.secondary">
-                  Пользователи /{' '}
+                  Пользователи /
                </Typography>
                <Typography variant="body2" fontWeight={500}>
                   {selectedUser
                      ? selectedUser.firstName.split(' ')[0]
-                     : 'Загрузка...'}{' '}
+                     : 'Загрузка...'}
                </Typography>
             </Breadcrumbs>
 
@@ -386,7 +386,7 @@ const OperationsContentWrapper = styled(Box)({
 })
 
 const LeftPanel = styled(Box)({
-   width: '150px',
+   width: '170px',
    paddingRight: '20px',
    display: 'flex',
    flexDirection: 'column',
@@ -431,7 +431,7 @@ const BookListContainer = styled(Box)({
 
 const BookListHeader = styled(Box)({
    display: 'grid',
-   gridTemplateColumns: '70px 200px 90px 150px 130px 1fr',
+   gridTemplateColumns: '100px 200px 90px 150px 130px 1fr',
    gap: '20px',
    padding: '10px 0',
    borderBottom: '1px solid #e0e0e0',
@@ -446,7 +446,7 @@ const BookListHeader = styled(Box)({
 
 const BookItem = styled(Box)({
    display: 'grid',
-   gridTemplateColumns: '70px 200px 90px 150px 130px 1fr',
+   gridTemplateColumns: '100px 200px 90px 150px 130px 1fr',
    gap: '20px',
    padding: '15px 0',
    borderBottom: '1px solid #e0e0e0',
@@ -485,11 +485,6 @@ const PriceDetails = styled(Box)({
    },
 })
 
-const OriginalPrice = styled(Typography)({
-   textDecoration: 'line-through',
-   color: '#A0A0A0',
-   fontSize: '0.85rem',
-})
 const ModalContentWrapper = styled(Box)({
    display: 'flex',
    flexDirection: 'column',

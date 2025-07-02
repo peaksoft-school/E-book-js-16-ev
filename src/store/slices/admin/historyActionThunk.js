@@ -6,7 +6,7 @@ export const getClinetBasketHistoryAction = createAsyncThunk(
    async ({ pageNumber = 1, pageSize = 12, userId }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            '/historyAction/getClinetBasketHistoryAction',
+            '/api/historyAction/getClinetBasketHistoryAction',
             { params: { pageNumber, pageSize, userId } }
          )
          return data
@@ -24,7 +24,7 @@ export const getClientPurchaseHistoryAction = createAsyncThunk(
    async ({ pageNumber, pageSize, userId }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            '/historyAction/getClientPurchaseHistoryAction',
+            '/api/historyAction/getClientPurchaseHistoryAction',
             { params: { pageNumber, pageSize, userId } }
          )
          return data
@@ -42,7 +42,7 @@ export const getClientFavoriteHistoryAction = createAsyncThunk(
    async ({ pageNumber, pageSize, userId }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            '/historyAction/getClientFavoriteHistoryAction',
+            '/api/historyAction/getClientFavoriteHistoryAction',
             { params: { pageNumber, pageSize, userId } }
          )
          return data

@@ -13,6 +13,7 @@ import SideBar from '../../components/SideBar'
 import Input from '../../components/UI/Input'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { AUTH_ACTION } from '../../store/slices/authSlice'
 
 const AdminLayout = () => {
    const [anchorEl, setAnchorEl] = useState(null)
@@ -29,7 +30,7 @@ const AdminLayout = () => {
    }
 
    const handleLogout = () => {
-      dispatch(logout())
+      dispatch(AUTH_ACTION.logOut())
       navigate('/login')
    }
    return (
@@ -61,7 +62,7 @@ const AdminLayout = () => {
                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                   >
-                     <MenuItem>Выйти</MenuItem>
+                     <MenuItem onClick={handleLogout}>Выйти</MenuItem>
                   </Menu>
                </Box>
             </StyledHeaderBox>

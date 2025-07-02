@@ -9,7 +9,7 @@ const SideBar = () => (
       </LogoText>
 
       <StyledContBar>
-         <NavItem to="/w">
+         <NavItem to="/admin/applications">
             {({ isActive }) => (
                <>
                   <img
@@ -42,7 +42,7 @@ const SideBar = () => (
                </>
             )}
          </NavItem>
-         <NavItem to="d">
+         <NavItem to="/admin/books">
             {({ isActive }) => (
                <>
                   <img
@@ -66,11 +66,12 @@ const StyledSideBarBox = styled(Box)(({ theme }) => ({
    height: '100vh',
    width: '250px',
    backgroundColor: theme.palette.secondary.main,
-
+   width: 270,
+   height: '100%',
    display: 'flex',
    flexDirection: 'column',
    alignItems: 'center',
-   overflow: 'hidden',
+   position: 'fixed',
 }))
 
 const LogoText = styled(Typography)(({ theme }) => ({
@@ -95,7 +96,7 @@ const NavItem = styled(NavLink)(({ theme }) => ({
    textDecoration: 'none',
    color: theme.palette.primary.white,
    fontWeight: 500,
-   fontSize: 16,
+   fontSize: 18,
    gap: '10px',
    background: theme.palette.secondary.main,
 
@@ -111,5 +112,5 @@ const StyledContBar = styled(Box)(({ theme }) => ({
    flexDirection: 'column',
    background: theme.palette.secondary.main,
    width: '100%',
-   marginTop: 59,
+   marginTop: 58,
 }))

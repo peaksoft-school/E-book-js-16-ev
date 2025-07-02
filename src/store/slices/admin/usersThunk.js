@@ -5,7 +5,7 @@ export const getAllUsers = createAsyncThunk(
    'users/getAll',
    async ({ pageNumber = 1, pageSize = 12 }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get('/user/getAllUsers', {
+         const response = await axiosInstance.get('/api/user/getAllUsers', {
             params: { pageNumber, pageSize },
          })
          return response.data
@@ -23,7 +23,7 @@ export const deleteUser = createAsyncThunk(
    async ({ clientId }, { rejectWithValue }) => {
       try {
          const response = await axiosInstance.delete(
-            `/user/deleteUser/${clientId}`
+            `/api/user/deleteUser/${clientId}`
          )
          return response.data
       } catch (error) {
@@ -39,7 +39,7 @@ export const getClientById = createAsyncThunk(
    'user/getById',
    async ({ clientId }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get('/user/getClientById', {
+         const response = await axiosInstance.get('/api/user/getClientById', {
             params: { clientId },
          })
          return response.data
