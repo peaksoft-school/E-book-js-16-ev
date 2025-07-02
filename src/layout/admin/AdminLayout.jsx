@@ -1,19 +1,27 @@
 import { Outlet, useNavigate } from 'react-router'
 import PersonIcon from '@mui/icons-material/Person'
-import { Box, Typography, styled, Avatar , Button, Menu, MenuItem} from '@mui/material'
+import {
+   Box,
+   Typography,
+   styled,
+   Avatar,
+   Button,
+   Menu,
+   MenuItem,
+} from '@mui/material'
 import SideBar from '../../components/SideBar'
 import Input from '../../components/UI/Input'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { logout } from '../../store/authSlice'
+import { AUTH_ACTION } from '../../store/slices/authSlice'
 
 const AdminLayout = () => {
-    const [anchorEl, setAnchorEl] = useState(null)
-    const open = Boolean(anchorEl)
-     const dispatch = useDispatch()
-     const navigate = useNavigate()
+   const [anchorEl, setAnchorEl] = useState(null)
+   const open = Boolean(anchorEl)
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
 
-      const handleMenuOpen = (event) => {
+   const handleMenuOpen = (event) => {
       setAnchorEl(event.currentTarget)
    }
 
@@ -22,7 +30,7 @@ const AdminLayout = () => {
    }
 
    const handleLogout = () => {
-      dispatch(logout())
+      dispatch(AUTH_ACTION.logOut())
       navigate('/login')
    }
    return (
@@ -30,7 +38,6 @@ const AdminLayout = () => {
          <SideBar />
          <ContentBox>
             <StyledHeaderBox>
-
                <Input
                   type="search"
                   placeholder="Искать жанр, книги, авторов, издательства..."
@@ -43,8 +50,8 @@ const AdminLayout = () => {
                      onClick={handleMenuOpen}
                   >
                      <Avatar sx={{ bgcolor: '#ddd', width: 40, height: 40 }}>
-                  <PersonIcon sx={{ color: '#777' }} />
-               </Avatar>
+                        <PersonIcon sx={{ color: '#777' }} />
+                     </Avatar>
                      <Typography>Администратор</Typography>
                   </StyledButton>
 
