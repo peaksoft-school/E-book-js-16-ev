@@ -1,16 +1,11 @@
-<<<<<<< HEAD
 import { Box} from '@mui/material'
-import { Outlet } from 'react-router'
 import Input from '../../components/UI/Input'
 import { Icons } from '../../assets/icons'
 import Button from '../../components/UI/buttons/Button'
 import { Tooltip,} from '@mui/material';
-
-=======
 import { useDispatch } from 'react-redux'
 import { Outlet } from 'react-router'
 import { AUTH_ACTION } from '../../store/slices/authSlice'
->>>>>>> 9a4cc2002ee05cbbcf046bc0097798f264ebf677
 
 const VendorLayout = () => {
    const dispatch = useDispatch()
@@ -20,7 +15,6 @@ const VendorLayout = () => {
    }
 
    return (
-<<<<<<< HEAD
       <Box>
          <Box>
             <Box>
@@ -28,8 +22,7 @@ const VendorLayout = () => {
             <Input  placeholder='hello' />
             <Button></Button>
             </Box>
-            <Box>
-               
+            <Box>               
                <Button variant='outlined'>Создать промокод</Button>
                 <Tooltip title="Промокод применится ко всем вашим книгам" arrow>
       <Box
@@ -54,13 +47,7 @@ const VendorLayout = () => {
             </Box>
          </Box>
       </Box>
-=======
-      <div>
-         <h1>Vendor</h1>
-         <button onClick={handleLogout}>Выйти</button>
-         <Outlet />
-      </div>
->>>>>>> 9a4cc2002ee05cbbcf046bc0097798f264ebf677
+   
    )
 }
 

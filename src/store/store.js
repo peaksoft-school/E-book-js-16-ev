@@ -8,13 +8,13 @@ import addBookReducer from './admin/books/addBookSlice'
 import uploadBookReducer from './admin/books/updateSlice'
 import fetchBookByIdReducer from './admin/books/fetchBookByIdSlice'
 
+
 const rootReducer = combineReducers({
    allBooks: booksReducer,
    [resetFileState.name]: resetFileState.reducer,
    addBook: addBookReducer,
    updateBook: uploadBookReducer,
    findBook: fetchBookByIdReducer,
-
 })
 
 const persistConfig = {
