@@ -42,7 +42,7 @@ const SideBar = () => (
                </>
             )}
          </NavItem>
-         <NavItem to="d">
+         <NavItem to="/admin/books">
             {({ isActive }) => (
                <>
                   <img

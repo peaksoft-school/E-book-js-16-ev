@@ -40,7 +40,6 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
          height: '42px',
          width: '99px',
          padding: '10px 24px',
-         marginTop: '20px',
          textTransform: 'none',
          fontSize: '16px',
       },

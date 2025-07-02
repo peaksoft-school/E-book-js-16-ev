@@ -13,6 +13,7 @@ import SideBar from '../../components/SideBar'
 import Input from '../../components/UI/Input'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { logout } from '../../store/authSlice'
 
 const AdminLayout = () => {
    const [anchorEl, setAnchorEl] = useState(null)
