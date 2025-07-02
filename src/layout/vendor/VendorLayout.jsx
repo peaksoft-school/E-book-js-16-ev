@@ -32,7 +32,25 @@ const VendorLayout = () => {
                      cursor: 'pointer',
                   }}
                />
-               <Button variant='outlined'>relll</Button>
+                  <Box display="flex" flexDirection="column" alignItems="center">
+      <IconButton onClick={handleClick}>
+        <PersonIcon />
+      </IconButton>
+      <IconButton onClick={handleClick} size="small">
+        <ExpandMoreIcon />
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MenuItem onClick={handleClose}>Профиль</MenuItem>
+        <MenuItem onClick={handleClose}>Выйти</MenuItem>
+      </Menu>
+    </Box>
             </StyledBox1>
             <StyledBox2>
               <Box className='block1'>
