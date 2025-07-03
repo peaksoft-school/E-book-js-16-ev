@@ -3,11 +3,11 @@ import { Suspense, lazy } from 'react'
 import { ROLES, ROUTES } from './routes'
 import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
-import VendorsPage from '../pages/admin/VendorsPage'
-import VendorsDetailtPage from '../pages/admin/VendorsDeatilPage'
 import Books from '../pages/admin/books/Books'
 import AddBook from '../pages/admin/books/AddBook'
 import UploadBook from '../pages/admin/books/UploadBook'
+import VendorsPage from '../pages/admin/vendors/VendorsPage'
+import VendorsDetailtPage from '../pages/admin/vendors/VendorsDeatilPage'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))

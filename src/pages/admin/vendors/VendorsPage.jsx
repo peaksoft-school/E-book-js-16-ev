@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, styled, Pagination, CircularProgress } from '@mui/material'
-import Table from '../../components/UI/Table'
+import Table from '../../../components/UI/Table'
 import {
    deleteVendor,
    findAllVendor,
-} from '../../store/slices/admin/vendorThunk'
+} from '../../../store/admin/vendors/vendorThunk'
 
 const VendorsPage = () => {
    const [currentPage, setCurrentPage] = useState(1)

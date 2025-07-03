@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -14,18 +13,19 @@ import {
    FormControl,
 } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import Modal from '../../components/UI/Modal'
-import Button from '../../components/UI/buttons/Button'
-import SmallBasketCard from '../../components/UI/cards/SmallBasketCard'
-import notify from '../../utils/helpers/notify'
-import Loading from '../../components/UI/Loading'
-import { Icons } from '../../assets/icons/index'
+import Modal from '../../../components/UI/Modal'
+import Button from '../../../components/UI/buttons/Button'
+import SmallBasketCard from '../../../components/UI/cards/SmallBasketCard'
+import notify from '../../../utils/helpers/notify'
+import Loading from '../../../components/UI/Loading'
+import { Icons } from '../../../assets/icons/index'
 import {
    deleteVendor,
    findVendorById,
    getAllVendorBooks,
-} from '../../store/slices/admin/vendorThunk'
-import { BOOK_FILTER } from '../../utils/helpers'
+} from '../../../store/admin/vendors/vendorThunk'
+import { useEffect, useState } from 'react'
+import { BOOK_FILTER } from '../../../utils/helpers/index'
 
 const VendorsDetailtPage = () => {
    const { id } = useParams()

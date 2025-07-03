@@ -4,6 +4,7 @@ import {
    findAllVendor,
    findVendorById,
    getAllVendorBooks,
+   sortVendorBooksForAdmin,
 } from './vendorThunk'
 
 const initialState = {
@@ -28,10 +29,14 @@ const initialState = {
 
 const vendorSlice = createSlice({
    name: 'vendor',
+
    initialState,
+
    reducers: {},
+
    extraReducers: (builder) => {
       builder
+
          .addCase(findAllVendor.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -102,6 +107,24 @@ const vendorSlice = createSlice({
             state.vendorBooks.totalPages = payload.totalPages
          })
          .addCase(getAllVendorBooks.rejected, (state, { payload }) => {
+            state.vendorBooks.isLoading = false
+            state.vendorBooks.error = payload
+         })
+
+         .addCase(sortVendorBooksForAdmin.pending, (state) => {
+            state.vendorBooks.isLoading = true
+            state.vendorBooks.error = null
+         })
+         .addCase(sortVendorBooksForAdmin.fulfilled, (state, { payload }) => {
+            state.vendorBooks.isLoading = false
+            state.vendorBooks.error = null
+            state.vendorBooks.content = payload.content || []
+            state.vendorBooks.pageNumber = payload.pageNumber
+            state.vendorBooks.pageSize = payload.pageSize
+            state.vendorBooks.totalElements = payload.totalElements
+            state.vendorBooks.totalPages = payload.totalPages
+         })
+         .addCase(sortVendorBooksForAdmin.rejected, (state, { payload }) => {
             state.vendorBooks.isLoading = false
             state.vendorBooks.error = payload
          })

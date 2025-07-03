@@ -3,12 +3,13 @@ import { axiosInstance } from '../../../configs/axiosInstance'
 
 export const findAllVendor = createAsyncThunk(
    'vendor/getAll',
+
    async ({ pageNumber = 1, pageSize = 15 }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get('/api/user/findAllVendor', {
+         const { data } = await axiosInstance.get('/api/user/findAllVendor', {
             params: { pageNumber, pageSize },
          })
-         return response.data
+         return data
       } catch (error) {
          return rejectWithValue(
             error.response?.data?.message ||
@@ -20,12 +21,13 @@ export const findAllVendor = createAsyncThunk(
 
 export const deleteVendor = createAsyncThunk(
    'vendor/deleteVendor',
+
    async ({ vendorId }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.delete(
+         const { data } = await axiosInstance.delete(
             `/api/user/deletedVendor/${vendorId}`
          )
-         return response.data
+         return data
       } catch (error) {
          return rejectWithValue(
             error.response?.data?.message ||
@@ -37,12 +39,13 @@ export const deleteVendor = createAsyncThunk(
 
 export const findVendorById = createAsyncThunk(
    'vendor/getVendorById',
+
    async ({ vendorId }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get(
+         const { data } = await axiosInstance.get(
             `/api/user/findVendorById/${vendorId}`
          )
-         return response.data
+         return data
       } catch (error) {
          return rejectWithValue(
             error.response?.data?.message ||
@@ -54,9 +57,10 @@ export const findVendorById = createAsyncThunk(
 
 export const getAllVendorBooks = createAsyncThunk(
    'vendor/getAllVendorBooks',
+
    async ({ vendorId, pageNumber = 1, pageSize = 8 }, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get(
+         const { data } = await axiosInstance.get(
             `/api/book/getAllVendorBooks/${vendorId}`,
             {
                params: {
@@ -65,11 +69,31 @@ export const getAllVendorBooks = createAsyncThunk(
                },
             }
          )
-         return response.data
+         return data
       } catch (error) {
          return rejectWithValue(
             error.response?.data?.message ||
                'Ошибка сервера при получении списка книг продавца.'
+         )
+      }
+   }
+)
+
+export const sortVendorBooksForAdmin = createAsyncThunk(
+   'vendor/sortBook',
+   async ({ value, pageNumber, pageSize, vendorId }, { rejectWithValue }) => {
+      try {
+         const { data } = await axiosInstance.get(
+            `/api/bookItem/sortVendorBooksForAdmin/${vendorId}`,
+            {
+               params: { value, pageNumber, pageSize },
+            }
+         )
+         return data
+      } catch (error) {
+         return rejectWithValue(
+            error.response?.data?.message ||
+               'Ошибка сервера при получении сортировки.'
          )
       }
    }
