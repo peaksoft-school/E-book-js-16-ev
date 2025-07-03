@@ -81,6 +81,7 @@ export const getAllVendorBooks = createAsyncThunk(
 
 export const sortVendorBooksForAdmin = createAsyncThunk(
    'vendor/sortBook',
+
    async ({ value, pageNumber, pageSize, vendorId }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(

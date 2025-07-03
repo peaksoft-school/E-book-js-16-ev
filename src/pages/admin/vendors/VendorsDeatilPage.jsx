@@ -7,18 +7,17 @@ import {
    Tabs,
    Tab,
    MenuItem,
-   Menu,
    Pagination,
    Select,
    FormControl,
+   useMediaQuery,
+   useTheme,
 } from '@mui/material'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Modal from '../../../components/UI/Modal'
 import Button from '../../../components/UI/buttons/Button'
 import SmallBasketCard from '../../../components/UI/cards/SmallBasketCard'
 import notify from '../../../utils/helpers/notify'
-import Loading from '../../../components/UI/Loading'
-import { Icons } from '../../../assets/icons/index'
 import {
    deleteVendor,
    findVendorById,
@@ -26,23 +25,26 @@ import {
 } from '../../../store/admin/vendors/vendorThunk'
 import { useEffect, useState } from 'react'
 import { BOOK_FILTER } from '../../../utils/helpers/index'
+import { Icons } from '../../../assets/icons/index'
 
 const VendorsDetailtPage = () => {
-   const { id } = useParams()
-   const navigate = useNavigate()
-   const dispatch = useDispatch()
-
-   const { selectedVendor, isLoading, error, vendorBooks } = useSelector(
-      (state) => state.vendor
-   )
-
    const [tabValue, setTabValue] = useState(0)
-   const [anchorEl, setAnchorEl] = useState(null)
    const [isModalOpen, setIsModalOpen] = useState(false)
    const [currentBookPage, setCurrentBookPage] = useState(1)
    const [booksPerPage] = useState(8)
-   const [openFormat, setOpenFormat] = useState(false)
-   const [format, setFormat] = useState('')
+   const [openFilterSelect, setOpenFilterSelect] = useState(false)
+   const [selectedBookFilter, setSelectedBookFilter] = useState('все')
+
+   const { id } = useParams()
+   const navigate = useNavigate()
+   const dispatch = useDispatch()
+   const theme = useTheme()
+   const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
+   const isMedium = useMediaQuery(theme.breakpoints.down('md'))
+
+   const { selectedVendor, isLoading, vendorBooks } = useSelector(
+      (state) => state.vendor
+   )
 
    useEffect(() => {
       if (id) {
@@ -57,28 +59,29 @@ const VendorsDetailtPage = () => {
                vendorId: id,
                pageNumber: currentBookPage,
                pageSize: booksPerPage,
+               filterType:
+                  selectedBookFilter !== 'все' ? selectedBookFilter : '',
             })
          )
       }
-   }, [dispatch, id, tabValue, currentBookPage, booksPerPage])
+   }, [
+      dispatch,
+      id,
+      tabValue,
+      currentBookPage,
+      booksPerPage,
+      selectedBookFilter,
+   ])
 
    const handleTabChange = (event, newValue) => {
       setTabValue(newValue)
       if (newValue === 1) {
          setCurrentBookPage(1)
+         setSelectedBookFilter('все')
       }
    }
 
-   const handleFilterMenuClick = (event) => {
-      setAnchorEl(event.currentTarget)
-   }
-
-   const handleFilterMenuClose = () => {
-      setAnchorEl(null)
-   }
-
-   const handleDeleteProfileClick = (vendorId) => {
-      dispatch(deleteVendor({ vendorId: selectedVendor.vendorId }))
+   const handleDeleteProfileClick = () => {
       setIsModalOpen(true)
    }
 
@@ -87,205 +90,176 @@ const VendorsDetailtPage = () => {
    }
 
    const handleConfirmDelete = () => {
-      setIsModalOpen(false)
-      navigate('/admin/vendors')
-      notify({ message: 'Успешно удалено' })
+      dispatch(deleteVendor({ vendorId: selectedVendor.vendorId })).then(() => {
+         setIsModalOpen(false)
+         navigate('/admin/vendors')
+         notify({ message: 'Успешно удалено' })
+      })
    }
 
    const handleBookPageChange = (event, value) => {
       setCurrentBookPage(value)
    }
-   const handleFormatChange = (event) => {
-      const value = event.target.value
-      setFormat(value)
 
+   const handleBookFilterChange = (event) => {
+      const value = event.target.value
+      setSelectedBookFilter(value)
+      setCurrentBookPage(1)
       dispatch(
          getAllVendorBooks({
             vendorId: id,
             pageNumber: 1,
             pageSize: booksPerPage,
-            type: value || undefined,
+            filterType: value !== 'все' ? value : '',
          })
       )
    }
+
+   const DownIcon = () => (
+      <img
+         src={Icons.down}
+         alt="down arrow"
+         style={{ width: 16, height: 16 }}
+      />
+   )
+
+   const UpIcon = () => (
+      <img src={Icons.up} alt="up arrow" style={{ width: 16, height: 16 }} />
+   )
 
    return (
       <PageWrapper>
          <ContentBox>
             <Breadcrumbs>
                <Typography variant="body2" color="text.secondary">
-                  Продавцы /{' '}
+                  Продавцы /
                </Typography>
                <Typography variant="body2" fontWeight={500}>
                   {isLoading
                      ? 'Загрузка...'
                      : selectedVendor
                        ? `${selectedVendor.firstName} ${selectedVendor.lastName}`
-                       : 'Не найден'}{' '}
+                       : 'Не найден'}
                </Typography>
             </Breadcrumbs>
 
-            {isLoading && tabValue === 0 && (
-               <LoadingContainer>
-                  <Loading />
-                  <Typography>Загрузка данных профиля...</Typography>
-               </LoadingContainer>
+            <StyledTabs
+               value={tabValue}
+               onChange={handleTabChange}
+               variant={isSmall ? 'fullWidth' : 'standard'}
+               aria-label="profile and books tabs"
+            >
+               <Tab label="Профиль" />
+               <Tab label="Книги" />
+            </StyledTabs>
+
+            {tabValue === 0 && (
+               <ProfileContentWrapper>
+                  <ProfileDetailsGrid>
+                     <ProfileRow>
+                        <Typography variant="body1" fontWeight={500}>
+                           Имя
+                        </Typography>
+                        <Typography variant="body1">
+                           {selectedVendor?.firstName}
+                        </Typography>
+                     </ProfileRow>
+                     <ProfileRow>
+                        <Typography variant="body1" fontWeight={500}>
+                           Фамилия
+                        </Typography>
+                        <Typography variant="body1">
+                           {selectedVendor?.lastName}
+                        </Typography>
+                     </ProfileRow>
+                     <ProfileRow>
+                        <Typography variant="body1" fontWeight={500}>
+                           Номер телефона
+                        </Typography>
+                        <Typography variant="body1">
+                           {selectedVendor?.phoneNumber}
+                        </Typography>
+                     </ProfileRow>
+                     <ProfileRow>
+                        <Typography variant="body1" fontWeight={500}>
+                           Email
+                        </Typography>
+                        <Typography variant="body1">
+                           {selectedVendor?.email}
+                        </Typography>
+                     </ProfileRow>
+                     <ProfileRow>
+                        <Typography variant="body1" fontWeight={500}>
+                           Дата регистрации
+                        </Typography>
+                        <Typography variant="body1">
+                           {selectedVendor?.dateOfRegistration}
+                        </Typography>
+                     </ProfileRow>
+                  </ProfileDetailsGrid>
+                  <DeleteProfileText onClick={handleDeleteProfileClick}>
+                     Удалить профиль
+                  </DeleteProfileText>
+               </ProfileContentWrapper>
             )}
-            {error && tabValue === 0 && (
-               <ErrorContainer>
-                  <Typography>Ошибка при загрузке профиля: {error}</Typography>
-               </ErrorContainer>
-            )}
 
-            {!isLoading && !error && !selectedVendor && (
-               <NoDataContainer>
-                  <Typography>Продавец с ID {id} не найден.</Typography>
-               </NoDataContainer>
-            )}
-
-            {!isLoading && !error && selectedVendor && (
-               <>
-                  <StyledTabs
-                     value={tabValue}
-                     onChange={handleTabChange}
-                     aria-label="profile and books tabs"
-                  >
-                     <Tab label="Профиль" />
-                     <Tab label="Книги" />
-                  </StyledTabs>
-
-                  {tabValue === 0 && (
-                     <ProfileContentWrapper>
-                        <ProfileDetailsGrid>
-                           <ProfileRow>
-                              <Typography variant="body1" fontWeight={500}>
-                                 Имя
-                              </Typography>
-                              <Typography variant="body1">
-                                 {selectedVendor.firstName}
-                              </Typography>
-                           </ProfileRow>
-                           <ProfileRow>
-                              <Typography variant="body1" fontWeight={500}>
-                                 Фамилия
-                              </Typography>
-                              <Typography variant="body1">
-                                 {selectedVendor.lastName}
-                              </Typography>
-                           </ProfileRow>
-                           <ProfileRow>
-                              <Typography variant="body1" fontWeight={500}>
-                                 Номер телефона
-                              </Typography>
-                              <Typography variant="body1">
-                                 {selectedVendor.phoneNumber}
-                              </Typography>
-                           </ProfileRow>
-                           <ProfileRow>
-                              <Typography variant="body1" fontWeight={500}>
-                                 Email
-                              </Typography>
-                              <Typography variant="body1">
-                                 {selectedVendor.email}
-                              </Typography>
-                           </ProfileRow>
-                           <ProfileRow>
-                              <Typography variant="body1" fontWeight={500}>
-                                 Дата регистрации
-                              </Typography>
-                              <Typography variant="body1">
-                                 {selectedVendor.dateOfRegistration}
-                              </Typography>
-                           </ProfileRow>
-                        </ProfileDetailsGrid>
-
-                        <DeleteProfileText onClick={handleDeleteProfileClick}>
-                           Удалить профиль
-                        </DeleteProfileText>
-                     </ProfileContentWrapper>
-                  )}
-
-                  {tabValue === 1 && (
-                     <BooksTabContentWrapper>
-                        <BooksHeader>
-                           <StyledTypography variant="body1" fontWeight={500}>
-                              Всего {vendorBooks?.totalElements || 0} книг
-                           </StyledTypography>
-                           <NoBorderFormControl>
-                              <CustomSelect
-                                 value={format}
-                                 onChange={handleFormatChange}
-                                 displayEmpty
-                                 onOpen={() => setOpenFormat(true)}
-                                 onClose={() => setOpenFormat(false)}
-                                 renderValue={(selected) => {
-                                    if (selected === '') return <>Все</>
-                                    const found = BOOK_FILTER.find(
-                                       (f) => f.value === selected
-                                    )
-                                    return found ? found.label : 'Тип'
-                                 }}
+            {tabValue === 1 && (
+               <BooksTabContentWrapper>
+                  <BooksHeader>
+                     <StyledTypography variant="body1" fontWeight={500}>
+                        Всего {vendorBooks?.totalElements || 0} книг
+                     </StyledTypography>
+                     <NoBorderFormControl>
+                        <CustomSelect
+                           value={selectedBookFilter}
+                           onChange={handleBookFilterChange}
+                           displayEmpty
+                           onOpen={() => setOpenFilterSelect(true)}
+                           onClose={() => setOpenFilterSelect(false)}
+                           IconComponent={openFilterSelect ? UpIcon : DownIcon}
+                           renderValue={(selected) => {
+                              if (selected === '') return <>Все</>
+                              const found = BOOK_FILTER.find(
+                                 (f) => f.value === selected
+                              )
+                              return found ? found.label : 'Все'
+                           }}
+                        >
+                           {BOOK_FILTER.map((f) => (
+                              <MenuItem
+                                 key={f.value}
+                                 value={f.value}
+                                 sx={{ pl: 3 }}
                               >
-                                 <MenuItem value="">Все</MenuItem>
-                                 {BOOK_FILTER.map((f) => (
-                                    <MenuItem key={f.value} value={f.value}>
-                                       {f.label}
-                                    </MenuItem>
-                                 ))}
-                              </CustomSelect>
-                           </NoBorderFormControl>
-
-                           <MoreVertIcon />
-                        </BooksHeader>
-
-                        {vendorBooks?.isLoading ? (
-                           <LoadingContainer>
-                              <Loading />
-                              <Typography>Загрузка книг...</Typography>
-                           </LoadingContainer>
-                        ) : vendorBooks?.error ? (
-                           <ErrorContainer>
-                              <Typography>
-                                 Ошибка при загрузке книг: {vendorBooks?.error}
-                              </Typography>
-                           </ErrorContainer>
-                        ) : vendorBooks?.content?.length === 0 ? (
-                           <NoDataContainer>
-                              <Typography>
-                                 У этого продавца пока нет книг.
-                              </Typography>
-                           </NoDataContainer>
-                        ) : (
-                           <>
-                              <BookGrid>
-                                 {vendorBooks?.content?.map((book) => (
-                                    <SmallBasketCard
-                                       key={book.bookItemId}
-                                       book={book}
-                                    />
-                                 ))}
-                              </BookGrid>
-                              {vendorBooks?.totalPages > 1 && (
-                                 <PaginationContainer>
-                                    <Pagination
-                                       count={vendorBooks?.totalPages || 1}
-                                       page={currentBookPage}
-                                       onChange={handleBookPageChange}
-                                       color="primary"
-                                       size="large"
-                                       showFirstButton
-                                       showLastButton
-                                    />
-                                 </PaginationContainer>
-                              )}
-                           </>
-                        )}
-                        <DeleteProfileText onClick={handleDeleteProfileClick}>
-                           Удалить профиль
-                        </DeleteProfileText>
-                     </BooksTabContentWrapper>
+                                 {f.label}
+                              </MenuItem>
+                           ))}
+                        </CustomSelect>
+                     </NoBorderFormControl>
+                     <MoreVertIcon />
+                  </BooksHeader>
+                  <BookGrid isSmall={isSmall} isMedium={isMedium}>
+                     {vendorBooks?.content?.map((book) => (
+                        <SmallBasketCard key={book.bookItemId} book={book} />
+                     ))}
+                  </BookGrid>
+                  {vendorBooks?.totalPages > 1 && (
+                     <PaginationContainer>
+                        <Pagination
+                           count={vendorBooks?.totalPages || 1}
+                           page={currentBookPage}
+                           onChange={handleBookPageChange}
+                           color="primary"
+                           size="large"
+                           showFirstButton
+                           showLastButton
+                        />
+                     </PaginationContainer>
                   )}
-               </>
+                  <DeleteProfileText onClick={handleDeleteProfileClick}>
+                     Удалить профиль
+                  </DeleteProfileText>
+               </BooksTabContentWrapper>
             )}
 
             <Modal open={isModalOpen} handleClose={handleCloseModal}>
@@ -412,7 +386,6 @@ const BooksHeader = styled(Box)({
    justifyContent: 'space-between',
    alignItems: 'center',
    marginBottom: '20px',
-   backgroundColor: 'red',
 })
 
 const BookGrid = styled(Box)({
@@ -430,25 +403,6 @@ const LoadingContainer = styled(Box)({
    minHeight: '200px',
    gap: '10px',
    color: '#1976d2',
-})
-
-const ErrorContainer = styled(Box)({
-   display: 'flex',
-   justifyContent: 'center',
-   alignItems: 'center',
-   minHeight: '200px',
-   color: 'red',
-   fontSize: '1.2rem',
-   fontWeight: 'bold',
-})
-
-const NoDataContainer = styled(Box)({
-   display: 'flex',
-   alignItems: 'center',
-   minHeight: '200px',
-   color: '#757575',
-   fontSize: '1.2rem',
-   marginLeft: '400px',
 })
 
 const PaginationContainer = styled(Box)({
@@ -485,8 +439,8 @@ const CustomSelect = styled(Select)(() => ({
       position: 'relative',
    },
    '& .MuiSelect-select': {
-      paddingRight: '9px !important',
-      fontSize: 16,
+      paddingRight: '7px !important',
+      fontSize: 18,
       width: 'auto',
       display: 'inline-flex',
       alignItems: 'center',
@@ -510,4 +464,5 @@ const CustomSelect = styled(Select)(() => ({
 const NoBorderFormControl = styled(FormControl)(() => ({
    minWidth: 100,
    borderBottom: 'none',
+   marginRight: -600,
 }))
