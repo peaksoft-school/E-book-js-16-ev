@@ -8,12 +8,12 @@ import { toast } from 'react-toastify'
 import {
    deleteUser,
    getClientById,
-} from '../../../store/slices/admin/usersThunk'
+} from '../../../store/admin/users/usersThunk'
 import {
    getClientFavoriteHistoryAction,
    getClientPurchaseHistoryAction,
    getClinetBasketHistoryAction,
-} from '../../../store/slices/admin/historyActionThunk'
+} from '../../../store/admin/users/historyActionThunk'
 
 const filterOptionPurchasedStyle = (activeFilter) => ({
    color: activeFilter === 'purchased' ? '#F34901' : 'inherit',

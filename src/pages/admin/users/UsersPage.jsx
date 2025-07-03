@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import Table from '../../../components/UI/Table'
-import { deleteUser, getAllUsers } from '../../../store/slices/admin/usersThunk'
+import { deleteUser, getAllUsers } from '../../../store/admin/users/usersThunk'
 import { Pagination, Typography, Box, styled } from '@mui/material'
 import Loading from '../../../components/UI/Loading'
 
