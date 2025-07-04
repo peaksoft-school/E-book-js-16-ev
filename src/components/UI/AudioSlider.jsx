@@ -62,7 +62,7 @@ const AudioSlider = ({ audiobooks, onButtonClick }) => {
 export default AudioSlider
 
 const StyledCard = styled(Card)(({ theme }) => ({
-   width: '309px',
+   width: '308px',
    borderRadius: '0px',
    position: 'relative',
    overflow: 'hidden',
