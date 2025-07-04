@@ -6,6 +6,7 @@ import Loading from '../components/UI/Loading'
 import Books from '../pages/admin/books/Books'
 import AddBook from '../pages/admin/books/AddBook'
 import UploadBook from '../pages/admin/books/UploadBook'
+import VendorProfilePage from '../pages/vendor/VendorProfilePage'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))
@@ -114,7 +115,9 @@ const AppRouter = () => (
                fallbackPath={'/'}
             />
          }
-      />
+      >
+         <Route path="profile" element={<VendorProfilePage />} />
+      </Route>
 
       <Route path="*" element="Not found" />
    </Routes>

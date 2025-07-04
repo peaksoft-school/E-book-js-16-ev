@@ -1,7 +1,6 @@
 import './App.css'
-import VendorProfilePage from './pages/vendor/VendorProfilePage'
 import AppRouter from './routes/AppRouter'
 
-const App = () => <VendorProfilePage />
+const App = () => <AppRouter />
 
 export default App
