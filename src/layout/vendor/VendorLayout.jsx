@@ -1,19 +1,49 @@
-import { Box, Container, Tooltip, useTheme } from '@mui/material'
+import {
+   Box,
+   Menu,
+   MenuItem,
+   Tooltip,
+   useTheme,
+   Avatar,
+   Typography,
+} from '@mui/material'
+import MuiButton from '@mui/material/Button'
 import Input from '../../components/UI/Input'
 import { Icons } from '../../assets/icons'
 import Button from '../../components/UI/buttons/Button'
 import { styled, tooltipClasses } from '@mui/material'
 import { useDispatch } from 'react-redux'
-import { Outlet } from 'react-router'
+import { Outlet, useNavigate } from 'react-router'
 import VendorFooter from '../VendorFooter'
-
+import { useState } from 'react'
+import PersonIcon from '@mui/icons-material/Person'
+import { AUTH_ACTION } from '../../store/slices/authSlice'
 
 const VendorLayout = () => {
+   const [anchorEl, setAnchorEl] = useState(null)
+   const open = Boolean(anchorEl)
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const theme = useTheme()
 
    const handleLogout = () => {
       dispatch(AUTH_ACTION.logOut())
+   }
+
+   const handleClick = (event) => {
+      setAnchorEl(event.currentTarget)
+   }
+
+   const handleClose = () => {
+      setAnchorEl(null)
+   }
+
+   const handleMenuOpen = (event) => {
+      setAnchorEl(event.currentTarget)
+   }
+
+   const handleMenuClose = () => {
+      setAnchorEl(null)
    }
 
    return (
@@ -21,7 +51,10 @@ const VendorLayout = () => {
          <StyledHeader>
             <StyledBox1>
                <img src={Icons.eBook} alt="logo" />
-               <Input width='895px' placeholder="Искать жанр, книги, авторов, издательства... " />
+               <Input
+                  width="895px"
+                  placeholder="Искать жанр, книги, авторов, издательства... "
+               />
                <Box
                   component="img"
                   src={Icons.ball}
@@ -32,55 +65,60 @@ const VendorLayout = () => {
                      cursor: 'pointer',
                   }}
                />
-                  <Box display="flex" flexDirection="column" alignItems="center">
-      <IconButton onClick={handleClick}>
-        <PersonIcon />
-      </IconButton>
-      <IconButton onClick={handleClick} size="small">
-        <ExpandMoreIcon />
-      </IconButton>
+               <Box >
+                  <StyledButton
+                     aria-label="settings"
+                     size="small"
+                     onClick={handleMenuOpen}
+                  >
+                     <Avatar sx={{ bgcolor: '#ddd', width: 40, height: 40 }}>
+                        <PersonIcon sx={{ color: '#777' }} />
+                     </Avatar>
+                     <Box component="img" src={Icons.down} alt="down"></Box>
+                  </StyledButton>
 
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <MenuItem onClick={handleClose}>Профиль</MenuItem>
-        <MenuItem onClick={handleClose}>Выйти</MenuItem>
-      </Menu>
-    </Box>
+                  <Menu
+                     anchorEl={anchorEl}
+                     open={open}
+                     onClose={handleMenuClose}
+                     disableScrollLock 
+                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  >
+                     <MenuItem onClick={handleClose}>Профиль</MenuItem>
+                     <MenuItem onClick={handleLogout}>Выйти</MenuItem>
+                  </Menu>
+               </Box>
             </StyledBox1>
             <StyledBox2>
-              <Box className='block1'>
-                <Button variant="outlined">Создать промокод</Button>
-               <StyledTooltip
-                  title="Промокод применится ко всем вашим книгам"
-                  arrow
-               >
-                  <Box
-                     component="img"
-                     src={Icons.excl}
-                     alt="!"
-                     sx={{
-                        width: 24,
-                        height: 24,
-                        border: '0',
-
-                     }}
-                  />
-               </StyledTooltip>
-              </Box>
+               <Box className="block1">
+                  <Button variant="outlined">Создать промокод</Button>
+                  <StyledTooltip
+                     title="Промокод применится ко всем вашим книгам"
+                     placement="bottom-start"
+                     arrow
+                  >
+                     <Box
+                        component="img"
+                        src={Icons.exclg}
+                        alt="!"
+                        sx={{
+                           width: 24,
+                           height: 24,
+                           border: '0',
+                        }}
+                     />
+                  </StyledTooltip>
+               </Box>
                <Button variant="add" icon>
                   Добавить книгу
                </Button>
             </StyledBox2>
          </StyledHeader>
-          <Box sx={{ flex: 1 }}>
-      <Outlet />
-    </Box>
-         <VendorFooter/>
+         <Box sx={{ flex: 1 }}>
+            <Outlet />
+         </Box>
+         <VendorFooter />
       </StyledContainer>
    )
 }
@@ -106,15 +144,14 @@ const StyledTooltip = styled(({ className, ...props }) => (
          boxSizing: 'border-box',
       },
    },
-}));
+}))
 
 const StyledBox1 = styled(Box)({
    display: 'flex',
-gap: 45,
-textAlign: 'center',
-justifyContent: 'center',
-alignItems: 'center',
-
+   gap: 45,
+   textAlign: 'center',
+   justifyContent: 'center',
+   alignItems: 'center',
 })
 
 const StyledBox2 = styled(Box)({
@@ -125,23 +162,27 @@ const StyledBox2 = styled(Box)({
       display: 'flex',
       alignItems: 'center',
       gap: '20px',
-   }
-
+   },
 })
 
 const StyledContainer = styled(Box)({
    display: 'flex',
    flexDirection: 'column',
    minHeight: '100vh',
- 
-
 })
 
-const StyledHeader  =styled(Box)({
+const StyledHeader = styled(Box)({
    display: 'flex',
    flexDirection: 'column',
- gap: 40,
-  paddingRight: 100,
+   gap: 40,
+   paddingRight: 100,
    paddingLeft: 100,
+})
 
+const StyledButton = styled(MuiButton)({
+   color: '#B4B4B4',
+   textTransform: 'none',
+   display: 'flex',
+   alignItems: 'center',
+   // gap: 8,
 })

@@ -4,7 +4,6 @@ const BASE_URL = 'http://35.159.168.248'
 
 export const axiosInstance = axios.create({
    baseURL: BASE_URL,
-
    headers: {
       'Content-Type': 'application/json',
    },
@@ -30,18 +29,10 @@ axiosInstance.interceptors.request.use(
 
       return updateConfig
    },
-
-   (error) => {
-      return Promise.reject(error)
-   }
+   (error) => Promise.reject(error)
 )
 
 axiosInstance.interceptors.response.use(
-   (response) => {
-      return Promise.resolve(response)
-   },
-
-   (error) => {
-      return Promise.reject(error)
-   }
+   (response) => response,
+   (error) => Promise.reject(error)
 )
