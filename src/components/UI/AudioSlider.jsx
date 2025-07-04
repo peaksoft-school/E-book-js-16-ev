@@ -1,5 +1,3 @@
-import React from 'react'
-import { styled } from '@mui/material/styles'
 import {
    Card,
    CardMedia,
@@ -8,6 +6,7 @@ import {
    Grid,
    Box,
    Button,
+   styled,
 } from '@mui/material'
 
 const AudiobookCard = ({ book }) => (
