@@ -8,16 +8,12 @@ import {
    Button,
    styled,
 } from '@mui/material'
+import { Icons } from '../../assets/icons'
 
 const AudiobookCard = ({ book }) => (
    <StyledCard>
       <StyledCardMedia image={book.image} title={book.title} />
-      {book.isNew && (
-         <NewRibbon
-            src="https://knews.kg/wp-content/uploads/2017/03/knigi.jpg"
-            alt="Новинка"
-         />
-      )}
+      {book.isNew && <NewRibbon src={Icons.knew} alt="Новинка" />}
 
       <CardContentWrapper>
          <BookTitle>{book.title}</BookTitle>
@@ -84,8 +80,8 @@ const StyledCardMedia = styled(CardMedia)({
 
 const NewRibbon = styled('img')({
    position: 'absolute',
-   top: '0px',
-   right: '0px',
+   top: '120px',
+   right: '-10px',
    width: '120px',
    height: '120px',
    objectFit: 'contain',
