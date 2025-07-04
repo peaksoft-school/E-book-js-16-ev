@@ -1,20 +1,14 @@
-import { useDispatch } from 'react-redux'
 import { Outlet } from 'react-router'
-import { AUTH_ACTION } from '../../store/slices/authSlice'
+import VendorHeader from './VendorHeder'
+import VendorFooter from '../VendorFooter'
 
 const VendorLayout = () => {
-   const dispatch = useDispatch()
-
-   const handleLogout = () => {
-      dispatch(AUTH_ACTION.logOut())
-   }
-
    return (
-      <div>
-         <h1>Vendor</h1>
-         <button onClick={handleLogout}>Выйти</button>
+      <>
+         <VendorHeader />
          <Outlet />
-      </div>
+         <VendorFooter />
+      </>
    )
 }
 

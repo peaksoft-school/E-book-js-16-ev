@@ -73,6 +73,8 @@ const VendorProfilePage = () => {
                })
                setValidationErrors(errors)
             })
+
+         notify({ message: 'Успешно обнавлено' })
       },
       [
          currentPassword,
@@ -104,115 +106,132 @@ const VendorProfilePage = () => {
    }
 
    return (
-      <StyledForm onSubmit={handleSubmit}>
-         <FormWrapper>
-            <StyledLeftForm>
-               <StyledText>Личная информация</StyledText>
-               <Input
-                  type="info"
-                  placeholder="Напишите ваше имя"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  label="Ваше имя"
-                  error={Boolean(validationErrors.firstName)}
-                  helperText={validationErrors.firstName}
-               />
-               <Input
-                  type="info"
-                  placeholder="Введите вашу фамилию"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  label="Ваша фамилия"
-                  error={Boolean(validationErrors.lastName)}
-                  helperText={validationErrors.lastName}
-               />
-               <Input
-                  type="info"
-                  placeholder="+996 (___) __ __ __"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  label="Номер телефона"
-                  error={Boolean(validationErrors.phoneNumber)}
-                  helperText={validationErrors.phoneNumber}
-               />
-               <Input
-                  type="info"
-                  placeholder="Напишите email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  label="Email"
-                  error={Boolean(validationErrors.email)}
-                  helperText={validationErrors.email}
-               />
-               <StyledDeleteText onClick={handleDeleteProfileClick}>
-                  Удалить профиль?
-               </StyledDeleteText>
-            </StyledLeftForm>
+      <Box
+         sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+         }}
+      >
+         <StyledForm onSubmit={handleSubmit}>
+            <FormWrapper>
+               <StyledLeftForm>
+                  <StyledText>Личная информация</StyledText>
+                  <Input
+                     type="info"
+                     placeholder="Напишите ваше имя"
+                     value={firstName}
+                     onChange={(e) => setFirstName(e.target.value)}
+                     label="Ваше имя"
+                     error={Boolean(validationErrors.firstName)}
+                     helperText={validationErrors.firstName}
+                  />
+                  <Input
+                     type="info"
+                     placeholder="Введите вашу фамилию"
+                     value={lastName}
+                     onChange={(e) => setLastName(e.target.value)}
+                     label="Ваша фамилия"
+                     error={Boolean(validationErrors.lastName)}
+                     helperText={validationErrors.lastName}
+                  />
+                  <Input
+                     type="info"
+                     placeholder="+996 (___) __ __ __"
+                     value={phoneNumber}
+                     onChange={(e) => setPhoneNumber(e.target.value)}
+                     label="Номер телефона"
+                     error={Boolean(validationErrors.phoneNumber)}
+                     helperText={validationErrors.phoneNumber}
+                  />
+                  <Input
+                     type="info"
+                     placeholder="Напишите email"
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
+                     label="Email"
+                     error={Boolean(validationErrors.email)}
+                     helperText={validationErrors.email}
+                  />
+                  <StyledDeleteText onClick={handleDeleteProfileClick}>
+                     Удалить профиль?
+                  </StyledDeleteText>
+               </StyledLeftForm>
 
-            <StyledRightForm>
-               <StyledText>Изменить пароль</StyledText>
-               <Input
-                  type="password"
-                  placeholder="Напишите текущий пароль"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  label="Текущий пароль"
-                  error={Boolean(validationErrors.currentPassword)}
-                  helperText={validationErrors.currentPassword}
-               />
-               <Input
-                  type="password"
-                  placeholder="Напишите новый пароль"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  label="Новый пароль"
-                  error={Boolean(validationErrors.newPassword)}
-                  helperText={validationErrors.newPassword}
-               />
-               <Input
-                  type="password"
-                  placeholder="Подтвердите пароль"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  label="Подтвердите пароль*"
-                  InputLabelProps={{ sx: { color: '#ca3c3c' } }}
-                  error={Boolean(validationErrors.confirmPassword)}
-                  helperText={validationErrors.confirmPassword}
-               />
-            </StyledRightForm>
-         </FormWrapper>
+               <StyledRightForm>
+                  <StyledText>Изменить пароль</StyledText>
+                  <Input
+                     type="password"
+                     placeholder="Напишите текущий пароль"
+                     value={currentPassword}
+                     onChange={(e) => setCurrentPassword(e.target.value)}
+                     label="Текущий пароль"
+                     error={Boolean(validationErrors.currentPassword)}
+                     helperText={validationErrors.currentPassword}
+                  />
+                  <Input
+                     type="password"
+                     placeholder="Напишите новый пароль"
+                     value={newPassword}
+                     onChange={(e) => setNewPassword(e.target.value)}
+                     label="Новый пароль"
+                     error={Boolean(validationErrors.newPassword)}
+                     helperText={validationErrors.newPassword}
+                  />
+                  <Input
+                     type="password"
+                     placeholder="Подтвердите пароль"
+                     value={confirmPassword}
+                     onChange={(e) => setConfirmPassword(e.target.value)}
+                     label="Подтвердите пароль*"
+                     InputLabelProps={{ sx: { color: '#ca3c3c' } }}
+                     error={Boolean(validationErrors.confirmPassword)}
+                     helperText={validationErrors.confirmPassword}
+                  />
+               </StyledRightForm>
+            </FormWrapper>
 
-         <ButtonWrapper>
-            <StyledCencelButton variant="outlined">Отменить</StyledCencelButton>
-            <StyledSaveButton type="submit" variant="contained">
-               Сохранить
-            </StyledSaveButton>
-         </ButtonWrapper>
-         <Modal open={isModalOpen} handleClose={handleCloseModal}>
-            <ModalContentWrapper>
-               <Typography sx={{ mt: 2 }}>
-                  Вы уверены, что хотите удалить профиль?
-               </Typography>
-               <ModalActions>
-                  <StyledButton onClick={handleCloseModal}>Отмена</StyledButton>
-                  <Button
-                     onClick={handleConfirmDelete}
-                     color="error"
-                     variant="contained"
-                  >
-                     Удалить
-                  </Button>
-               </ModalActions>
-            </ModalContentWrapper>
-         </Modal>
-      </StyledForm>
+            <ButtonWrapper>
+               <StyledCencelButton variant="outlined">
+                  Отменить
+               </StyledCencelButton>
+               <StyledSaveButton type="submit" variant="contained">
+                  Сохранить
+               </StyledSaveButton>
+            </ButtonWrapper>
+            <Modal open={isModalOpen} handleClose={handleCloseModal}>
+               <ModalContentWrapper>
+                  <Typography sx={{ mt: 2 }}>
+                     Вы уверены, что хотите удалить профиль?
+                  </Typography>
+                  <ModalActions>
+                     <StyledButton onClick={handleCloseModal}>
+                        Отмена
+                     </StyledButton>
+                     <Button
+                        onClick={handleConfirmDelete}
+                        color="black"
+                        variant="contained"
+                     >
+                        Удалить
+                     </Button>
+                  </ModalActions>
+               </ModalContentWrapper>
+            </Modal>
+         </StyledForm>
+      </Box>
    )
 }
 
 export default VendorProfilePage
 
 const StyledForm = styled('form')({
-   margin: '10px',
+   width: '100%',
+   maxWidth: '1250px',
+   backgroundColor: '#fff',
+   padding: '32px',
+   borderRadius: '8px',
+   boxShadow: 'none',
 })
 
 const StyledRightForm = styled(Box)({
@@ -233,6 +252,7 @@ const FormWrapper = styled(Box)({
    width: '100%',
    display: 'flex',
    gap: '160px',
+   margin: '60px auto',
 })
 
 const ButtonWrapper = styled(Box)({
@@ -252,7 +272,7 @@ const StyledText = styled(Typography)({
 const StyledDeleteText = styled(Typography)({
    marginBottom: '40px',
    color: 'red',
-   marginTop: '64px',
+   marginTop: '10px',
 })
 
 const StyledSaveButton = styled(Button)({
