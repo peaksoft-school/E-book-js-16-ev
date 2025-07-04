@@ -1,56 +1,107 @@
 import { Typography, Box, styled, Button } from '@mui/material'
 import Input from '../../components/UI/Input'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { VALIDATION_SCHEMA_UPDATE_PROFILE } from '../../utils/helpers/validate'
+import {
+   deletedProfileByVendor,
+   updatePasswordForVendor,
+   updateProfileVendor,
+} from '../../store/vendor/profile/vendorProfileThunk'
+import notify from '../../utils/helpers/notify'
+import Modal from '../../components/UI/Modal'
+import { AUTH_ACTION } from '../../store/slices/authSlice'
 
 const VendorProfilePage = () => {
    const [email, setEmail] = useState('')
    const [lastName, setLastName] = useState('')
    const [firstName, setFirstName] = useState('')
-   const [сurrentPassword, setСurrentPassword] = useState('')
+   const [currentPassword, setCurrentPassword] = useState('')
    const [newPassword, setNewPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
    const [phoneNumber, setPhoneNumber] = useState('')
    const [validationErrors, setValidationErrors] = useState({})
+   const [isModalOpen, setIsModalOpen] = useState(false)
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const { error } = useSelector((state) => state.vendorProfile)
+   const { error, successMessage, isLoading } = useSelector(
+      (state) => state.vendorProfile
+   )
 
-   const handleFirstNameChange = (e) => setFirstName(e.target.value)
-   const handleLastNameChange = (e) => setLastName(e.target.value)
-   const handlePhoneNumberChange = (e) => setPhoneNumber(e.target.value)
-   const handleEmailChange = (e) => setEmail(e.target.value)
-   const handleCurrentPasswordChange = (e) => setСurrentPassword(e.target.value)
-   const handleNewPasswordChange = (e) => setNewPassword(e.target.value)
-   const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value)
+   const handleSubmit = useCallback(
+      (e) => {
+         e.preventDefault()
+         setValidationErrors({})
 
-   const handleSubmit = useCallback(() => {
-      setValidationErrors({})
+         VALIDATION_SCHEMA_UPDATE_PROFILE.validate(
+            {
+               currentPassword,
+               newPassword,
+               confirmPassword,
+               firstName,
+               lastName,
+               phoneNumber,
+               email,
+            },
+            { abortEarly: false }
+         )
+            .then(() => {
+               if (currentPassword && newPassword) {
+                  dispatch(
+                     updatePasswordForVendor({
+                        currentPassword,
+                        newPassword,
+                     })
+                  )
+               }
 
-      VALIDATION_SCHEMA_UPDATE_PROFILE.validate(
-         { сurrentPassword, newPassword, confirmPassword },
-         { abortEarly: false }
-      )
-         .then(() => {
-            dispatch(
-               resetPassword({
-                  сurrentPassword,
-                  newPassword,
-                  confirmPassword,
-               })
-            )
-         })
-         .catch((validationErr) => {
-            const errors = {}
-            validationErr.inner.forEach((err) => {
-               errors[err.path] = err.message
+               dispatch(
+                  updateProfileVendor({
+                     firstName,
+                     lastName,
+                     phoneNumber,
+                     email,
+                  })
+               )
             })
-            setValidationErrors(errors)
-         })
-   }, [сurrentPassword, newPassword, confirmPassword, dispatch])
+            .catch((validationErr) => {
+               const errors = {}
+               validationErr.inner.forEach((err) => {
+                  errors[err.path] = err.message
+               })
+               setValidationErrors(errors)
+            })
+      },
+      [
+         currentPassword,
+         newPassword,
+         confirmPassword,
+         firstName,
+         lastName,
+         phoneNumber,
+         email,
+         dispatch,
+      ]
+   )
+
+   const handleDeleteProfileClick = () => {
+      setIsModalOpen(true)
+   }
+
+   const handleCloseModal = () => {
+      setIsModalOpen(false)
+   }
+
+   const handleConfirmDelete = () => {
+      dispatch(deletedProfileByVendor()).then(() => {
+         setIsModalOpen(false)
+         navigate('/')
+         dispatch(AUTH_ACTION.logOut())
+         notify({ message: 'Успешно удалено' })
+      })
+   }
 
    return (
       <StyledForm onSubmit={handleSubmit}>
@@ -61,25 +112,25 @@ const VendorProfilePage = () => {
                   type="info"
                   placeholder="Напишите ваше имя"
                   value={firstName}
-                  onChange={handleFirstNameChange}
+                  onChange={(e) => setFirstName(e.target.value)}
                   label="Ваше имя"
-                  // error={Boolean(validationErrors.firstName)}
-                  // helperText={validationErrors.firstName}
+                  error={Boolean(validationErrors.firstName)}
+                  helperText={validationErrors.firstName}
                />
                <Input
                   type="info"
                   placeholder="Введите вашу фамилию"
                   value={lastName}
-                  onChange={handleLastNameChange}
+                  onChange={(e) => setLastName(e.target.value)}
                   label="Ваша фамилия"
-                  // error={Boolean(validationErrors.firstName)}
-                  // helperText={validationErrors.firstName}
+                  error={Boolean(validationErrors.lastName)}
+                  helperText={validationErrors.lastName}
                />
                <Input
                   type="info"
                   placeholder="+996 (___) __ __ __"
                   value={phoneNumber}
-                  onChange={handlePhoneNumberChange}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                   label="Номер телефона"
                   error={Boolean(validationErrors.phoneNumber)}
                   helperText={validationErrors.phoneNumber}
@@ -88,12 +139,14 @@ const VendorProfilePage = () => {
                   type="info"
                   placeholder="Напишите email"
                   value={email}
-                  onChange={handleEmailChange}
+                  onChange={(e) => setEmail(e.target.value)}
                   label="Email"
                   error={Boolean(validationErrors.email)}
                   helperText={validationErrors.email}
                />
-               <StyledDeleteText>Удалить профиль?</StyledDeleteText>
+               <StyledDeleteText onClick={handleDeleteProfileClick}>
+                  Удалить профиль?
+               </StyledDeleteText>
             </StyledLeftForm>
 
             <StyledRightForm>
@@ -101,17 +154,17 @@ const VendorProfilePage = () => {
                <Input
                   type="password"
                   placeholder="Напишите текущий пароль"
-                  value={сurrentPassword}
-                  onChange={handleCurrentPasswordChange}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
                   label="Текущий пароль"
-                  error={Boolean(validationErrors.сurrentPassword)}
-                  helperText={validationErrors.сurrentPassword}
+                  error={Boolean(validationErrors.currentPassword)}
+                  helperText={validationErrors.currentPassword}
                />
                <Input
                   type="password"
                   placeholder="Напишите новый пароль"
                   value={newPassword}
-                  onChange={handleNewPasswordChange}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   label="Новый пароль"
                   error={Boolean(validationErrors.newPassword)}
                   helperText={validationErrors.newPassword}
@@ -120,7 +173,7 @@ const VendorProfilePage = () => {
                   type="password"
                   placeholder="Подтвердите пароль"
                   value={confirmPassword}
-                  onChange={handleConfirmPasswordChange}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   label="Подтвердите пароль*"
                   InputLabelProps={{ sx: { color: '#ca3c3c' } }}
                   error={Boolean(validationErrors.confirmPassword)}
@@ -128,12 +181,30 @@ const VendorProfilePage = () => {
                />
             </StyledRightForm>
          </FormWrapper>
+
          <ButtonWrapper>
             <StyledCencelButton variant="outlined">Отменить</StyledCencelButton>
             <StyledSaveButton type="submit" variant="contained">
                Сохранить
             </StyledSaveButton>
          </ButtonWrapper>
+         <Modal open={isModalOpen} handleClose={handleCloseModal}>
+            <ModalContentWrapper>
+               <Typography sx={{ mt: 2 }}>
+                  Вы уверены, что хотите удалить профиль?
+               </Typography>
+               <ModalActions>
+                  <StyledButton onClick={handleCloseModal}>Отмена</StyledButton>
+                  <Button
+                     onClick={handleConfirmDelete}
+                     color="error"
+                     variant="contained"
+                  >
+                     Удалить
+                  </Button>
+               </ModalActions>
+            </ModalContentWrapper>
+         </Modal>
       </StyledForm>
    )
 }
@@ -192,4 +263,23 @@ const StyledCencelButton = styled(Button)({
    borderRadius: 0,
    padding: '10px 24px',
    border: 'none',
+})
+const ModalContentWrapper = styled(Box)({
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '15px',
+})
+
+const ModalActions = styled(Box)({
+   display: 'flex',
+   flexDirection: 'row',
+   justifyContent: 'flex-end',
+   gap: '10px',
+   marginTop: '20px',
+   alignItems: 'center',
+})
+const StyledButton = styled(Button)({
+   backgroundColor: 'white !important',
+   color: '#afafaf !important',
+   boxShadow: 'none',
 })

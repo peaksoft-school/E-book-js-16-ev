@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {
+   deletedProfileByVendor,
    updatePasswordForVendor,
    updateProfileVendor,
 } from './vendorProfileThunk'
@@ -36,6 +37,7 @@ const vendorProfileSlice = createSlice({
                action.payload?.message || 'Пароль успешно обновлён'
          })
          .addCase(updatePasswordForVendor.rejected, (state, action) => {
+            state.isLoading = false
             state.error =
                action.payload?.message || 'Ошибка при обновлении пароля'
          })
@@ -52,6 +54,26 @@ const vendorProfileSlice = createSlice({
             state.isLoading = false
             state.error =
                action.payload?.message || 'Ошибка при обновлении профиля'
+         })
+
+         .addCase(deletedProfileByVendor.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(deletedProfileByVendor.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.successMessage =
+               action.payload?.message || 'Профиль успешно удалён'
+            state.profile = {
+               firstName: '',
+               lastName: '',
+               phoneNumber: '',
+               email: '',
+            }
+         })
+         .addCase(deletedProfileByVendor.rejected, (state, action) => {
+            state.isLoading = false
+            state.error =
+               action.payload?.message || 'Ошибка при удалении профиля'
          })
    },
 })

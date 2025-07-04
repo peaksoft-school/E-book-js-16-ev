@@ -77,10 +77,7 @@ const passwordRules =
 const VALIDATION_SCHEMA_UPDATE_PROFILE = Yup.object({
    email: Yup.string().email('Введите корректный email').nullable(),
    phoneNumber: Yup.string()
-      .matches(
-         /^\+996\d{9}$/,
-         'Номер телефона должен быть в формате +996 (XXX) XXX-XX-XX'
-      )
+
       .nullable(),
    currentPassword: Yup.string().nullable(),
 

@@ -44,3 +44,22 @@ export const updateProfileVendor = createAsyncThunk(
       }
    }
 )
+
+export const deletedProfileByVendor = createAsyncThunk(
+   'vendor/deleteProfile',
+   async (_, { rejectWithValue }) => {
+      try {
+         const { data } = await axiosInstance.delete(
+            '/api/user/deletedProfileByVendor'
+         )
+         console.log(data.message)
+         return data // <-- верни данные!
+      } catch (error) {
+         if (error.response && error.response.data) {
+            return rejectWithValue(error.response.data)
+         } else {
+            return rejectWithValue({ message: 'Произошла ошибка при удалении' })
+         }
+      }
+   }
+)

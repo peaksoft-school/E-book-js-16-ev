@@ -3,16 +3,19 @@ import { forwardRef } from 'react'
 import { Icons } from '../../../assets/icons'
 
 const Button = forwardRef(
-   ({
-      children,
-      onClick,
-      variant = 'contained',
-      disabled,
-      type = 'submit',
-      color,
-      icon = false,
-      ...rest
-   }) => (
+   (
+      {
+         children,
+         onClick,
+         variant = 'contained',
+         disabled,
+         type = 'submit',
+         color,
+         icon = false,
+         ...rest
+      },
+      ref
+   ) => (
       <StyledButton
          disableRipple={true}
          onClick={onClick}
@@ -20,6 +23,7 @@ const Button = forwardRef(
          disabled={disabled}
          variant={variant}
          color={color}
+         ref={ref}
          {...rest}
       >
          {icon && <StyledImg component="img" src={Icons.plusw} alt="plus" />}
@@ -120,6 +124,31 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
             backgroundColor: '#1C1B1F1F',
             color: 'white',
             border: 'none',
+         },
+      }
+   } else if (variant === 'borderOrg') {
+      buttonStyles['&.MuiButton-root'] = {
+         ...buttonStyles['&.MuiButton-root'],
+         width: '224px',
+         height: '33px',
+         padding: '8px 25px',
+         fontSize: '14px',
+         color: '#F34901',
+         border: '1px solid #F34901',
+
+         '&:hover': {
+            backgroundColor: '#Fe6F33',
+            color: '#ffffff',
+         },
+
+         '&:active': {
+            backgroundColor: '#E54400',
+            Color: '#ffffff',
+         },
+
+         '&.Mui-disabled': {
+            color: '#1C1B1F1F',
+            backgroundColor: '#ffffff',
          },
       }
    } else if (variant === 'add') {

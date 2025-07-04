@@ -3,6 +3,8 @@ import { Suspense, lazy } from 'react'
 import { ROLES, ROUTES } from './routes'
 import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
+import Applications from '../pages/admin/aplications/Applications'
+import InnerPageCard from '../pages/admin/aplications/InnerPageCard'
 import Books from '../pages/admin/books/Books'
 import AddBook from '../pages/admin/books/AddBook'
 import UploadBook from '../pages/admin/books/UploadBook'
@@ -19,6 +21,21 @@ const ResetPassword = lazy(() => import('../pages/sign-in/ResetPassword'))
 
 const AppRouter = () => (
    <Routes>
+      <Route
+         path="/"
+         element={
+            <PrivateRouter
+               roles={[ROLES.GUEST, ROLES.CLIENT]}
+               Component={
+                  <Suspense fallback={<Loading />}>
+                     <Home />
+                  </Suspense>
+               }
+               fallbackPath={'/admin'}
+            />
+         }
+      />
+
       <Route
          path={ROUTES.SIGN_IN}
          element={
@@ -54,21 +71,6 @@ const AppRouter = () => (
       />
 
       <Route
-         path="/"
-         element={
-            <PrivateRouter
-               roles={[ROLES.GUEST, ROLES.CLIENT]}
-               Component={
-                  <Suspense fallback={<Loading />}>
-                     <Home />
-                  </Suspense>
-               }
-               fallbackPath={'/'}
-            />
-         }
-      />
-
-      <Route
          path="/admin"
          element={
             <PrivateRouter
@@ -82,8 +84,17 @@ const AppRouter = () => (
             />
          }
       >
+         <Route index path="/admin/application" element={<Applications />} />
+
+         <Route
+            path="/admin/application/:bookItemId"
+            element={<InnerPageCard />}
+         />
+
          <Route path="books" element={<Books />} />
+
          <Route path="books/addbook" element={<AddBook />} />
+
          <Route path="books/uploadbook/:bookItemId" element={<UploadBook />} />
       </Route>
 
@@ -116,7 +127,7 @@ const AppRouter = () => (
             />
          }
       >
-         <Route path="profile" element={<VendorProfilePage />} />
+         <Route path="/vendor/profile" element={<VendorProfilePage />} />
       </Route>
 
       <Route path="*" element="Not found" />
