@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router'
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router'
 import PersonIcon from '@mui/icons-material/Person'
 import {
    Box,
@@ -18,6 +18,7 @@ import { AUTH_ACTION } from '../../store/slices/authSlice'
 const AdminLayout = () => {
    const [anchorEl, setAnchorEl] = useState(null)
    const open = Boolean(anchorEl)
+
    const dispatch = useDispatch()
    const navigate = useNavigate()
 
@@ -31,8 +32,16 @@ const AdminLayout = () => {
 
    const handleLogout = () => {
       dispatch(AUTH_ACTION.logOut())
+
       navigate('/login')
    }
+
+   const location = useLocation()
+
+   if (location.pathname === '/admin') {
+      return <Navigate to="/admin/application" replace />
+   }
+
    return (
       <PageWrapper>
          <SideBar />
