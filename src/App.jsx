@@ -1,7 +1,6 @@
 import './App.css'
-import AudiobooksGrid from './components/UI/LandingSlider'
 import AppRouter from './routes/AppRouter'
 
-const App = () => <AudiobooksGrid />
+const App = () => <AppRouter />
 
 export default App
