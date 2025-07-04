@@ -3,7 +3,7 @@ import {
    TextField,
    InputAdornment,
    IconButton,
-   InputLabel,
+   InputLabel, // Keep this import
    styled,
    Box,
    Typography,
@@ -21,7 +21,7 @@ const Input = forwardRef(
          value = '',
          onChange,
          iconVariant = 'on',
-         label,
+         label, // Ensure label is destructured
          multiline = false,
          rows,
          inputProps,
@@ -76,7 +76,7 @@ const Input = forwardRef(
             flexDirection="column"
          >
             {label && (
-               <InputLabel sx={{ color: 'black', marginBottom: 1 }}>
+               <InputLabel sx={{ color: '#5d5d5d', marginBottom: 1 }}>
                   {label}
                </InputLabel>
             )}

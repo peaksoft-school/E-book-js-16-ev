@@ -70,10 +70,57 @@ const VALIDATION_SCHEMA_FORGOT = Yup.object({
       .email('Введите корректный email')
       .required('Email обязателен для заполнения'),
 })
+
+const passwordRules =
+   /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?/{}~])[A-Za-z\d!@#$%^&*()_\-+=<>?/{}~]{8,}$/
+
+const VALIDATION_SCHEMA_UPDATE_PROFILE = Yup.object({
+   email: Yup.string().email('Введите корректный email').nullable(),
+   phoneNumber: Yup.string()
+      .matches(
+         /^\+996\d{9}$/,
+         'Номер телефона должен быть в формате +996 (XXX) XXX-XX-XX'
+      )
+      .nullable(),
+   currentPassword: Yup.string().nullable(),
+
+   newPassword: Yup.string()
+      .nullable()
+      .matches(
+         passwordRules,
+         'Пароль должен содержать минимум 8 символов, одну заглавную букву, одну цифру и спецсимвол'
+      )
+      .test(
+         'newPassword-required-if-provided',
+         'Пароль должен содержать минимум 8 символов, одну заглавную букву, одну цифру и спецсимвол',
+         function (value) {
+            if (value) {
+               return passwordRules.test(value)
+            }
+            return true
+         }
+      ),
+   confirmPassword: Yup.string()
+      .nullable()
+      .oneOf([Yup.ref('newPassword'), null], 'Пароли не совпадают')
+      .test(
+         'confirmPassword-required-if-newPassword-provided',
+         'Пожалуйста, повторите новый пароль',
+         function (value) {
+            const { newPassword } = this.parent
+            if (newPassword && !value) {
+               return false
+            }
+            return true
+         }
+      ),
+})
+
 export {
    VALIDATION_SCHEMA_VENDOR,
    VALIDATION_SCHEMA_CLIENT,
    VALIDATION_SCHEMA_SIGN_IN,
    VALIDATION_SCHEMA_RESET,
    VALIDATION_SCHEMA_FORGOT,
+   VALIDATION_SCHEMA_UPDATE_PROFILE,
 }
