@@ -3,16 +3,19 @@ import { forwardRef } from 'react'
 import { Icons } from '../../../assets/icons'
 
 const Button = forwardRef(
-   ({
-      children,
-      onClick,
-      variant = 'contained',
-      disabled,
-      type = 'submit',
-      color,
-      icon = false,
-      ...rest
-   }) => (
+   (
+      {
+         children,
+         onClick,
+         variant = 'contained',
+         disabled,
+         type = 'submit',
+         color,
+         icon = false,
+         ...rest
+      },
+      ref
+   ) => (
       <StyledButton
          disableRipple={true}
          onClick={onClick}
@@ -20,6 +23,7 @@ const Button = forwardRef(
          disabled={disabled}
          variant={variant}
          color={color}
+         ref={ref}
          {...rest}
       >
          {icon && <StyledImg component="img" src={Icons.plusw} alt="plus" />}

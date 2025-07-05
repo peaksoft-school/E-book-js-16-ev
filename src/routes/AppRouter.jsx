@@ -24,13 +24,13 @@ const AppRouter = () => (
          path="/"
          element={
             <PrivateRouter
-               roles={[ROLES.GUEST, ROLES.USER]}
+               roles={[ROLES.GUEST, ROLES.CLIENT]}
                Component={
                   <Suspense fallback={<Loading />}>
                      <Home />
                   </Suspense>
                }
-               fallbackPath={'/admin'}
+               fallbackPath={'/'}
             />
          }
       />
@@ -70,21 +70,6 @@ const AppRouter = () => (
       />
 
       <Route
-         path="/"
-         element={
-            <PrivateRouter
-               roles={[ROLES.GUEST, ROLES.CLIENT]}
-               Component={
-                  <Suspense fallback={<Loading />}>
-                     <Home />
-                  </Suspense>
-               }
-               fallbackPath={'/'}
-            />
-         }
-      />
-
-      <Route
          path="/admin"
          element={
             <PrivateRouter
@@ -98,13 +83,17 @@ const AppRouter = () => (
             />
          }
       >
-         <Route path="/admin/application" element={<Applications />} />
+         <Route index path="/admin/application" element={<Applications />} />
+
          <Route
             path="/admin/application/:bookItemId"
             element={<InnerPageCard />}
          />
+
          <Route path="books" element={<Books />} />
+
          <Route path="books/addbook" element={<AddBook />} />
+
          <Route path="books/uploadbook/:bookItemId" element={<UploadBook />} />
       </Route>
 

@@ -45,6 +45,7 @@ import x from './svgs/xicon.svg'
 import greenOk from './svgs/greenOk.svg'
 import knew from './svgs/New.svg'
 import exclg from './svgs/Vector.svg'
+import prosent from './svgs/prosent.svg'
 
 export const Icons = {
   application,
@@ -94,4 +95,5 @@ export const Icons = {
   greenOk,
   knew,
   exclg,
+  prosent,
 }

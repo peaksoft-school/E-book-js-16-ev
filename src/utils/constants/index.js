@@ -98,4 +98,45 @@ const VENDORCARDS = [
    },
 ]
 
-export { LATEST_PUBLICATIONS_BOOKS, BOOK_SLIDER, SELLERS, VENDORCARDS }
+const SLIDER_BOOKS = [
+   {
+      title: 'Сила настоящего',
+      description: 'Путеводитель к духовному просветлению от Экхарта Толле.',
+      price: '950 сом',
+      img: Images.chamberOfSecrets,
+   },
+   {
+      title: 'Атлант расправил плечи',
+      description: 'Философский роман Айн Рэнд о свободе и разуме.',
+      price: '1200 сом',
+      img: Images.gelobtesLand,
+   },
+   {
+      title: '1984',
+      description:
+         'Антиутопия Джорджа Оруэлла о тоталитаризме и свободе мысли.',
+      price: '800 сом',
+      img: Images.historyOfBook,
+   },
+   {
+      title: 'Вино из одуванчиков',
+      description:
+         'Ностальгическое произведение Рэя Брэдбери о детстве и лете.',
+      price: '700 сом',
+      img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRptcgd9s87CUvCdCeaU7FuaSiWbX4AO1qccg&s',
+   },
+   {
+      title: 'Человек в поисках смысла',
+      description: 'Автобиография и логотерапия Виктора Франкла.',
+      price: '850 сом',
+      img: 'https://toppsta.com/images/covers/5/9/0/4/9781408855904.webp?t=1709095286',
+   },
+]
+
+export {
+   LATEST_PUBLICATIONS_BOOKS,
+   BOOK_SLIDER,
+   SELLERS,
+   VENDORCARDS,
+   SLIDER_BOOKS,
+}

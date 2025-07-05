@@ -29,6 +29,7 @@ const Input = forwardRef(
          maxLength,
          error,
          helperText,
+         customIcon,
          ...rest
       },
       ref
@@ -43,6 +44,12 @@ const Input = forwardRef(
          setIsPasswordVisible((prev) => !prev)
 
       const getEndAdornment = () => {
+         if (customIcon) return   <Box
+            component="img"
+            src={customIcon}
+            alt="icon"
+            sx={{ width: 20, height: 20 }}
+         />
          if (!withIcon) return null
 
          if (type === 'search') return <SearchIcon />

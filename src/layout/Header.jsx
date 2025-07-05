@@ -11,8 +11,12 @@ import Input from '../components/UI/Input'
 import { Icons } from '../assets/icons'
 import { createGlobalStyle } from 'styled-components'
 import { NAV_LINKS } from '../utils/helpers'
+import { useNavigate } from 'react-router'
 
-const Header = ({ onLogin }) => {
+const Header = () => {
+   const navigate = useNavigate()
+
+   const handleNavigateSignIn = () => navigate('/sign-in')
    return (
       <>
          <GlobalFont />
@@ -49,7 +53,7 @@ const Header = ({ onLogin }) => {
                   ))}
                </NavLinks>
 
-               <StyledButton onClick={onLogin}>Войти</StyledButton>
+               <StyledButton onClick={handleNavigateSignIn}>Войти</StyledButton>
             </StyledNav>
          </StyledAppBar>
       </>
