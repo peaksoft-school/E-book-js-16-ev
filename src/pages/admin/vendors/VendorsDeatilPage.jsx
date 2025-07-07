@@ -130,7 +130,11 @@ const VendorsDetailtPage = () => {
       <PageWrapper>
          <ContentBox>
             <Breadcrumbs>
-               <Typography variant="body2" color="text.secondary">
+               <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  onClick={() => navigate('/admin/vendors')}
+               >
                   Продавцы /
                </Typography>
                <Typography variant="body2" fontWeight={500}>
