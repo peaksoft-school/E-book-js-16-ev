@@ -85,15 +85,16 @@ const AppRouter = () => (
             />
          }
       >
-         <Route index element={<VendorsPage />} />
-         <Route path="vendors" element={<VendorsPage />} />
-         <Route path="vendors/:id" element={<VendorsDetailtPage />} />
          <Route index path="/admin/application" element={<Applications />} />
 
          <Route
             path="/admin/application/:bookItemId"
             element={<InnerPageCard />}
          />
+
+         <Route path="vendors" element={<VendorsPage />} />
+
+         <Route path="vendors/:id" element={<VendorsDetailtPage />} />
 
          <Route path="books" element={<Books />} />
 

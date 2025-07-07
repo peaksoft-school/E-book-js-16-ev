@@ -1,11 +1,10 @@
-// store/admin/vendors/vendorSlice.js - ИЗМЕНЕН
 import { createSlice } from '@reduxjs/toolkit'
 import {
    deleteVendor,
    findAllVendor,
    findVendorById,
-   getAllVendorBooks, // Остается, но для общей загрузки
-   sortVendorBooksForAdmin, // Добавляем обработку этого санки
+   getAllVendorBooks,
+   sortVendorBooksForAdmin,
 } from './vendorThunk'
 
 const initialState = {
@@ -34,8 +33,6 @@ const vendorSlice = createSlice({
    reducers: {},
    extraReducers: (builder) => {
       builder
-         // ... (обработчики findAllVendor, deleteVendor, findVendorById - без изменений)
-
          .addCase(findAllVendor.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -91,8 +88,6 @@ const vendorSlice = createSlice({
             state.error = payload
          })
 
-         // Обработка getAllVendorBooks - будет использоваться для первой загрузки
-         // или если не выбрана никакая специфическая сортировка/фильтрация
          .addCase(getAllVendorBooks.pending, (state) => {
             state.vendorBooks.isLoading = true
             state.vendorBooks.error = null
@@ -112,7 +107,6 @@ const vendorSlice = createSlice({
             state.vendorBooks.error = payload
          })
 
-         // ОБРАБОТКА САНКИ sortVendorBooksForAdmin для фильтрации
          .addCase(sortVendorBooksForAdmin.pending, (state) => {
             state.vendorBooks.isLoading = true
             state.vendorBooks.error = null
