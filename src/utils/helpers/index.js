@@ -31,5 +31,12 @@ const FORMATS = [
    { label: 'Бумажные', value: 'PAPER' },
    { label: 'Электронные', value: 'ELECTRONIC' },
 ]
+const BOOK_FILTER = [
+   { value: 'все', label: 'все' },
+   { value: 'в избранном', label: 'в избранном' },
+   { value: 'в корзине', label: 'в корзине' },
+   { value: 'проданы', label: 'проданы' },
+   { value: 'со скидками', label: 'со скидкой' },
+]
 
-export { CATEGORIES, NAV_LINKS, GENRES, FORMATS }
+export { CATEGORIES, NAV_LINKS, GENRES, FORMATS, BOOK_FILTER }
