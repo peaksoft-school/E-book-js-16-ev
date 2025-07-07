@@ -1,6 +1,6 @@
 import { Box, styled, TextField, Typography } from '@mui/material'
 import Button from './UI/buttons/Button'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 const Mailing = () => (
    <StyledContainer>

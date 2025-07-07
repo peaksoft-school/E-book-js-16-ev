@@ -3,6 +3,8 @@ import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import { vendorSlice } from './admin/vendors/vendorSlice'
+import applicationReducer from './admin/applications/applicationSlice'
+import bookReducer from './admin/applications/innerpage/bookSlice'
 import booksReducer from './admin/books/booksSlice'
 import resetFileState from './admin/books/fileSlice'
 import addBookReducer from './admin/books/addBookSlice'
@@ -18,6 +20,8 @@ const rootReducer = combineReducers({
    updateBook: uploadBookReducer,
    findBook: fetchBookByIdReducer,
    [vendorSlice.name]: vendorSlice.reducer,
+   application: applicationReducer,
+   book: bookReducer,
 })
 
 const persistConfig = {
@@ -29,11 +33,8 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
    reducer: persistedReducer,
-
    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-         serializableCheck: false,
-      }),
+      getDefaultMiddleware({ serializableCheck: false }),
 })
 
 const persistor = persistStore(store)

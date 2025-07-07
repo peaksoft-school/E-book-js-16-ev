@@ -15,11 +15,11 @@ const NAV_LINKS = [
 ]
 
 const BOOK_FILTER = [
-   { value: 'все', label: 'Все' },
-   { value: 'избранное', label: 'Избранное' },
-   { value: 'корзина', label: 'В корзине' },
-   { value: 'проданы', label: 'Продано' },
-   { value: 'со скидками', label: 'Со скидкой' },
+   { value: 'все', label: 'все' },
+   { value: 'в избранном', label: 'в избранном' },
+   { value: 'в корзине', label: 'в корзине' },
+   { value: 'проданы', label: 'проданы' },
+   { value: 'со скидками', label: 'со скидкой' },
 ]
 
 const GENRES = [

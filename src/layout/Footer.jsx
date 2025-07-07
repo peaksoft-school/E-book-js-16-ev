@@ -1,5 +1,5 @@
 import { Box, Container, Typography, styled } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router'
 
 const Footer = ({ variant = 'full' }) => (
    <FooterWrapper>

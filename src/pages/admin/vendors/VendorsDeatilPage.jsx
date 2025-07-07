@@ -21,7 +21,7 @@ import notify from '../../../utils/helpers/notify'
 import {
    deleteVendor,
    findVendorById,
-   getAllVendorBooks,
+   sortVendorBooksForAdmin,
 } from '../../../store/admin/vendors/vendorThunk'
 import { useEffect, useState } from 'react'
 import { BOOK_FILTER } from '../../../utils/helpers/index'
@@ -55,12 +55,11 @@ const VendorsDetailtPage = () => {
    useEffect(() => {
       if (tabValue === 1 && id) {
          dispatch(
-            getAllVendorBooks({
+            sortVendorBooksForAdmin({
                vendorId: id,
                pageNumber: currentBookPage,
                pageSize: booksPerPage,
-               filterType:
-                  selectedBookFilter !== 'все' ? selectedBookFilter : '',
+               value: selectedBookFilter,
             })
          )
       }
@@ -106,11 +105,11 @@ const VendorsDetailtPage = () => {
       setSelectedBookFilter(value)
       setCurrentBookPage(1)
       dispatch(
-         getAllVendorBooks({
+         sortVendorBooksForAdmin({
             vendorId: id,
             pageNumber: 1,
             pageSize: booksPerPage,
-            filterType: value !== 'все' ? value : '',
+            value: value,
          })
       )
    }
@@ -390,19 +389,9 @@ const BooksHeader = styled(Box)({
 
 const BookGrid = styled(Box)({
    display: 'grid',
-   gridTemplateColumns: 'auto auto auto auto ',
+   gridTemplateColumns: 'auto auto auto auto',
    gap: '20px',
    justifyContent: 'start',
-})
-
-const LoadingContainer = styled(Box)({
-   display: 'flex',
-   flexDirection: 'column',
-   justifyContent: 'center',
-   alignItems: 'center',
-   minHeight: '200px',
-   gap: '10px',
-   color: '#1976d2',
 })
 
 const PaginationContainer = styled(Box)({
