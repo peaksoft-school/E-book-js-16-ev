@@ -71,48 +71,69 @@ const VALIDATION_SCHEMA_FORGOT = Yup.object({
       .required('Email обязателен для заполнения'),
 })
 
+const phoneNumberRules = /^\+996\d{9}$/
+
 const passwordRules =
-   /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?/{}~])[A-Za-z\d!@#$%^&*()_\-+=<>?/{}~]{8,}$/
+   /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`])[A-Za-z\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`]{8,}$/
 
 const VALIDATION_SCHEMA_UPDATE_PROFILE = Yup.object({
-   email: Yup.string().email('Введите корректный email').nullable(),
-   phoneNumber: Yup.string()
-
+   firstName: Yup.string()
+      .trim()
+      .min(2, 'Имя должно содержать не менее 2 символов')
       .nullable(),
-   currentPassword: Yup.string().nullable(),
+
+   lastName: Yup.string()
+      .trim()
+      .min(2, 'Фамилия должна содержать не менее 2 символов')
+      .nullable(),
+
+   phoneNumber: Yup.string()
+      .matches(
+         phoneNumberRules,
+         'Номер телефона должен быть в формате +996 (XXX) XXX-XX-XX'
+      )
+      .nullable(),
+
+   email: Yup.string().email('Введите корректный email').nullable(),
 
    newPassword: Yup.string()
       .nullable()
-      .matches(
-         passwordRules,
-         'Пароль должен содержать минимум 8 символов, одну заглавную букву, одну цифру и спецсимвол'
-      )
-      .test(
-         'newPassword-required-if-provided',
-         'Пароль должен содержать минимум 8 символов, одну заглавную букву, одну цифру и спецсимвол',
-         function (value) {
-            if (value) {
-               return passwordRules.test(value)
-            }
-            return true
-         }
-      ),
+      .when('.', {
+         is: (values) => values.newPassword && values.newPassword.length > 0,
+         then: (schema) =>
+            schema
+               .min(8, 'Пароль должен содержать минимум 8 символов')
+               .matches(
+                  passwordRules,
+                  'Пароль должен содержать минимум 8 символов, одну заглавную букву, одну цифру и спецсимвол'
+               )
+               .required('Новый пароль обязателен для изменения пароля'),
+         otherwise: (schema) => schema.notRequired(),
+      }),
+
    confirmPassword: Yup.string()
       .nullable()
-      .oneOf([Yup.ref('newPassword'), null], 'Пароли не совпадают')
-      .test(
-         'confirmPassword-required-if-newPassword-provided',
-         'Пожалуйста, повторите новый пароль',
-         function (value) {
-            const { newPassword } = this.parent
-            if (newPassword && !value) {
-               return false
-            }
-            return true
-         }
-      ),
-})
+      .when('newPassword', {
+         is: (newPassword) => newPassword && newPassword.length > 0,
+         then: (schema) =>
+            schema
+               .required('Подтвердите новый пароль')
+               .oneOf([Yup.ref('newPassword')], 'Пароли не совпадают'),
+         otherwise: (schema) =>
+            schema
+               .notRequired()
+               .oneOf([Yup.ref('newPassword'), null], 'Пароли не совпадают'),
+      }),
 
+   currentPassword: Yup.string()
+      .nullable()
+      .when('newPassword', {
+         is: (newPassword) => newPassword && newPassword.length > 0,
+         then: (schema) =>
+            schema.required('Текущий пароль обязателен для изменения пароля'),
+         otherwise: (schema) => schema.notRequired(),
+      }),
+})
 export {
    VALIDATION_SCHEMA_VENDOR,
    VALIDATION_SCHEMA_CLIENT,

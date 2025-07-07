@@ -53,12 +53,30 @@ export const deletedProfileByVendor = createAsyncThunk(
             '/api/user/deletedProfileByVendor'
          )
          console.log(data.message)
-         return data // <-- верни данные!
+         return data
       } catch (error) {
          if (error.response && error.response.data) {
             return rejectWithValue(error.response.data)
          } else {
             return rejectWithValue({ message: 'Произошла ошибка при удалении' })
+         }
+      }
+   }
+)
+
+export const getProfileVendor = createAsyncThunk(
+   'vendor/getProfileVendor',
+   async (_, { rejectWithValue }) => {
+      try {
+         const { data } = await axiosInstance.get('/api/user/getProfileVendor')
+         return data
+      } catch (error) {
+         if (error.response && error.response.data) {
+            return rejectWithValue(error.response.data)
+         } else {
+            return rejectWithValue({
+               message: 'Не удалось получить профиль продавца.',
+            })
          }
       }
    }

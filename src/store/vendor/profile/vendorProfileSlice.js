@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {
    deletedProfileByVendor,
+   getProfileVendor,
    updatePasswordForVendor,
    updateProfileVendor,
 } from './vendorProfileThunk'
@@ -74,6 +75,21 @@ const vendorProfileSlice = createSlice({
             state.isLoading = false
             state.error =
                action.payload?.message || 'Ошибка при удалении профиля'
+         })
+         .addCase(getProfileVendor.fulfilled, (state, { payload }) => {
+            state.isLoading = false
+            state.profile = {
+               firstName: payload.firstName || '',
+               lastName: payload.lastName || '',
+               phoneNumber: payload.phoneNumber || '',
+               email: payload.email || '',
+            }
+            state.error = null
+         })
+         .addCase(getProfileVendor.rejected, (state, { payload }) => {
+            state.isLoading = false
+            state.error = payload || 'Не удалось загрузить профиль продавца.'
+            state.profile = initialState.profile
          })
    },
 })

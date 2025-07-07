@@ -8,10 +8,12 @@ import {
    deletedProfileByVendor,
    updatePasswordForVendor,
    updateProfileVendor,
+   getProfileVendor,
 } from '../../store/vendor/profile/vendorProfileThunk'
 import notify from '../../utils/helpers/notify'
 import Modal from '../../components/UI/Modal'
 import { AUTH_ACTION } from '../../store/slices/authSlice'
+import { VENDOR_PROFILE_ACTION } from '../../store/vendor/profile/vendorProfileSlice'
 
 const VendorProfilePage = () => {
    const [email, setEmail] = useState('')
@@ -21,69 +23,121 @@ const VendorProfilePage = () => {
    const [newPassword, setNewPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
    const [phoneNumber, setPhoneNumber] = useState('')
+
    const [validationErrors, setValidationErrors] = useState({})
    const [isModalOpen, setIsModalOpen] = useState(false)
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
-   const { error, successMessage, isLoading } = useSelector(
+
+   const { error, successMessage, isLoading, profile } = useSelector(
       (state) => state.vendorProfile
    )
+
+   useEffect(() => {
+      dispatch(getProfileVendor())
+      return () => {
+         dispatch(VENDOR_PROFILE_ACTION.clearVendorMessages())
+      }
+   }, [dispatch])
+
+   useEffect(() => {
+      if (profile) {
+         setFirstName(profile.firstName || '')
+         setLastName(profile.lastName || '')
+         setPhoneNumber(profile.phoneNumber || '')
+         setEmail(profile.email || '')
+      }
+   }, [profile])
+
+   useEffect(() => {
+      if (successMessage) {
+         notify({ message: successMessage, type: 'success' })
+         dispatch(VENDOR_PROFILE_ACTION.clearVendorMessages())
+      }
+      if (error) {
+         notify({ message: error, type: 'error' })
+         dispatch(VENDOR_PROFILE_ACTION.clearVendorMessages())
+      }
+   }, [successMessage, error, dispatch])
 
    const handleSubmit = useCallback(
       (e) => {
          e.preventDefault()
          setValidationErrors({})
 
+         const isProfileInfoChanged =
+            firstName !== (profile?.firstName || '') ||
+            lastName !== (profile?.lastName || '') ||
+            phoneNumber !== (profile?.phoneNumber || '') ||
+            email !== (profile?.email || '')
+
+         const isPasswordChangeAttempted =
+            currentPassword || newPassword || confirmPassword
+
+         if (!isProfileInfoChanged && !isPasswordChangeAttempted) {
+            notify({
+               message: 'Нет изменений для сохранения.',
+               type: 'info',
+            })
+            return
+         }
+
          VALIDATION_SCHEMA_UPDATE_PROFILE.validate(
             {
-               currentPassword,
-               newPassword,
-               confirmPassword,
                firstName,
                lastName,
                phoneNumber,
                email,
+               currentPassword,
+               newPassword,
+               confirmPassword,
             },
             { abortEarly: false }
          )
             .then(() => {
-               if (currentPassword && newPassword) {
+               if (isProfileInfoChanged) {
+                  dispatch(
+                     updateProfileVendor({
+                        firstName,
+                        lastName,
+                        phoneNumber,
+                        email,
+                     })
+                  )
+               }
+
+               if (currentPassword && newPassword && confirmPassword) {
                   dispatch(
                      updatePasswordForVendor({
                         currentPassword,
                         newPassword,
                      })
                   )
+                  setCurrentPassword('')
+                  setNewPassword('')
+                  setConfirmPassword('')
                }
-
-               dispatch(
-                  updateProfileVendor({
-                     firstName,
-                     lastName,
-                     phoneNumber,
-                     email,
-                  })
-               )
             })
             .catch((validationErr) => {
                const errors = {}
-               validationErr.inner.forEach((err) => {
-                  errors[err.path] = err.message
-               })
+               if (validationErr.inner) {
+                  validationErr.inner.forEach((err) => {
+                     errors[err.path] = err.message
+                  })
+               }
                setValidationErrors(errors)
             })
-
-         notify({ message: 'Успешно обнавлено' })
       },
       [
-         currentPassword,
-         newPassword,
-         confirmPassword,
          firstName,
          lastName,
          phoneNumber,
          email,
+         currentPassword,
+         newPassword,
+         confirmPassword,
+         profile,
          dispatch,
       ]
    )
@@ -97,12 +151,10 @@ const VendorProfilePage = () => {
    }
 
    const handleConfirmDelete = () => {
-      dispatch(deletedProfileByVendor()).then(() => {
-         setIsModalOpen(false)
-         navigate('/')
-         dispatch(AUTH_ACTION.logOut())
-         notify({ message: 'Успешно удалено' })
-      })
+      dispatch(deletedProfileByVendor())
+      setIsModalOpen(false)
+      navigate('/')
+      dispatch(AUTH_ACTION.logOut())
    }
 
    return (
@@ -111,6 +163,7 @@ const VendorProfilePage = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            minHeight: '80vh',
          }}
       >
          <StyledForm onSubmit={handleSubmit}>
@@ -192,29 +245,40 @@ const VendorProfilePage = () => {
             </FormWrapper>
 
             <ButtonWrapper>
-               <StyledCencelButton variant="outlined">
+               <StyledCencelButton
+                  variant="outlined"
+                  onClick={() => navigate(-1)}
+               >
                   Отменить
                </StyledCencelButton>
-               <StyledSaveButton type="submit" variant="contained">
-                  Сохранить
+               <StyledSaveButton
+                  type="submit"
+                  variant="contained"
+                  disabled={isLoading}
+               >
+                  {isLoading ? 'Сохранение...' : 'Сохранить'}
                </StyledSaveButton>
             </ButtonWrapper>
+
             <Modal open={isModalOpen} handleClose={handleCloseModal}>
                <ModalContentWrapper>
                   <Typography sx={{ mt: 2 }}>
                      Вы уверены, что хотите удалить профиль?
                   </Typography>
                   <ModalActions>
-                     <StyledButton onClick={handleCloseModal}>
+                     <StyledButton
+                        onClick={handleCloseModal}
+                        disabled={isLoading}
+                     >
                         Отмена
                      </StyledButton>
-                     <Button
+                     <StyledSaveButton
                         onClick={handleConfirmDelete}
-                        color="black"
                         variant="contained"
+                        disabled={isLoading}
                      >
-                        Удалить
-                     </Button>
+                        {isLoading ? 'Удаление...' : 'Удалить'}
+                     </StyledSaveButton>
                   </ModalActions>
                </ModalContentWrapper>
             </Modal>
@@ -272,7 +336,8 @@ const StyledText = styled(Typography)({
 const StyledDeleteText = styled(Typography)({
    marginBottom: '40px',
    color: 'red',
-   marginTop: '10px',
+   marginTop: '30px',
+   cursor: 'pointer',
 })
 
 const StyledSaveButton = styled(Button)({
