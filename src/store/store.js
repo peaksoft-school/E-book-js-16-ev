@@ -10,6 +10,7 @@ import addBookReducer from './admin/books/addBookSlice'
 import uploadBookReducer from './admin/books/updateSlice'
 import fetchBookByIdReducer from './admin/books/fetchBookByIdSlice'
 import { authSlice } from './slices/authSlice'
+import { clientProfileSlice } from './user/profile/profileSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
    findBook: fetchBookByIdReducer,
    application: applicationReducer,
    book: bookReducer,
+   [clientProfileSlice.name]: clientProfileSlice.reducer,
 })
 
 const persistConfig = {
