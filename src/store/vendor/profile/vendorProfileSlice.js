@@ -10,12 +10,7 @@ const initialState = {
    isLoading: false,
    error: null,
    successMessage: null,
-   profile: {
-      firstName: '',
-      lastName: '',
-      phoneNumber: '',
-      email: '',
-   },
+   profile: null,
 }
 
 const vendorProfileSlice = createSlice({
@@ -64,18 +59,14 @@ const vendorProfileSlice = createSlice({
             state.isLoading = false
             state.successMessage =
                action.payload?.message || 'Профиль успешно удалён'
-            state.profile = {
-               firstName: '',
-               lastName: '',
-               phoneNumber: '',
-               email: '',
-            }
+            state.profile = null
          })
          .addCase(deletedProfileByVendor.rejected, (state, action) => {
             state.isLoading = false
             state.error =
                action.payload?.message || 'Ошибка при удалении профиля'
          })
+
          .addCase(getProfileVendor.fulfilled, (state, { payload }) => {
             state.isLoading = false
             state.profile = {
@@ -89,7 +80,7 @@ const vendorProfileSlice = createSlice({
          .addCase(getProfileVendor.rejected, (state, { payload }) => {
             state.isLoading = false
             state.error = payload || 'Не удалось загрузить профиль продавца.'
-            state.profile = initialState.profile
+            state.profile = null
          })
    },
 })

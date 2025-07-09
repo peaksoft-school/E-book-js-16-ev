@@ -56,7 +56,11 @@ const VendorProfilePage = () => {
          dispatch(VENDOR_PROFILE_ACTION.clearVendorMessages())
       }
       if (error) {
-         notify({ message: error, type: 'error' })
+         const errorMessage =
+            typeof error === 'string'
+               ? error
+               : error?.message || 'Произошла ошибка'
+         notify({ message: errorMessage, type: 'error' })
          dispatch(VENDOR_PROFILE_ACTION.clearVendorMessages())
       }
    }, [successMessage, error, dispatch])
@@ -150,11 +154,15 @@ const VendorProfilePage = () => {
       setIsModalOpen(false)
    }
 
-   const handleConfirmDelete = () => {
-      dispatch(deletedProfileByVendor())
+   const handleConfirmDelete = async () => {
+      const resultAction = await dispatch(deletedProfileByVendor())
+
+      if (deletedProfileByVendor.fulfilled.match(resultAction)) {
+         dispatch(AUTH_ACTION.logOut())
+         navigate('/')
+      }
+
       setIsModalOpen(false)
-      navigate('/')
-      dispatch(AUTH_ACTION.logOut())
    }
 
    return (
