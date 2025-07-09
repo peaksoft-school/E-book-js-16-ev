@@ -3,6 +3,8 @@ import { Suspense, lazy } from 'react'
 import { ROLES, ROUTES } from './routes'
 import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
+import UsersPage from '../pages/admin/users/UsersPage'
+import UserProfilePage from '../pages/admin/users/UserProfilePage'
 import Applications from '../pages/admin/aplications/Applications'
 import InnerPageCard from '../pages/admin/aplications/InnerPageCard'
 import Books from '../pages/admin/books/Books'
@@ -87,6 +89,8 @@ const AppRouter = () => (
             />
          }
       >
+         <Route path="users" element={<UsersPage />} />
+         <Route path="users/:id" element={<UserProfilePage />} />
          <Route index path="/admin/application" element={<Applications />} />
 
          <Route
@@ -142,9 +146,11 @@ const AppRouter = () => (
             path="innerpagevendor/uploadbook/:bookItemId"
             element={<UploadBook />}
          />
-         <Route path='innerpagevendor/:bookItemId/addtype' element={<AddType/>}/> 
+         <Route
+            path="innerpagevendor/:bookItemId/addtype"
+            element={<AddType />}
+         />
          <Route path="addbook" element={<AddBook />} />
-         
       </Route>
 
       <Route path="*" element="Not found" />

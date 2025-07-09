@@ -17,11 +17,13 @@ import {
 import { Icons } from '../../assets/icons'
 import Modal from './Modal'
 import Button from './buttons/Button'
+import { SELLERS } from '../../utils/constants'
 
 const Table = ({ variant = 'B', sellers, onRowClick, onDeleteConfirm }) => {
    const theme = useTheme()
    const [modalOpen, setModalOpen] = useState(false)
    const [toDelete, setToDelete] = useState(null)
+   // const [sellers, setSellers] = useState(SELLERS)
 
    const handleDeleteClick = (seller) => {
       setToDelete(seller)
@@ -80,11 +82,20 @@ const Table = ({ variant = 'B', sellers, onRowClick, onDeleteConfirm }) => {
                            <img src={Icons.del} alt="delete" />
                         </IconButton>
                      </TableCell>
+                     {variant === 'A' && <TableCell>{seller.email}</TableCell>}
+                     {variant === 'A' && <TableCell>{seller.books}</TableCell>}
+                     <TableCell onClick={(e) => e.stopPropagation()}>
+                        <IconButton
+                           className="iconBtn"
+                           onClick={() => handleDeleteClick(seller)}
+                        >
+                           <img src={Icons.del} alt="delete" />
+                        </IconButton>
+                     </TableCell>
                   </StyledTableRow>
                ))}
             </StyledTableBody>
          </StyledTable>
-
          <Modal open={modalOpen} handleClose={handleCloseModal}>
             <StyledText>
                Вы уверены, что хотите удалить{' '}
