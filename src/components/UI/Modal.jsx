@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 import { Modal as MuiModal, Box, styled } from '@mui/material'
 
 const Modal = forwardRef(({ open, handleClose, children }, ref) => (
-   <MuiModal open={open} onClose={handleClose}>
+   <MuiModal disableScrollLock open={open} onClose={handleClose}>
       <StyleBox ref={ref}>{children}</StyleBox>
    </MuiModal>
 ))
