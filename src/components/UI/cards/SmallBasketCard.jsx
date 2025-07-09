@@ -11,57 +11,58 @@ import {
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
-const BasketCard = forwardRef(({ book }, ref) => {
+const SmallBasketCard = forwardRef(({ book }, ref) => {
    const { image, name, price, year, basketCount, likes } = book
 
    return (
-      <StyledCard ref={ref}>
+      <SmallStyledCard ref={ref}>
          <Box sx={{ position: 'relative' }}>
             <StyledOverlayBox>
                <StyledLikeButton aria-label="add to favorites" size="small">
-                  <FavoriteBorderIcon />
+                  <FavoriteBorderIcon fontSize="small" />
                </StyledLikeButton>
                <StyledLikeCount variant="caption">
                   <span>({likes})</span> В корзине <span>({basketCount})</span>
                </StyledLikeCount>
             </StyledOverlayBox>
-            <StyledCardMedia component="img" image={image} alt={name} />
+            <SmallStyledCardMedia component="img" image={image} alt={name} />
             <StyledOptionsButton aria-label="settings" size="small">
-               <MoreVertIcon />
+               <MoreVertIcon fontSize="small" />
             </StyledOptionsButton>
          </Box>
          <StyledCardContent>
-            <StyledTitle variant="h6" component="div">
+            <SmallStyledTitle variant="h6" component="div">
                {name}
-            </StyledTitle>
+            </SmallStyledTitle>
             <StyledSubTitleWrapper mt={1}>
                {year && (
                   <StyledDate variant="body2" color="text.secondary">
                      {year}
                   </StyledDate>
                )}
-               <StyledPrice variant="h5" sx={{ mt: 1 }}>
+               <SmallStyledPrice variant="h6" sx={{ mt: 1 }}>
                   {price}
-               </StyledPrice>
+               </SmallStyledPrice>
             </StyledSubTitleWrapper>
          </StyledCardContent>
-      </StyledCard>
+      </SmallStyledCard>
    )
 })
 
-export default BasketCard
-const StyledCard = styled(Card)(({ theme }) => ({
-   width: 305,
-   height: 460,
-   padding: '20px 17px 19px 54px',
+export default SmallBasketCard
+
+const SmallStyledCard = styled(Card)(({ theme }) => ({
+   width: 260,
+   height: 412,
+   padding: '16px 14px 16px 40px',
    background: '#EDEDED',
    borderRadius: '0px',
    boxShadow: 'none',
 }))
 
-const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
-   height: 297,
-   width: 197,
+const SmallStyledCardMedia = styled(CardMedia)(({ theme }) => ({
+   height: 260,
+   width: 170,
    marginTop: '10px',
 }))
 
@@ -69,6 +70,7 @@ const StyledOverlayBox = styled(Box)(({ theme }) => ({
    display: 'flex',
    alignItems: 'center',
 }))
+
 const StyledSubTitleWrapper = styled(Box)(({ theme }) => ({
    display: 'flex',
    alignItems: 'center',
@@ -76,6 +78,7 @@ const StyledSubTitleWrapper = styled(Box)(({ theme }) => ({
 }))
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({}))
+
 const StyledLikeButton = styled(IconButton)(({ theme }) => ({
    color: '#8A8A8A',
    padding: theme.spacing(0.5),
@@ -83,25 +86,29 @@ const StyledLikeButton = styled(IconButton)(({ theme }) => ({
 
 const StyledLikeCount = styled(Typography)(({ theme }) => ({
    color: '#8A8A8A',
-   fontSize: 14,
+   fontSize: 12,
 }))
-const StyledTitle = styled(Typography)(({ theme }) => ({
+
+const SmallStyledTitle = styled(Typography)(({ theme }) => ({
    color: '#222222',
    fontWeight: 600,
    textTransform: 'uppercase',
-   fontSize: 14,
+   fontSize: 12,
    textAlign: 'start',
 }))
+
 const StyledDate = styled(Typography)(({ theme }) => ({
    color: '#8A8A8A',
-   fontSize: 14,
+   fontSize: 12,
    fontWeight: 400,
 }))
-const StyledPrice = styled(Typography)(({ theme }) => ({
+
+const SmallStyledPrice = styled(Typography)(({ theme }) => ({
    color: '#FF4C00',
-   fontSize: 16,
+   fontSize: 14,
    fontWeight: 600,
 }))
+
 const StyledOptionsButton = styled(IconButton)(({ theme }) => ({
    position: 'absolute',
    top: theme.spacing(0),

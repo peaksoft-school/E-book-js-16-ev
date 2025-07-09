@@ -17,9 +17,12 @@ const BookSlider = () => {
    const [currentIndex, setCurrentIndex] = useState(0)
 
    const prevSlide = () =>
-      setCurrentIndex((prev) => (prev - 1 + books.length) % books.length)
+      setCurrentIndex(
+         (prev) => (prev - 1 + BOOK_SLIDER.length) % BOOK_SLIDER.length
+      )
 
-   const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % books.length)
+   const nextSlide = () =>
+      setCurrentIndex((prev) => (prev + 1) % BOOK_SLIDER.length)
 
    const handlers = useSwipeable({
       onSwipedLeft: nextSlide,

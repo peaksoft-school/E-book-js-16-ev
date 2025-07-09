@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
+import { vendorSlice } from './admin/vendors/vendorSlice'
 import applicationReducer from './admin/applications/applicationSlice'
 import bookReducer from './admin/applications/innerpage/bookSlice'
 import booksReducer from './admin/books/booksSlice'
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
    addBook: addBookReducer,
    updateBook: uploadBookReducer,
    findBook: fetchBookByIdReducer,
+   [vendorSlice.name]: vendorSlice.reducer,
    application: applicationReducer,
    book: bookReducer,
    promoCode: promoCodeReducer,

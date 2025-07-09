@@ -8,6 +8,8 @@ import InnerPageCard from '../pages/admin/aplications/InnerPageCard'
 import Books from '../pages/admin/books/Books'
 import AddBook from '../pages/admin/books/AddBook'
 import UploadBook from '../pages/admin/books/UploadBook'
+import VendorsPage from '../pages/admin/vendors/VendorsPage'
+import VendorsDetailtPage from '../pages/admin/vendors/VendorsDeatilPage'
 import InnerPageVendor from '../pages/vendor/InnerPageVendor'
 import AddType from '../pages/vendor/addType'
 
@@ -91,6 +93,10 @@ const AppRouter = () => (
             path="/admin/application/:bookItemId"
             element={<InnerPageCard />}
          />
+
+         <Route path="vendors" element={<VendorsPage />} />
+
+         <Route path="vendors/:id" element={<VendorsDetailtPage />} />
 
          <Route path="books" element={<Books />} />
 
