@@ -4,12 +4,18 @@ import persistStore from 'redux-persist/es/persistStore'
 import storage from 'redux-persist/lib/storage'
 import usersSlice from './admin/users/usersSlice'
 import { historyActionSlice } from './admin/users/historyActionSlice'
+import { vendorSlice } from './admin/vendors/vendorSlice'
+import applicationReducer from './admin/applications/applicationSlice'
+import bookReducer from './admin/applications/innerpage/bookSlice'
 import booksReducer from './admin/books/booksSlice'
 import resetFileState from './admin/books/fileSlice'
 import addBookReducer from './admin/books/addBookSlice'
 import uploadBookReducer from './admin/books/updateSlice'
 import fetchBookByIdReducer from './admin/books/fetchBookByIdSlice'
 import { authSlice } from './slices/authSlice'
+import promoCodeReducer from './vendor/promoSandSlice'
+import vendorBookReducer from './vendor/vendorBookSlice'
+import deleteVendorBookReducer from './vendor/deleteVendorBookSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -20,6 +26,12 @@ const rootReducer = combineReducers({
    findBook: fetchBookByIdReducer,
    [usersSlice.name]: usersSlice.reducer,
    [historyActionSlice.name]: historyActionSlice.reducer,
+   [vendorSlice.name]: vendorSlice.reducer,
+   application: applicationReducer,
+   book: bookReducer,
+   promoCode: promoCodeReducer,
+   vendorBook: vendorBookReducer,
+   vendorDeleteBook: deleteVendorBookReducer,
 })
 
 const persistConfig = {
@@ -31,11 +43,8 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
    reducer: persistedReducer,
-
    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-         serializableCheck: false,
-      }),
+      getDefaultMiddleware({ serializableCheck: false }),
 })
 
 const persistor = persistStore(store)

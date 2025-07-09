@@ -11,6 +11,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import { useSelector } from 'react-redux'
 
 const Input = forwardRef(
    (
@@ -29,12 +30,13 @@ const Input = forwardRef(
          maxLength,
          error,
          helperText,
+         customIcon,
          ...rest
       },
       ref
    ) => {
       const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-
+const { role } = useSelector((state) => state.auth)
       if (!placeholder) {
          console.error('Ошибка: placeholder является обязательным пропсом')
       }
@@ -43,6 +45,12 @@ const Input = forwardRef(
          setIsPasswordVisible((prev) => !prev)
 
       const getEndAdornment = () => {
+         if (customIcon) return   <Box
+            component="img"
+            src={customIcon}
+            alt="icon"
+            sx={{ width: 20, height: 20 }}
+         />
          if (!withIcon) return null
 
          if (type === 'search') return <SearchIcon />
@@ -71,7 +79,7 @@ const Input = forwardRef(
 
       return (
          <Box
-            width={type === 'description' ? 650 : '100%'}
+            width={type === 'description'  ? 650 : '100%'}
             display="flex"
             flexDirection="column"
          >

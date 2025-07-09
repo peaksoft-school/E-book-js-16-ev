@@ -5,9 +5,15 @@ import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
 import UsersPage from '../pages/admin/users/UsersPage'
 import UserProfilePage from '../pages/admin/users/UserProfilePage'
+import Applications from '../pages/admin/aplications/Applications'
+import InnerPageCard from '../pages/admin/aplications/InnerPageCard'
 import Books from '../pages/admin/books/Books'
 import AddBook from '../pages/admin/books/AddBook'
 import UploadBook from '../pages/admin/books/UploadBook'
+import VendorsPage from '../pages/admin/vendors/VendorsPage'
+import VendorsDetailtPage from '../pages/admin/vendors/VendorsDeatilPage'
+import InnerPageVendor from '../pages/vendor/InnerPageVendor'
+import AddType from '../pages/vendor/addType'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))
@@ -20,6 +26,21 @@ const ResetPassword = lazy(() => import('../pages/sign-in/ResetPassword'))
 
 const AppRouter = () => (
    <Routes>
+      <Route
+         path="/"
+         element={
+            <PrivateRouter
+               roles={[ROLES.GUEST, ROLES.CLIENT]}
+               Component={
+                  <Suspense fallback={<Loading />}>
+                     <Home />
+                  </Suspense>
+               }
+               fallbackPath={'/'}
+            />
+         }
+      />
+
       <Route
          path={ROUTES.SIGN_IN}
          element={
@@ -55,21 +76,6 @@ const AppRouter = () => (
       />
 
       <Route
-         path="/"
-         element={
-            <PrivateRouter
-               roles={[ROLES.GUEST, ROLES.CLIENT]}
-               Component={
-                  <Suspense fallback={<Loading />}>
-                     <Home />
-                  </Suspense>
-               }
-               fallbackPath={'/'}
-            />
-         }
-      />
-
-      <Route
          path="/admin"
          element={
             <PrivateRouter
@@ -85,8 +91,21 @@ const AppRouter = () => (
       >
          <Route path="users" element={<UsersPage />} />
          <Route path="users/:id" element={<UserProfilePage />} />
+         <Route index path="/admin/application" element={<Applications />} />
+
+         <Route
+            path="/admin/application/:bookItemId"
+            element={<InnerPageCard />}
+         />
+
+         <Route path="vendors" element={<VendorsPage />} />
+
+         <Route path="vendors/:id" element={<VendorsDetailtPage />} />
+
          <Route path="books" element={<Books />} />
+
          <Route path="books/addbook" element={<AddBook />} />
+
          <Route path="books/uploadbook/:bookItemId" element={<UploadBook />} />
       </Route>
 
@@ -118,7 +137,21 @@ const AppRouter = () => (
                fallbackPath={'/'}
             />
          }
-      />
+      >
+         <Route
+            path="innerpagevendor/:bookItemId"
+            element={<InnerPageVendor />}
+         />
+         <Route
+            path="innerpagevendor/uploadbook/:bookItemId"
+            element={<UploadBook />}
+         />
+         <Route
+            path="innerpagevendor/:bookItemId/addtype"
+            element={<AddType />}
+         />
+         <Route path="addbook" element={<AddBook />} />
+      </Route>
 
       <Route path="*" element="Not found" />
    </Routes>

@@ -12,7 +12,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 const BasketCard = forwardRef(({ book }, ref) => {
-   const { image, title, price, date } = book
+   const { image, name, price, year, basketCount, likes } = book
 
    return (
       <StyledCard ref={ref}>
@@ -22,22 +22,22 @@ const BasketCard = forwardRef(({ book }, ref) => {
                   <FavoriteBorderIcon />
                </StyledLikeButton>
                <StyledLikeCount variant="caption">
-                  (12) В корзине (1)
+                  <span>({likes})</span> В корзине <span>({basketCount})</span>
                </StyledLikeCount>
             </StyledOverlayBox>
-            <StyledCardMedia component="img" image={image} alt={title} />
+            <StyledCardMedia component="img" image={image} alt={name} />
             <StyledOptionsButton aria-label="settings" size="small">
                <MoreVertIcon />
             </StyledOptionsButton>
          </Box>
          <StyledCardContent>
             <StyledTitle variant="h6" component="div">
-               {title}
+               {name}
             </StyledTitle>
             <StyledSubTitleWrapper mt={1}>
-               {date && (
+               {year && (
                   <StyledDate variant="body2" color="text.secondary">
-                     {date}
+                     {year}
                   </StyledDate>
                )}
                <StyledPrice variant="h5" sx={{ mt: 1 }}>
@@ -52,7 +52,7 @@ const BasketCard = forwardRef(({ book }, ref) => {
 export default BasketCard
 const StyledCard = styled(Card)(({ theme }) => ({
    width: 305,
-   height: 450,
+   height: 460,
    padding: '20px 17px 19px 54px',
    background: '#EDEDED',
    borderRadius: '0px',
