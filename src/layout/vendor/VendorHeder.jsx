@@ -88,6 +88,10 @@ const handleSubmitPromoCode = () => {
    const handleMenuClose = () => {
       setAnchorEl(null)
    }
+
+   const handleClick = () => {
+      navigate('addbook')
+   } 
    return (
       <StyledHeader>
          <StyledBox1>
@@ -134,7 +138,7 @@ const handleSubmitPromoCode = () => {
          <StyledBox2>
             <Box className="block1">
             
-<Button variant="outlined" onClick={handleOpenModal}>
+<Button variant="borderOrgS" onClick={handleOpenModal}>
   Создать промокод
 </Button>
 
@@ -221,7 +225,7 @@ const handleSubmitPromoCode = () => {
                   />
                </StyledTooltip>
             </Box>
-            <Button variant="add" icon>
+            <Button variant="add" onClick={handleClick} icon>
                Добавить книгу
             </Button>
          </StyledBox2>

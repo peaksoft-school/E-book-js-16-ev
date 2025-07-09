@@ -1,4 +1,3 @@
-
 import { Box, styled} from '@mui/material'
 import { Outlet} from 'react-router'
 import VendorFooter from '../VendorFooter'
@@ -8,7 +7,9 @@ const VendorLayout = () => {
    return (
       <StyledContainer>
      <VendorHeder/>
-          <Outlet />
+         <StyledOutletBox>
+             <Outlet />
+         </StyledOutletBox>
          <VendorFooter />
       </StyledContainer>
    )
@@ -20,5 +21,10 @@ const StyledContainer = styled(Box)({
    display: 'flex',
    flexDirection: 'column',
    minHeight: '100vh',
+  
 })
 
+const StyledOutletBox = styled(Box)({
+ paddingRight: 100,
+   paddingLeft: 100,
+})

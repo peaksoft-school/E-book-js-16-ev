@@ -11,6 +11,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import { useSelector } from 'react-redux'
 
 const Input = forwardRef(
    (
@@ -35,7 +36,7 @@ const Input = forwardRef(
       ref
    ) => {
       const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-
+const { role } = useSelector((state) => state.auth)
       if (!placeholder) {
          console.error('Ошибка: placeholder является обязательным пропсом')
       }
@@ -78,7 +79,7 @@ const Input = forwardRef(
 
       return (
          <Box
-            width={type === 'description' ? 650 : '100%'}
+            width={type === 'description'  ? 650 : '100%'}
             display="flex"
             flexDirection="column"
          >

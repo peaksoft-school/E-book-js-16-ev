@@ -43,7 +43,6 @@ const BookFilterPage = () => {
    useEffect(() => {
       dispatch(setPageNumber(currentPage))
       dispatch(
-         // filter
          fetchBooksByGenreAndType({
             genre: genre || null,
             type: format || null,

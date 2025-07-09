@@ -8,6 +8,8 @@ import InnerPageCard from '../pages/admin/aplications/InnerPageCard'
 import Books from '../pages/admin/books/Books'
 import AddBook from '../pages/admin/books/AddBook'
 import UploadBook from '../pages/admin/books/UploadBook'
+import InnerPageVendor from '../pages/vendor/InnerPageVendor'
+import AddType from '../pages/vendor/addType'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))
@@ -125,7 +127,19 @@ const AppRouter = () => (
                fallbackPath={'/'}
             />
          }
-      />
+      >
+         <Route
+            path="innerpagevendor/:bookItemId"
+            element={<InnerPageVendor />}
+         />
+         <Route
+            path="innerpagevendor/uploadbook/:bookItemId"
+            element={<UploadBook />}
+         />
+         <Route path='innerpagevendor/:bookItemId/addtype' element={<AddType/>}/> 
+         <Route path="addbook" element={<AddBook />} />
+         
+      </Route>
 
       <Route path="*" element="Not found" />
    </Routes>
