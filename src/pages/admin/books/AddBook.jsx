@@ -43,6 +43,9 @@ const AddBook = ({
 }) => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
+   const { role } = useSelector((state) => state.auth)
+
+   console.log(role, 'role')
 
    const {
       images,
@@ -273,8 +276,8 @@ const AddBook = ({
       }
    }
    return (
-      <StyledBox>
-         <Box sx={{ marginBottom: 3 }}>
+      <StyledBox role={role}>
+         <Box className="breadcrums" role={role}>
             <Breadcrumbs aria-label="breadcrumb">
                <MuiLink
                   component={Link}
@@ -282,7 +285,7 @@ const AddBook = ({
                   underline="hover"
                   color="inherit"
                >
-                  Книги
+                  {role === 'ADMIN' ? 'Книги' : 'Главная'}
                </MuiLink>
                <Typography color="text.primary">
                   {isEdit ? 'Редактировать' : 'Добавить книгу'}
@@ -291,15 +294,26 @@ const AddBook = ({
          </Box>
 
          <Typography className="imageT">Загрузите 3 фото *</Typography>
-         <StyledImageBox>
+         <StyledImageBox role={role}>
             {photos.map((photo, i) => (
-               <UploadImageBox
+               <Box
                   key={i}
-                  onChange={(file) => handleImageChange(file, i)}
-                  file={photo}
-               />
+                  sx={{
+                     display: 'flex',
+                     flexDirection: 'column',
+                     alignItems: 'center',
+                  }}
+               >
+                  <UploadImageBox
+                     onChange={(file) => handleImageChange(file, i)}
+                     file={photo}
+                  />
+                  <Typography color='grey' variant="caption" sx={{ mt: 1 , fontSize: '14px',}}>
+                     {i === 0 ? 'Главное фото' : `${i + 1}`}
+                  </Typography>
+               </Box>
             ))}
-            <StyledCont>
+            <StyledCont role={role}>
                <Typography>
                   Публикации с качественными фото получают больше откликов!
                </Typography>
@@ -317,7 +331,7 @@ const AddBook = ({
             </StyledCont>
          </StyledImageBox>
 
-         <FormControl className="typeBox" component="fieldset">
+         <FormControl role={role} className="typeBox" component="fieldset">
             <FormLabel
                component="legend"
                sx={{ mb: 1.5, fontWeight: 500, color: 'black' }}
@@ -348,8 +362,8 @@ const AddBook = ({
             </RadioGroup>
          </FormControl>
 
-         <StyledContainer>
-            <StyledLeftBox>
+         <StyledContainer role={role}>
+            <StyledLeftBox role={role}>
                <Input
                   placeholder="Название книги *"
                   name="bookName"
@@ -357,6 +371,7 @@ const AddBook = ({
                   onChange={handleChange}
                   label="Название книги"
                   type="info"
+                  width={role === 'ADMIN' ? '650px' : '770px'}
                />
                <Input
                   name="authorsInput"
@@ -365,10 +380,12 @@ const AddBook = ({
                   value={authorsInput}
                   onChange={(e) => setAuthorsInput(e.target.value)}
                   label="ФИО автора"
+                  width={role === 'ADMIN' ? '650px' : '770px'}
                />
                <SelectField
                   label="Жанры *"
                   value={selectedGenres}
+                  width={role === 'ADMIN' ? '650px' : '770px'}
                   onChange={(value) =>
                      setSelectedGenres(
                         Array.isArray(value) ? value : [value].filter(Boolean)
@@ -386,6 +403,7 @@ const AddBook = ({
                      onChange={handleChange}
                      label="Издательство"
                      type="info"
+                     width={role === 'ADMIN' ? '650px' : '770px'}
                   />
                )}
                <Input
@@ -398,6 +416,7 @@ const AddBook = ({
                   multiline
                   rows={8}
                   maxLength={1000}
+                  width={role === 'ADMIN' ? '650px' : '770px'}
                />
                {type !== 'AUDIO' && (
                   <Input
@@ -410,12 +429,13 @@ const AddBook = ({
                      multiline
                      rows={8}
                      maxLength={9234}
+                     width={role === 'ADMIN' ? '650px' : '770px'}
                   />
                )}
             </StyledLeftBox>
 
-            <StyledRightBox>
-               <Box className="firstRow">
+            <StyledRightBox role={role}>
+               <Box className="firstRow" role={role}>
                   <SelectField
                      width="228.5px"
                      label="Выберите язык"
@@ -442,7 +462,7 @@ const AddBook = ({
                   </Box>
                </Box>
                {type === 'AUDIO' && (
-                  <Box className="forth">
+                  <Box className="forth" role={role}>
                      <Typography sx={{ fontWeight: 500, marginBottom: '8px' }}>
                         Длительность
                      </Typography>
@@ -489,7 +509,7 @@ const AddBook = ({
                      </InputsBox>
                   </Box>
                )}
-               <Box className="secondRow">
+               <Box className="secondRow" role={role}>
                   {type !== 'AUDIO' && (
                      <NumericInput
                         width="228.5px"
@@ -505,6 +525,7 @@ const AddBook = ({
                   )}
                   {type === 'PAPER' && (
                      <NumericInput
+                     width="228.5px"
                         unit="шт."
                         placeholder="0"
                         name="count"
@@ -526,7 +547,7 @@ const AddBook = ({
                      </StyledCheckbox>
                   )}
                </Box>
-               <Box className="therdRow">
+               <Box className="therdRow" role={role}>
                   <NumericInput
                      width={228.5}
                      name="price"
@@ -560,7 +581,7 @@ const AddBook = ({
                )}
                {type === 'AUDIO' && (
                   <>
-                     <Box className="fragment">
+                     <Box className="fragment" role={role}>
                         <UploadButton
                            label="фрагмент аудиозаписи"
                            fileName="fragment"
@@ -593,7 +614,7 @@ const AddBook = ({
 
          <Button
             className="addBtn"
-            variant="warning"
+            variant="add"
             onClick={handleSubmit}
             disabled={
                loading ||
@@ -632,27 +653,27 @@ const InputsBox = styled(Box)({
    gap: 16,
 })
 
-const StyledContainer = styled(Box)({
-   maxWidth: 1190,
+const StyledContainer = styled(Box)(({ role }) => ({
+   maxWidth: role === 'ADMIN' ? 1190 : 1400,
    display: 'flex',
    flexDirection: 'row',
    gap: 42,
-})
+}))
 
-const StyledLeftBox = styled(Box)({
+const StyledLeftBox = styled(Box)(({ role }) => ({
    display: 'flex',
    flexDirection: 'column',
    gap: 25,
-   width: 650,
-})
+   width: role === 'ADMIN' ? 650 : 770,
+}))
 
 const StyledRightBox = styled(Box)({
    display: 'flex',
    flexDirection: 'column',
    width: '100%',
-   gap: 25,
+   gap: 23,
    '& .firstRow': { display: 'flex', gap: 42 },
-   '& .secondRow': { display: 'flex', gap: 42 },
+   '& .secondRow': { display: 'flex', gap: 42, marginTop: 2 , width: 400,},
    '& .therdRow': { display: 'flex', gap: 42, width: 400 },
    '& .forth': { marginTop: '-1px' },
    '& .fragment': {
@@ -661,26 +682,39 @@ const StyledRightBox = styled(Box)({
    },
 })
 
-const StyledBox = styled(Box)(({ theme }) => ({
-   width: 1190,
+const StyledBox = styled(Box)(({ theme, role }) => ({
+   width: role === 'ADMIN' ? 1190 : 1320,
+   marginBottom: 50,
    '& .imageT': { marginBottom: 40 },
-   '& .addBtn': { width: 130, height: 42, fontSize: 16 },
+   '& .addBtn': {
+      width: 130,
+      height: 42,
+      fontSize: 16,
+      left: role === 'ADMIN' ? 980 : 1180,
+      marginTop: 50,
+   },
    '& .typeBox': { marginBottom: 20 },
    '& .modal-error': { color: 'red', fontSize: '14px' },
+   '& .breadcrums': {
+      marginBottom: 30,
+      marginTop: role === 'ADMIN' ? 0 : 30,
+   },
 }))
 
-const StyledImageBox = styled(Box)(({ theme }) => ({
+const StyledImageBox = styled(Box)(({ theme, role }) => ({
    display: 'flex',
-   gap: 30,
+   gap: role === 'ADMIN' ? 30 : 43.5,
    marginBottom: 40,
 }))
 
-const StyledCont = styled(Box)(({ theme }) => ({
+const StyledCont = styled(Box)(({ theme, role }) => ({
    display: 'flex',
    flexDirection: 'column',
+   height: 312,
    width: 395,
    backgroundColor: '#ECECEC',
    padding: '30px 35px 26px 30px',
+   marginLeft: role === 'ADMIN' ? 1 : 80,
    '& .trule': {
       fontWeight: 600,
       marginTop: 20,

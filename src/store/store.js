@@ -11,6 +11,9 @@ import uploadBookReducer from './admin/books/updateSlice'
 import fetchBookByIdReducer from './admin/books/fetchBookByIdSlice'
 import { authSlice } from './slices/authSlice'
 import { vendorProfileSlice } from './vendor/profile/vendorProfileSlice'
+import promoCodeReducer from './vendor/promoSandSlice'
+import vendorBookReducer from './vendor/vendorBookSlice'
+import deleteVendorBookReducer from './vendor/deleteVendorBookSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -22,6 +25,9 @@ const rootReducer = combineReducers({
    [vendorProfileSlice.name]: vendorProfileSlice.reducer,
    application: applicationReducer,
    book: bookReducer,
+   promoCode: promoCodeReducer,
+   vendorBook: vendorBookReducer,
+   vendorDeleteBook: deleteVendorBookReducer,
 })
 
 const persistConfig = {

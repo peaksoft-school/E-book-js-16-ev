@@ -1,31 +1,85 @@
-import { useNavigate, NavLink } from 'react-router'
+import Modal from '../../components/UI/Modal'
+import PersonIcon from '@mui/icons-material/Person'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AUTH_ACTION } from '../../store/slices/authSlice'
 import {
-   AppBar,
    Box,
-   IconButton,
-   Typography,
-   Button,
-   styled,
-   Avatar,
    Menu,
    MenuItem,
+   Tooltip,
+   useTheme,
+   Avatar,
+   tooltipClasses,
+   styled,
 } from '@mui/material'
-import PersonIcon from '@mui/icons-material/Person'
-
-import { createGlobalStyle } from 'styled-components'
+import MuiButton from '@mui/material/Button'
 import Input from '../../components/UI/Input'
 import { Icons } from '../../assets/icons'
-import { NAV_LINKS } from '../../utils/helpers'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { AUTH_ACTION } from '../../store/slices/authSlice'
-
-const VendorHeader = () => {
+import Button from '../../components/UI/buttons/Button'
+import { useNavigate } from 'react-router'
+import { resetPromoState } from '../../store/vendor/promoSandSlice'
+import { createPromoCodeThunk } from '../../store/vendor/createPromoCodeThunk'
+import { toast } from 'react-toastify'
+const VendorHeder = () => {
    const [anchorEl, setAnchorEl] = useState(null)
+   const [isModalOpen, setIsModalOpen] = useState(false)
+   const [promoData, setPromoData] = useState({
+      code: '',
+      discount: '',
+      startDate: '',
+      endDate: '',
+   })
    const open = Boolean(anchorEl)
-
    const dispatch = useDispatch()
    const navigate = useNavigate()
+   const theme = useTheme()
+
+   const { loading, successMessage, errorMessage } = useSelector(
+      (state) => state.promoCode
+   )
+
+   const handleSubmitPromoCode = () => {
+      const { code, discount, startDate, endDate } = promoData
+
+      if (!code || !discount || !startDate || !endDate) {
+         return toast.error('Пожалуйста, заполните все поля.')
+      }
+
+      const discountNumber = Number(discount)
+      if (isNaN(discountNumber) || discountNumber < 1 || discountNumber > 100) {
+         return toast.error('Скидка должна быть числом от 1 до 100.')
+      }
+
+      if (new Date(startDate) > new Date(endDate)) {
+         return toast.error('Дата начала не может быть позже даты окончания.')
+      }
+
+      dispatch(createPromoCodeThunk(promoData)).then((res) => {
+         if (res.meta.requestStatus === 'fulfilled') {
+            toast.success(res.payload || 'Промокод успешно создан!')
+            setPromoData({ code: '', discount: '', startDate: '', endDate: '' })
+            handleCloseModal()
+         } else {
+            toast.error(res.payload || 'Ошибка при создании промокода')
+         }
+      })
+   }
+
+   const handleOpenModal = () => setIsModalOpen(true)
+   const handleCloseModal = () => {
+      setIsModalOpen(false)
+      dispatch(resetPromoState())
+   }
+
+   const handleLogout = () => {
+      dispatch(AUTH_ACTION.logOut())
+   }
+
+   const handleClose = () => {
+      navigate('/vendor/profile')
+      setAnchorEl(null)
+   }
 
    const handleMenuOpen = (event) => {
       setAnchorEl(event.currentTarget)
@@ -35,185 +89,211 @@ const VendorHeader = () => {
       setAnchorEl(null)
    }
 
-   const handleLogout = () => {
-      dispatch(AUTH_ACTION.logOut())
+   const handleClick = () => {
+      navigate('addbook')
    }
-   const handleProfile = () => {
-      navigate('/vendor/profile')
-   }
-
-   const handleNavigateSignIn = () => navigate('/sign-in')
    return (
-      <>
-         <GlobalFont />
-         <StyledAppBar position="static">
-            <StyledHeaderUp>
-               <LogoImage src={Icons.eBook} alt="Логотип" />
-               <StyledInputWrapper>
-                  <Input
-                     type="search"
-                     placeholder="Искать жанр, книги, авторов, издательства..."
-                  />
-               </StyledInputWrapper>
+      <StyledHeader>
+         <StyledBox1>
+            <img src={Icons.eBook} alt="logo" />
+            <Input
+               width="895px"
+               placeholder="Искать жанр, книги, авторов, издательства... "
+            />
+            <Box
+               component="img"
+               src={Icons.ball}
+               alt="!"
+               sx={{
+                  width: 24,
+                  height: 24,
+                  cursor: 'pointer',
+               }}
+            />
+            <Box>
+               <StyledButton
+                  aria-label="settings"
+                  size="small"
+                  onClick={handleMenuOpen}
+               >
+                  <Avatar sx={{ bgcolor: '#ddd', width: 40, height: 40 }}>
+                     <PersonIcon sx={{ color: '#777' }} />
+                  </Avatar>
+                  <Box component="img" src={Icons.down} alt="down"></Box>
+               </StyledButton>
 
-               <StyledIconButton>
-                  <img src={Icons.ball} alt="Like" />
-               </StyledIconButton>
+               <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleMenuClose}
+                  disableScrollLock
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+               >
+                  <MenuItem onClick={handleClose}>Профиль</MenuItem>
+                  <MenuItem onClick={handleLogout}>Выйти</MenuItem>
+               </Menu>
+            </Box>
+         </StyledBox1>
+         <StyledBox2>
+            <Box className="block1">
+               <Button variant="borderOrgS" onClick={handleOpenModal}>
+                  Создать промокод
+               </Button>
 
-               <Box sx={{ position: 'relative' }}>
-                  <StyledButtonAv
-                     aria-label="settings"
-                     size="small"
-                     onClick={handleMenuOpen}
+               <Modal
+                  open={isModalOpen}
+                  handleClose={handleCloseModal}
+                  disableScrollLock
+               >
+                  <Box
+                     onClick={(e) => e.stopPropagation()}
+                     sx={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                     }}
                   >
-                     <Avatar sx={{ bgcolor: '#ddd', width: 40, height: 40 }}>
-                        <PersonIcon sx={{ color: '#777' }} />
-                     </Avatar>
-                  </StyledButtonAv>
+                     <Input
+                        width="485px"
+                        label="Промокод"
+                        placeholder="Введите промокод"
+                        value={promoData.code}
+                        type="info"
+                        onChange={(e) =>
+                           setPromoData({ ...promoData, code: e.target.value })
+                        }
+                     />
+                     <Box sx={{ display: 'flex', gap: 2 }}>
+                        <Input
+                           width="160px"
+                           label="Дата начала"
+                           placeholder="гг-мм-дд"
+                           type="info"
+                           value={promoData.startDate}
+                           onChange={(e) =>
+                              setPromoData({
+                                 ...promoData,
+                                 startDate: e.target.value,
+                              })
+                           }
+                        />
+                        <Input
+                           width="160px"
+                           label="Дата завершения"
+                           placeholder="гг-мм-дд"
+                           type="info"
+                           value={promoData.endDate}
+                           onChange={(e) =>
+                              setPromoData({
+                                 ...promoData,
+                                 endDate: e.target.value,
+                              })
+                           }
+                        />
+                        <Input
+                           width="133px"
+                           label="Процент скидки"
+                           placeholder="0"
+                           type="info"
+                           customIcon={Icons.prosent}
+                           value={promoData.discount}
+                           onChange={(e) =>
+                              setPromoData({
+                                 ...promoData,
+                                 discount: e.target.value,
+                              })
+                           }
+                        />
+                     </Box>
+                     <StyledBtn onClick={handleSubmitPromoCode}>
+                        Создать
+                     </StyledBtn>
+                  </Box>
+               </Modal>
 
-                  <Menu
-                     anchorEl={anchorEl}
-                     open={open}
-                     onClose={handleMenuClose}
-                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                  >
-                     <MenuItem onClick={handleLogout}>Выйти</MenuItem>
-                     <MenuItem onClick={handleProfile}>Профиль</MenuItem>
-                  </Menu>
-               </Box>
-            </StyledHeaderUp>
-
-            <StyledNav>
-               <StyledMenuWrapper>
-                  <PromocodeButton>Создать промокод</PromocodeButton>
-                  <img
-                     src={Icons.excl}
-                     alt="menu"
-                     style={{
-                        filter:
-                           'invert(50%) sepia(0%) saturate(0%) hue-rotate(180deg) brightness(85%) contrast(85%)',
+               <StyledTooltip
+                  title="Промокод применится ко всем вашим книгам"
+                  placement="bottom-start"
+                  arrow
+               >
+                  <Box
+                     component="img"
+                     src={Icons.exclg}
+                     alt="!"
+                     sx={{
+                        width: 24,
+                        height: 24,
+                        border: '0',
                      }}
                   />
-               </StyledMenuWrapper>
-
-               <StyledButton onClick={handleNavigateSignIn}>
-                  + Добавить книгу
-               </StyledButton>
-            </StyledNav>
-         </StyledAppBar>
-      </>
+               </StyledTooltip>
+            </Box>
+            <Button variant="add" onClick={handleClick} icon>
+               Добавить книгу
+            </Button>
+         </StyledBox2>
+      </StyledHeader>
    )
 }
 
-export default VendorHeader
+export default VendorHeder
 
-const StyledAppBar = styled(AppBar)(({ theme }) => ({
-   paddingRight: '80px',
-   paddingLeft: '80px',
-   backgroundColor: theme.palette.background.paper,
-   boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+const StyledTooltip = styled(({ className, ...props }) => (
+   <Tooltip arrow classes={{ popper: className }} {...props} />
+))(({ theme }) => ({
+   [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: '#ffffff',
+      color: '#969696',
+      border: `1px solid #969696`,
+      fontSize: 12,
+      padding: '8px 12px',
+      borderRadius: 0,
+   },
+   [`& .${tooltipClasses.arrow}`]: {
+      '&:before': {
+         backgroundColor: '#ffffff',
+         border: '1px solid #969696',
+         transform: 'rotate(45deg)',
+         boxSizing: 'border-box',
+      },
+   },
+}))
+
+const StyledBox1 = styled(Box)({
    display: 'flex',
+   gap: 45,
+   textAlign: 'center',
    justifyContent: 'center',
    alignItems: 'center',
-   overflowX: 'hidden',
-   [theme.breakpoints.down('md')]: {
-      paddingLeft: '20px',
-      paddingRight: '20px',
-   },
-}))
-
-const StyledHeaderUp = styled(Box)(({ theme }) => ({
-   width: '100%',
-   maxWidth: '1280px',
-   display: 'flex',
-   flexWrap: 'wrap',
-   alignItems: 'center',
-   justifyContent: 'space-between',
-   gap: '20px',
-   [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-      alignItems: 'center',
-   },
-}))
-
-const StyledNav = styled(Box)(({ theme }) => ({
-   width: '100%',
-   maxWidth: '1280px',
-   display: 'flex',
-   flexWrap: 'wrap',
-   alignItems: 'center',
-   justifyContent: 'space-between',
-   marginTop: '20px',
-   marginBottom: '20px',
-   gap: '10px',
-   [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-      alignItems: 'center',
-   },
-}))
-
-const StyledMenuWrapper = styled(Box)(({ theme }) => ({
-   display: 'flex',
-   alignItems: 'center',
-   justifyContent: 'flex-start',
-   gap: '14px',
-   paddingLeft: '4px',
-}))
-
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-   marginLeft: '0px',
-   marginRight: '20px',
-}))
-
-const LogoImage = styled('img')({
-   maxWidth: '147px',
-   height: '85px',
-   marginRight: '20px',
 })
 
-const GlobalFont = createGlobalStyle`
-   @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+const StyledBox2 = styled(Box)({
+   display: 'flex',
+   justifyContent: 'space-between',
+   alignItems: 'center',
+   '& .block1': {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '20px',
+   },
+})
+const StyledHeader = styled(Box)({
+   display: 'flex',
+   flexDirection: 'column',
+   gap: 40,
+   paddingRight: 100,
+   paddingLeft: 100,
+})
 
-   * {
-      box-sizing: border-box;
-   }
-
-   body {
-      font-family: 'Open Sans', sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-   }
-`
-
-const StyledInputWrapper = styled(Box)(({ theme }) => ({
-   marginRight: '20px',
-   flexGrow: 1,
-   minWidth: '200px',
-}))
-
-const StyledButton = styled(Button)(({ theme }) => ({
-   backgroundColor: '#F34901',
-   height: '42px',
-   borderRadius: '0px',
-   color: 'white',
-   padding: '10px 24px',
-}))
-
-const StyledButtonAv = styled(Button)({
+const StyledButton = styled(MuiButton)({
    color: '#B4B4B4',
    textTransform: 'none',
    display: 'flex',
    alignItems: 'center',
-   gap: 8,
 })
 
-const PromocodeButton = styled(Button)(({ theme }) => ({
-   backgroundColor: '#ffffff',
-   height: '42px',
-   borderRadius: '0px',
-   color: '#FF4C00',
-   padding: '10px 16px',
-   border: 'solid 1px #FF4C00',
-}))
+const StyledBtn = styled(Button)({
+   marginLeft: 386,
+})
