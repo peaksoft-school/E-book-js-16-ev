@@ -39,45 +39,45 @@ const VendorHeder = () => {
       (state) => state.promoCode
    )
 
-const handleSubmitPromoCode = () => {
-  const { code, discount, startDate, endDate } = promoData
+   const handleSubmitPromoCode = () => {
+      const { code, discount, startDate, endDate } = promoData
 
-  if (!code || !discount || !startDate || !endDate) {
-    return toast.error('Пожалуйста, заполните все поля.')
-  }
+      if (!code || !discount || !startDate || !endDate) {
+         return toast.error('Пожалуйста, заполните все поля.')
+      }
 
-  const discountNumber = Number(discount)
-  if (isNaN(discountNumber) || discountNumber < 1 || discountNumber > 100) {
-    return toast.error('Скидка должна быть числом от 1 до 100.')
-  }
+      const discountNumber = Number(discount)
+      if (isNaN(discountNumber) || discountNumber < 1 || discountNumber > 100) {
+         return toast.error('Скидка должна быть числом от 1 до 100.')
+      }
 
-  if (new Date(startDate) > new Date(endDate)) {
-    return toast.error('Дата начала не может быть позже даты окончания.')
-  }
+      if (new Date(startDate) > new Date(endDate)) {
+         return toast.error('Дата начала не может быть позже даты окончания.')
+      }
 
-  dispatch(createPromoCodeThunk(promoData)).then((res) => {
-    if (res.meta.requestStatus === 'fulfilled') {
-      toast.success(res.payload || 'Промокод успешно создан!')
-      setPromoData({ code: '', discount: '', startDate: '', endDate: '' })
-      handleCloseModal()
-    } else {
-      toast.error(res.payload || 'Ошибка при создании промокода')
-    }
-  })
-}
+      dispatch(createPromoCodeThunk(promoData)).then((res) => {
+         if (res.meta.requestStatus === 'fulfilled') {
+            toast.success(res.payload || 'Промокод успешно создан!')
+            setPromoData({ code: '', discount: '', startDate: '', endDate: '' })
+            handleCloseModal()
+         } else {
+            toast.error(res.payload || 'Ошибка при создании промокода')
+         }
+      })
+   }
 
    const handleOpenModal = () => setIsModalOpen(true)
    const handleCloseModal = () => {
-  setIsModalOpen(false)
-  dispatch(resetPromoState())
-}
-
+      setIsModalOpen(false)
+      dispatch(resetPromoState())
+   }
 
    const handleLogout = () => {
       dispatch(AUTH_ACTION.logOut())
    }
 
    const handleClose = () => {
+      navigate('/vendor/profile')
       setAnchorEl(null)
    }
 
@@ -91,7 +91,7 @@ const handleSubmitPromoCode = () => {
 
    const handleClick = () => {
       navigate('addbook')
-   } 
+   }
    return (
       <StyledHeader>
          <StyledBox1>
@@ -137,14 +137,17 @@ const handleSubmitPromoCode = () => {
          </StyledBox1>
          <StyledBox2>
             <Box className="block1">
-            
-<Button variant="borderOrgS" onClick={handleOpenModal}>
-  Создать промокод
-</Button>
+               <Button variant="borderOrgS" onClick={handleOpenModal}>
+                  Создать промокод
+               </Button>
 
-               <Modal open={isModalOpen} handleClose={handleCloseModal} disableScrollLock>
+               <Modal
+                  open={isModalOpen}
+                  handleClose={handleCloseModal}
+                  disableScrollLock
+               >
                   <Box
-                  onClick={(e) => e.stopPropagation()}
+                     onClick={(e) => e.stopPropagation()}
                      sx={{
                         flex: 1,
                         display: 'flex',
@@ -157,7 +160,7 @@ const handleSubmitPromoCode = () => {
                         label="Промокод"
                         placeholder="Введите промокод"
                         value={promoData.code}
-                        type='info'
+                        type="info"
                         onChange={(e) =>
                            setPromoData({ ...promoData, code: e.target.value })
                         }
@@ -192,8 +195,8 @@ const handleSubmitPromoCode = () => {
                         <Input
                            width="133px"
                            label="Процент скидки"
-                           placeholder="0"  
-                           type='info'
+                           placeholder="0"
+                           type="info"
                            customIcon={Icons.prosent}
                            value={promoData.discount}
                            onChange={(e) =>
@@ -204,7 +207,9 @@ const handleSubmitPromoCode = () => {
                            }
                         />
                      </Box>
-                     <StyledBtn onClick={handleSubmitPromoCode}>Создать</StyledBtn>
+                     <StyledBtn onClick={handleSubmitPromoCode}>
+                        Создать
+                     </StyledBtn>
                   </Box>
                </Modal>
 
@@ -289,7 +294,6 @@ const StyledButton = styled(MuiButton)({
    alignItems: 'center',
 })
 
-
 const StyledBtn = styled(Button)({
-marginLeft: 386,
-} )
+   marginLeft: 386,
+})

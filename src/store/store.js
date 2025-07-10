@@ -13,6 +13,7 @@ import addBookReducer from './admin/books/addBookSlice'
 import uploadBookReducer from './admin/books/updateSlice'
 import fetchBookByIdReducer from './admin/books/fetchBookByIdSlice'
 import { authSlice } from './slices/authSlice'
+import { vendorProfileSlice } from './vendor/profile/vendorProfileSlice'
 import promoCodeReducer from './vendor/promoSandSlice'
 import vendorBookReducer from './vendor/vendorBookSlice'
 import deleteVendorBookReducer from './vendor/deleteVendorBookSlice'
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
    addBook: addBookReducer,
    updateBook: uploadBookReducer,
    findBook: fetchBookByIdReducer,
+   [vendorProfileSlice.name]: vendorProfileSlice.reducer,
    [usersSlice.name]: usersSlice.reducer,
    [historyActionSlice.name]: historyActionSlice.reducer,
    [vendorSlice.name]: vendorSlice.reducer,

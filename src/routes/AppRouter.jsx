@@ -10,6 +10,7 @@ import InnerPageCard from '../pages/admin/aplications/InnerPageCard'
 import Books from '../pages/admin/books/Books'
 import AddBook from '../pages/admin/books/AddBook'
 import UploadBook from '../pages/admin/books/UploadBook'
+import VendorProfilePage from '../pages/vendor/VendorProfilePage'
 import VendorsPage from '../pages/admin/vendors/VendorsPage'
 import VendorsDetailtPage from '../pages/admin/vendors/VendorsDeatilPage'
 import InnerPageVendor from '../pages/vendor/InnerPageVendor'
@@ -90,7 +91,9 @@ const AppRouter = () => (
          }
       >
          <Route path="users" element={<UsersPage />} />
+
          <Route path="users/:id" element={<UserProfilePage />} />
+
          <Route index path="/admin/application" element={<Applications />} />
 
          <Route
@@ -138,6 +141,7 @@ const AppRouter = () => (
             />
          }
       >
+         <Route path="/vendor/profile" element={<VendorProfilePage />} />
          <Route
             path="innerpagevendor/:bookItemId"
             element={<InnerPageVendor />}
