@@ -10,6 +10,10 @@ import addBookReducer from './admin/books/addBookSlice'
 import uploadBookReducer from './admin/books/updateSlice'
 import fetchBookByIdReducer from './admin/books/fetchBookByIdSlice'
 import { authSlice } from './slices/authSlice'
+import promoCodeReducer from './vendor/promoSandSlice'
+import vendorBookReducer from './vendor/vendorBookSlice'
+import deleteVendorBookReducer from './vendor/deleteVendorBookSlice'
+import bookClientStateReducer from './user/userBookByIdSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -20,6 +24,10 @@ const rootReducer = combineReducers({
    findBook: fetchBookByIdReducer,
    application: applicationReducer,
    book: bookReducer,
+   promoCode: promoCodeReducer,
+   vendorBook: vendorBookReducer,
+   vendorDeleteBook: deleteVendorBookReducer,
+   bookClient: bookClientStateReducer,
 })
 
 const persistConfig = {
