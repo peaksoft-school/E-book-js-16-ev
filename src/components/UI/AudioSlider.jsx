@@ -72,7 +72,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }))
 
 const StyledCardMedia = styled(CardMedia)({
-   height: '309px',
+   height: '409px',
    width: '100%',
    objectFit: 'cover',
    transition: 'height 0.3s ease-in-out',
