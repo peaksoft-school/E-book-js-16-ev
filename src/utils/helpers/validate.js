@@ -70,10 +70,75 @@ const VALIDATION_SCHEMA_FORGOT = Yup.object({
       .email('Введите корректный email')
       .required('Email обязателен для заполнения'),
 })
+
+const phoneNumberRules = /^\+996\d{9}$/
+
+const passwordRules =
+   /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`])[A-Za-z\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`]{8,}$/
+
+const VALIDATION_SCHEMA_UPDATE_PROFILE = Yup.object({
+   firstName: Yup.string()
+      .trim()
+      .min(2, 'Имя должно содержать не менее 2 символов')
+      .nullable(),
+
+   lastName: Yup.string()
+      .trim()
+      .min(2, 'Фамилия должна содержать не менее 2 символов')
+      .nullable(),
+
+   phoneNumber: Yup.string()
+      .matches(
+         phoneNumberRules,
+         'Номер телефона должен быть в формате +996 (XXX) XXX-XX-XX'
+      )
+      .nullable(),
+
+   email: Yup.string().email('Введите корректный email').nullable(),
+
+   newPassword: Yup.string()
+      .nullable()
+      .when('.', {
+         is: (values) => values.newPassword && values.newPassword.length > 0,
+         then: (schema) =>
+            schema
+               .min(8, 'Пароль должен содержать минимум 8 символов')
+               .matches(
+                  passwordRules,
+                  'Пароль должен содержать минимум 8 символов, одну заглавную букву, одну цифру и спецсимвол'
+               )
+               .required('Новый пароль обязателен для изменения пароля'),
+         otherwise: (schema) => schema.notRequired(),
+      }),
+
+   confirmPassword: Yup.string()
+      .nullable()
+      .when('newPassword', {
+         is: (newPassword) => newPassword && newPassword.length > 0,
+         then: (schema) =>
+            schema
+               .required('Подтвердите новый пароль')
+               .oneOf([Yup.ref('newPassword')], 'Пароли не совпадают'),
+         otherwise: (schema) =>
+            schema
+               .notRequired()
+               .oneOf([Yup.ref('newPassword'), null], 'Пароли не совпадают'),
+      }),
+
+   currentPassword: Yup.string()
+      .nullable()
+      .when('newPassword', {
+         is: (newPassword) => newPassword && newPassword.length > 0,
+         then: (schema) =>
+            schema.required('Текущий пароль обязателен для изменения пароля'),
+         otherwise: (schema) => schema.notRequired(),
+      }),
+})
 export {
    VALIDATION_SCHEMA_VENDOR,
    VALIDATION_SCHEMA_CLIENT,
    VALIDATION_SCHEMA_SIGN_IN,
    VALIDATION_SCHEMA_RESET,
    VALIDATION_SCHEMA_FORGOT,
+   VALIDATION_SCHEMA_UPDATE_PROFILE,
 }

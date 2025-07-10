@@ -14,6 +14,14 @@ const NAV_LINKS = [
    { label: 'Начать продавать на eBook', to: '/sell' },
 ]
 
+const BOOK_FILTER = [
+   { value: 'все', label: 'все' },
+   { value: 'в избранном', label: 'в избранном' },
+   { value: 'в корзине', label: 'в корзине' },
+   { value: 'проданы', label: 'проданы' },
+   { value: 'со скидками', label: 'со скидкой' },
+]
+
 const GENRES = [
    { label: 'Художественная литература', value: 'FICTION' },
    { label: 'Детские книги', value: 'CHILDRENS' },
@@ -30,13 +38,6 @@ const FORMATS = [
    { label: 'Аудио', value: 'AUDIO' },
    { label: 'Бумажные', value: 'PAPER' },
    { label: 'Электронные', value: 'ELECTRONIC' },
-]
-const BOOK_FILTER = [
-   { value: 'все', label: 'все' },
-   { value: 'в избранном', label: 'в избранном' },
-   { value: 'в корзине', label: 'в корзине' },
-   { value: 'проданы', label: 'проданы' },
-   { value: 'со скидками', label: 'со скидкой' },
 ]
 
 export { CATEGORIES, NAV_LINKS, GENRES, FORMATS, BOOK_FILTER }

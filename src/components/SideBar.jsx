@@ -60,6 +60,11 @@ const SideBar = () => (
 export default SideBar
 
 const StyledSideBarBox = styled(Box)(({ theme }) => ({
+   position: 'fixed',
+   top: 0,
+   left: 0,
+   height: '100vh',
+   width: '250px',
    backgroundColor: theme.palette.secondary.main,
    width: 270,
    height: '100%',

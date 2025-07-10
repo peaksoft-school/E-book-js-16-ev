@@ -151,6 +151,31 @@ const StyledButton = styled(MUIButton)(({ variant }) => {
             backgroundColor: '#ffffff',
          },
       }
+   }else if (variant === 'borderOrgS') {
+      buttonStyles['&.MuiButton-root'] = {
+         ...buttonStyles['&.MuiButton-root'],
+         width: '180px',
+         height: '42px',
+         padding: '8px 25px',
+         fontSize: '14px',
+         color: '#F34901',
+         border: '1px solid #F34901',
+
+         '&:hover': {
+            backgroundColor: '#Fe6F33',
+            color: '#ffffff',
+         },
+
+         '&:active': {
+            backgroundColor: '#E54400',
+            Color: '#ffffff',
+         },
+
+         '&.Mui-disabled': {
+            color: '#1C1B1F1F',
+            backgroundColor: '#ffffff',
+         },
+      }
    } else if (variant === 'add') {
       buttonStyles['&.MuiButton-root'] = {
          ...buttonStyles['&.MuiButton-root'],
