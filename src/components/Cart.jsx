@@ -1,5 +1,6 @@
-import { Box } from '@mui/material'
-import React from 'react'
+import { Box, Breadcrumbs, Link as MuiLink, Typography } from '@mui/material'
+import { Link } from 'react-router'
+
 
 const Cart = () => {
    return <Box>
@@ -13,7 +14,7 @@ const Cart = () => {
                   Главная
                </MuiLink>
                <Typography color="text.primary">
-                  {isEdit ? 'Редактировать' : 'Добавить книгу'}
+                  {/* { ? 'Избранные' : 'Корзина'} */}
                </Typography>
             </Breadcrumbs>
    </Box>

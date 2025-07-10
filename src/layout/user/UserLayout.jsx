@@ -12,8 +12,8 @@ const UserLayout = () => {
 
    return (
       <div>
-         {/* <h1>Client</h1> */}
-         <Cart/>
+         <h1>Client</h1>
+         {/* <Cart/> */}
          <button onClick={handleLogout}>Выйти</button>
          <Outlet />
       </div>
