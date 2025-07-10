@@ -3,12 +3,16 @@ import { Suspense, lazy } from 'react'
 import { ROLES, ROUTES } from './routes'
 import PrivateRouter from './PrivateRouter'
 import Loading from '../components/UI/Loading'
+import UsersPage from '../pages/admin/users/UsersPage'
+import UserProfilePage from '../pages/admin/users/UserProfilePage'
 import Applications from '../pages/admin/aplications/Applications'
 import InnerPageCard from '../pages/admin/aplications/InnerPageCard'
 import Books from '../pages/admin/books/Books'
 import AddBook from '../pages/admin/books/AddBook'
 import UploadBook from '../pages/admin/books/UploadBook'
 import VendorProfilePage from '../pages/vendor/VendorProfilePage'
+import VendorsPage from '../pages/admin/vendors/VendorsPage'
+import VendorsDetailtPage from '../pages/admin/vendors/VendorsDeatilPage'
 import InnerPageVendor from '../pages/vendor/InnerPageVendor'
 import AddType from '../pages/vendor/addType'
 
@@ -86,12 +90,20 @@ const AppRouter = () => (
             />
          }
       >
+         <Route path="users" element={<UsersPage />} />
+
+         <Route path="users/:id" element={<UserProfilePage />} />
+
          <Route index path="/admin/application" element={<Applications />} />
 
          <Route
             path="/admin/application/:bookItemId"
             element={<InnerPageCard />}
          />
+
+         <Route path="vendors" element={<VendorsPage />} />
+
+         <Route path="vendors/:id" element={<VendorsDetailtPage />} />
 
          <Route path="books" element={<Books />} />
 

@@ -14,6 +14,14 @@ const NAV_LINKS = [
    { label: 'Начать продавать на eBook', to: '/sell' },
 ]
 
+const BOOK_FILTER = [
+   { value: 'все', label: 'все' },
+   { value: 'в избранном', label: 'в избранном' },
+   { value: 'в корзине', label: 'в корзине' },
+   { value: 'проданы', label: 'проданы' },
+   { value: 'со скидками', label: 'со скидкой' },
+]
+
 const GENRES = [
    { label: 'Художественная литература', value: 'FICTION' },
    { label: 'Детские книги', value: 'CHILDRENS' },
@@ -32,4 +40,4 @@ const FORMATS = [
    { label: 'Электронные', value: 'ELECTRONIC' },
 ]
 
-export { CATEGORIES, NAV_LINKS, GENRES, FORMATS }
+export { CATEGORIES, NAV_LINKS, GENRES, FORMATS, BOOK_FILTER }
