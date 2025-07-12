@@ -34,8 +34,7 @@ const BookCard = forwardRef(({ book }, ref) => {
    const handleClick = () => {
       navigate(`/user/sort/innerpageuser/${book.bookItemId}`)
    }
-
-   console.log(book, 'hello book')
+   
    return (
       <StyledCard isclicked={isClicked.toString()} ref={ref}>
          <StyledCardMedia

@@ -196,21 +196,7 @@ const Sort = () => {
             <Box>
                <StyledCardBox>
                   {visibleBooks.map((book) => (
-                     // <BookCard
-                     //    key={book.bookItemId}
-                     //    book={{
-                     //       bookItemId: book.bookItemId,
-                     //       title: book.name,
-                     //       authors: Array.isArray(book.author)
-                     //          ? book.author.join(', ')
-                     //          : '',
-                     //       price: book.price,
-                     //       image: book.imageUrl,
-                     //       type: book.type || '',
-                     //    }}
-                     // />
                      <BookCard key={book.bookItemId} book={book} />
-
                   ))}
                </StyledCardBox>
 
@@ -242,12 +228,6 @@ const Sort = () => {
 }
 
 export default Sort
-
-const BooksGrid = styled(Box)(() => ({
-   display: 'flex',
-   flexWrap: 'wrap',
-   gap: '16px',
-}))
 
 const CustomSelect = styled(Select)(() => ({
    width: 150,
