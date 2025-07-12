@@ -3,11 +3,11 @@ import { axiosInstance } from '../../../configs/axiosInstance'
 
 export const getClinetBasketHistoryAction = createAsyncThunk(
    'user/getClinetBasketHistory',
-   async ({ pageNumber = 1, pageSize = 12, userId }, { rejectWithValue }) => {
+   async ({ pageNumber = 1, pageSize = 12 }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            '/api/historyAction/getClinetBasketHistoryActionForAdmin',
-            { params: { pageNumber, pageSize, userId } }
+            '/api/historyAction/getClinetBasketHistoryAction',
+            { params: { pageNumber, pageSize } }
          )
          return data
       } catch (error) {
@@ -21,11 +21,11 @@ export const getClinetBasketHistoryAction = createAsyncThunk(
 
 export const getClientPurchaseHistoryAction = createAsyncThunk(
    'user/getClientPurchaseHistory',
-   async ({ pageNumber, pageSize, userId }, { rejectWithValue }) => {
+   async ({ pageNumber, pageSize }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            '/api/historyAction/getClientPurchaseHistoryActionForAdmin',
-            { params: { pageNumber, pageSize, userId } }
+            '/api/historyAction/getClientPurchaseHistoryAction',
+            { params: { pageNumber, pageSize } }
          )
          return data
       } catch (error) {
@@ -39,11 +39,11 @@ export const getClientPurchaseHistoryAction = createAsyncThunk(
 
 export const getClientFavoriteHistoryAction = createAsyncThunk(
    'user/getClientFavoriteHistory',
-   async ({ pageNumber, pageSize, userId }, { rejectWithValue }) => {
+   async ({ pageNumber, pageSize }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            '/api/historyAction/getClientFavoriteHistoryActionForAdmin',
-            { params: { pageNumber, pageSize, userId } }
+            '/api/historyAction/getClientFavoriteHistoryAction',
+            { params: { pageNumber, pageSize } }
          )
          return data
       } catch (error) {

@@ -1,3 +1,6 @@
+import { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import {
    Typography,
    Box,
@@ -8,23 +11,24 @@ import {
    useMediaQuery,
    useTheme,
 } from '@mui/material'
-import Input from '../../components/UI/Input'
-import { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
 import { VALIDATION_SCHEMA_UPDATE_PROFILE_CLIENT } from '../../utils/helpers/validate'
-
-import notify from '../../utils/helpers/notify'
-import Modal from '../../components/UI/Modal'
-import { AUTH_ACTION } from '../../store/slices/authSlice'
 import {
    deleteProfileByClient,
    getClientProfile,
    updateClientProfile,
    updatePasswordForClient,
 } from '../../store/user/profile/profileThunk'
+import {
+   getClientFavoriteHistoryAction,
+   getClientPurchaseHistoryAction,
+   getClinetBasketHistoryAction,
+} from '../../store/user/profile/historyActionClientThunk'
 import { CLIENT_PROFILE_ACTION } from '../../store/user/profile/profileSlice'
+import { AUTH_ACTION } from '../../store/slices/authSlice'
 import RoleBreadcrumbs from '../../components/UI/innerpagecoms/RoleBreadCrums'
+import Input from '../../components/UI/Input'
+import notify from '../../utils/helpers/notify'
+import Modal from '../../components/UI/Modal'
 
 const ClientProfile = () => {
    const [email, setEmail] = useState('')
@@ -33,11 +37,12 @@ const ClientProfile = () => {
    const [newPassword, setNewPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
    const [tabValue, setTabValue] = useState(0)
-
+   const [activeFilter, setActiveFilter] = useState('purchased')
    const [validationErrors, setValidationErrors] = useState({})
    const [isModalOpen, setIsModalOpen] = useState(false)
-   const theme = useTheme()
+   const [loadingBooks, setLoadingBooks] = useState(true)
 
+   const theme = useTheme()
    const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
    const isMedium = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -47,6 +52,11 @@ const ClientProfile = () => {
    const { error, successMessage, isLoading, profile } = useSelector(
       (state) => state.clientProfile
    )
+   const {
+      basketHistory = [],
+      favoriteHistory = [],
+      purchaseHistory = [],
+   } = useSelector((state) => state.historyActionsClient)
 
    useEffect(() => {
       dispatch(getClientProfile())
@@ -74,10 +84,42 @@ const ClientProfile = () => {
       }
    }, [successMessage, error, dispatch])
 
+   useEffect(() => {
+      const loadBooks = async () => {
+         setLoadingBooks(true)
+         if (activeFilter === 'purchased') {
+            dispatch(
+               getClientPurchaseHistoryAction({
+                  pageNumber: 1,
+                  pageSize: 10,
+               })
+            )
+         } else if (activeFilter === 'favorite') {
+            dispatch(
+               getClientFavoriteHistoryAction({
+                  pageNumber: 1,
+                  pageSize: 10,
+               })
+            )
+         } else if (activeFilter === 'basket') {
+            dispatch(
+               getClinetBasketHistoryAction({
+                  pageNumber: 1,
+                  pageSize: 10,
+               })
+            )
+         }
+         setLoadingBooks(false)
+      }
+
+      if (tabValue === 1) {
+         loadBooks()
+      }
+   }, [tabValue, activeFilter, dispatch])
+
    const handleTabChange = (event, newValue) => {
       setTabValue(newValue)
       if (newValue === 1) {
-         setCurrentBookPage(1)
       }
    }
 
@@ -153,7 +195,28 @@ const ClientProfile = () => {
          dispatch,
       ]
    )
+   const books = (() => {
+      if (activeFilter === 'purchased') return purchaseHistory || []
+      if (activeFilter === 'favorite') return favoriteHistory || []
+      if (activeFilter === 'basket') return basketHistory || []
+      return []
+   })()
 
+   const filterOptionPurchasedStyle = (activeFilter) => ({
+      color: activeFilter === 'purchased' ? '#F34901' : 'inherit',
+   })
+
+   const filterOptionFavoriteStyle = (activeFilter) => ({
+      color: activeFilter === 'favorite' ? '#F34901' : 'inherit',
+   })
+
+   const filterOptionBasketStyle = (activeFilter) => ({
+      color: activeFilter === 'basket' ? '#F34901' : 'inherit',
+   })
+
+   const handleClearHistory = () => {
+      console.log('Очистить историю clicked for:', activeFilter)
+   }
    const handleDeleteProfileClick = () => {
       setIsModalOpen(true)
    }
@@ -294,7 +357,95 @@ const ClientProfile = () => {
                   </Modal>
                </StyledForm>
             )}
-            {tabValue === 1 && <Box>ghjbkj</Box>}
+            {tabValue === 1 && (
+               <OperationsContentWrapper>
+                  <LeftPanel>
+                     <ClearHistoryText
+                        onClick={handleClearHistory}
+                     ></ClearHistoryText>
+                     <FilterSidebar>
+                        <FilterOption
+                           onClick={() => setActiveFilter('purchased')}
+                           sx={filterOptionPurchasedStyle(activeFilter)}
+                        >
+                           <Typography variant="body2" fontWeight={500}>
+                              Купленные ({purchaseHistory.length} книг)
+                           </Typography>
+                        </FilterOption>
+                        <FilterOption
+                           onClick={() => setActiveFilter('favorite')}
+                           sx={filterOptionFavoriteStyle(activeFilter)}
+                        >
+                           <Typography variant="body2">
+                              В избранном ({favoriteHistory.length} книг)
+                           </Typography>
+                        </FilterOption>
+                        <FilterOption
+                           onClick={() => setActiveFilter('basket')}
+                           sx={filterOptionBasketStyle(activeFilter)}
+                        >
+                           <Typography variant="body2">
+                              В корзине ({basketHistory.length} книг)
+                           </Typography>
+                        </FilterOption>
+                     </FilterSidebar>
+                  </LeftPanel>
+
+                  <BookListContainer>
+                     <BookListHeader>
+                        <Typography variant="body2">Фото</Typography>
+                        <Typography variant="body2">Название/Автор</Typography>
+                        <Typography variant="body2">Кол-во</Typography>
+                        <Typography variant="body2">Цена</Typography>
+                        <Typography variant="body2">Дата</Typography>
+                        <Typography variant="body2">Состояние</Typography>
+                     </BookListHeader>
+
+                     {loadingBooks ? (
+                        <Typography sx={{ marginTop: '20px' }}>
+                           Загрузка истории...
+                        </Typography>
+                     ) : (
+                        books.map((book) => (
+                           <BookItem key={book.id}>
+                              <BookImage src={book.image} alt={book.bookName} />
+                              <BookDetails>
+                                 <Typography variant="body1" fontWeight={500}>
+                                    {book.bookName || '-'}
+                                 </Typography>
+                                 <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                 >
+                                    {book.authorNames?.join(', ') || '-'}
+                                 </Typography>
+                              </BookDetails>
+                              <Typography variant="body1">
+                                 {book.countOfBook !== null &&
+                                 book.countOfBook !== undefined
+                                    ? `${book.countOfBook} шт.`
+                                    : '-'}
+                              </Typography>
+                              <PriceDetails>
+                                 <Typography variant="body1" fontWeight={500}>
+                                    {book.price !== null &&
+                                    book.price !== undefined
+                                       ? `${book.price} с`
+                                       : '-'}
+                                 </Typography>
+                              </PriceDetails>
+                              <Typography variant="body1">
+                                 {book.date || '-'}
+                              </Typography>
+                              <Typography variant="body1">
+                                 {book.bookStatus || '-'}
+                              </Typography>
+                           </BookItem>
+                        ))
+                     )}
+                  </BookListContainer>
+               </OperationsContentWrapper>
+            )}
          </Box>
       </Box>
    )
@@ -396,5 +547,111 @@ const StyledTabs = styled(Tabs)({
       '&.Mui-selected': {
          color: '#F34901',
       },
+   },
+})
+
+const OperationsContentWrapper = styled(Box)({
+   display: 'flex',
+   flexGrow: 1,
+   paddingBottom: '20px',
+   width: '100%',
+   marginLeft: '100px',
+})
+
+const BookListContainer = styled(Box)({
+   marginLeft: '10px',
+   borderLeft: '1px solid #e0e0e0',
+   paddingLeft: '20px',
+   overflowX: 'auto',
+   boxSizing: 'border-box',
+   width: '1181px',
+})
+const PriceDetails = styled(Box)({
+   display: 'flex',
+   flexDirection: 'column',
+   alignItems: 'flex-start',
+   '& .promo-text': {
+      color: '#F34901',
+      fontSize: '0.75rem',
+      fontWeight: 500,
+   },
+})
+
+const BookListHeader = styled(Box)({
+   display: 'grid',
+   gridTemplateColumns: '100px 200px 90px 150px 130px 1fr',
+   gap: '20px',
+   padding: '10px 0',
+   borderBottom: '1px solid #e0e0e0',
+   '& > *': {
+      fontWeight: 500,
+      color: '#A0A0A0',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+   },
+})
+
+const BookItem = styled(Box)({
+   display: 'grid',
+   gridTemplateColumns: '100px 200px 90px 150px 130px 1fr',
+   gap: '20px',
+   padding: '15px 0',
+   borderBottom: '1px solid #e0e0e0',
+   alignItems: 'center',
+   '& > *': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+   },
+})
+
+const BookImage = styled('img')({
+   width: '60px',
+   height: '90px',
+   objectFit: 'cover',
+   borderRadius: '4px',
+})
+
+const BookDetails = styled(Box)({
+   display: 'flex',
+   flexDirection: 'column',
+   '& .MuiTypography-body1, & .MuiTypography-body2': {
+      whiteSpace: 'normal',
+      overflow: 'visible',
+      textOverflow: 'clip',
+   },
+})
+const LeftPanel = styled(Box)({
+   width: '170px',
+   paddingRight: '20px',
+   display: 'flex',
+   flexDirection: 'column',
+})
+
+const ClearHistoryText = styled(Typography)({
+   color: '#A0A0A0',
+   fontWeight: 500,
+   cursor: 'pointer',
+   marginBottom: '20px',
+   '&:hover': {
+      color: '#F34901',
+   },
+   fontSize: 13,
+})
+
+const FilterSidebar = styled(Box)({
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '15px',
+   paddingTop: '10px',
+})
+
+const FilterOption = styled(Box)({
+   cursor: 'pointer',
+   '&:hover .MuiTypography-root': {
+      color: '#F34901',
+   },
+   '& .MuiTypography-root': {
+      fontWeight: 500,
    },
 })

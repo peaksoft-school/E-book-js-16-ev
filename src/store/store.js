@@ -19,6 +19,7 @@ import { vendorProfileSlice } from './vendor/profile/vendorProfileSlice'
 import promoCodeReducer from './vendor/promoSandSlice'
 import vendorBookReducer from './vendor/vendorBookSlice'
 import deleteVendorBookReducer from './vendor/deleteVendorBookSlice'
+import { historyActionClientSlice } from './user/profile/historyActionClientSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
    promoCode: promoCodeReducer,
    vendorBook: vendorBookReducer,
    vendorDeleteBook: deleteVendorBookReducer,
+   [historyActionClientSlice.name]: historyActionClientSlice.reducer,
 })
 
 const persistConfig = {
