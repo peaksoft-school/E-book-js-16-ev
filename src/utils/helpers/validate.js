@@ -78,47 +78,33 @@ const passwordRules =
 
 const VALIDATION_SCHEMA_UPDATE_PROFILE_CLIENT = Yup.object({
    name: Yup.string()
-      .trim()
+      .transform((val) => (val === '' ? undefined : val))
       .min(2, 'Имя должно содержать не менее 2 символов')
       .nullable(),
 
-   email: Yup.string().email('Введите корректный email').nullable(),
+   email: Yup.string()
+      .transform((val) => (val === '' ? undefined : val))
+      .email('Введите корректный email')
+      .nullable(),
 
    newPassword: Yup.string()
-      .nullable()
-      .when('.', {
-         is: (values) => values.newPassword && values.newPassword.length > 0,
-         then: (schema) =>
-            schema
-               .min(8, 'Пароль должен содержать минимум 8 символов')
-               .matches(
-                  passwordRules,
-                  'Пароль должен содержать минимум 8 символов, одну заглавную букву, одну цифру и спецсимвол'
-               )
-               .required('Новый пароль обязателен для изменения пароля'),
-         otherwise: (schema) => schema.notRequired(),
-      }),
+      .transform((val) => (val === '' ? undefined : val))
+      .matches(
+         passwordRules,
+         'Пароль должен содержать минимум 8 символов, одну заглавную букву, одну цифру и спецсимвол'
+      )
+      .notRequired(),
 
    confirmPassword: Yup.string()
-      .nullable()
-      .when('newPassword', {
-         is: (newPassword) => newPassword && newPassword.length > 0,
-         then: (schema) =>
-            schema
-               .required('Подтвердите новый пароль')
-               .oneOf([Yup.ref('newPassword')], 'Пароли не совпадают'),
-         otherwise: (schema) =>
-            schema
-               .notRequired()
-               .oneOf([Yup.ref('newPassword'), null], 'Пароли не совпадают'),
-      }),
+      .transform((val) => (val === '' ? undefined : val))
+      .oneOf([Yup.ref('newPassword'), undefined], 'Пароли не совпадают')
+      .notRequired(),
 
    currentPassword: Yup.string()
-      .nullable()
+      .transform((val) => (val === '' ? undefined : val))
       .when('newPassword', {
-         is: (newPassword) => newPassword && newPassword.length > 0,
-         then: (schema) =>
-            schema.required('Текущий пароль обязателен для изменения пароля'),
+         is: (val) => !!val,
+         then: (schema) => schema.required('Введите текущий пароль'),
          otherwise: (schema) => schema.notRequired(),
       }),
 })

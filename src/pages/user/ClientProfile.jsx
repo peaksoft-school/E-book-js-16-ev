@@ -1,4 +1,13 @@
-import { Typography, Box, styled, Button } from '@mui/material'
+import {
+   Typography,
+   Box,
+   styled,
+   Button,
+   Tabs,
+   Tab,
+   useMediaQuery,
+   useTheme,
+} from '@mui/material'
 import Input from '../../components/UI/Input'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +24,7 @@ import {
    updatePasswordForClient,
 } from '../../store/user/profile/profileThunk'
 import { CLIENT_PROFILE_ACTION } from '../../store/user/profile/profileSlice'
+import RoleBreadcrumbs from '../../components/UI/innerpagecoms/RoleBreadCrums'
 
 const ClientProfile = () => {
    const [email, setEmail] = useState('')
@@ -22,9 +32,14 @@ const ClientProfile = () => {
    const [currentPassword, setCurrentPassword] = useState('')
    const [newPassword, setNewPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
+   const [tabValue, setTabValue] = useState(0)
 
    const [validationErrors, setValidationErrors] = useState({})
    const [isModalOpen, setIsModalOpen] = useState(false)
+   const theme = useTheme()
+
+   const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
+   const isMedium = useMediaQuery(theme.breakpoints.down('md'))
 
    const dispatch = useDispatch()
    const navigate = useNavigate()
@@ -58,6 +73,13 @@ const ClientProfile = () => {
          dispatch(CLIENT_PROFILE_ACTION.clearClientMessages())
       }
    }, [successMessage, error, dispatch])
+
+   const handleTabChange = (event, newValue) => {
+      setTabValue(newValue)
+      if (newValue === 1) {
+         setCurrentBookPage(1)
+      }
+   }
 
    const handleSubmit = useCallback(
       (e) => {
@@ -148,113 +170,132 @@ const ClientProfile = () => {
    }
 
    return (
-      <Box
-         sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '80vh',
-         }}
-      >
-         <StyledForm onSubmit={handleSubmit}>
-            <FormWrapper>
-               <StyledLeftForm>
-                  <StyledText>Личная информация</StyledText>
-                  <Input
-                     type="info"
-                     placeholder="Напишите ваше имя"
-                     value={name}
-                     onChange={(e) => setName(e.target.value)}
-                     label="Ваше имя"
-                     error={Boolean(validationErrors.name)}
-                     helperText={validationErrors.name}
-                  />
-                  <Input
-                     type="info"
-                     placeholder="Напишите email"
-                     value={email}
-                     onChange={(e) => setEmail(e.target.value)}
-                     label="Email"
-                     error={Boolean(validationErrors.email)}
-                     helperText={validationErrors.email}
-                  />
-                  <StyledDeleteText onClick={handleDeleteProfileClick}>
-                     Удалить профиль?
-                  </StyledDeleteText>
-               </StyledLeftForm>
+      <Box>
+         <RoleBreadcrumbs role="client" bookName="Профиль" />
 
-               <StyledRightForm>
-                  <StyledText>Изменить пароль</StyledText>
-                  <Input
-                     type="password"
-                     placeholder="Напишите текущий пароль"
-                     value={currentPassword}
-                     onChange={(e) => setCurrentPassword(e.target.value)}
-                     label="Текущий пароль"
-                     error={Boolean(validationErrors.currentPassword)}
-                     helperText={validationErrors.currentPassword}
-                  />
-                  <Input
-                     type="password"
-                     placeholder="Напишите новый пароль"
-                     value={newPassword}
-                     onChange={(e) => setNewPassword(e.target.value)}
-                     label="Новый пароль"
-                     error={Boolean(validationErrors.newPassword)}
-                     helperText={validationErrors.newPassword}
-                  />
-                  <Input
-                     type="password"
-                     placeholder="Подтвердите пароль"
-                     value={confirmPassword}
-                     onChange={(e) => setConfirmPassword(e.target.value)}
-                     label="Подтвердите пароль*"
-                     InputLabelProps={{ sx: { color: '#ca3c3c' } }}
-                     error={Boolean(validationErrors.confirmPassword)}
-                     helperText={validationErrors.confirmPassword}
-                  />
-               </StyledRightForm>
-            </FormWrapper>
+         <Box
+            sx={{
+               display: 'flex',
+               flexDirection: 'column',
+               justifyContent: 'center',
+               alignItems: 'center',
+               margin: '0 auto',
+               minHeight: '80vh',
+            }}
+         >
+            <StyledTabs
+               value={tabValue}
+               onChange={handleTabChange}
+               variant={isSmall ? 'fullWidth' : 'standard'}
+               aria-label="profile and books tabs"
+            >
+               <Tab label="Личная информация" />
+               <Tab label="История операций" />
+            </StyledTabs>
 
-            <ButtonWrapper>
-               <StyledCencelButton
-                  variant="outlined"
-                  onClick={() => navigate(-1)}
-               >
-                  Отменить
-               </StyledCencelButton>
-               <StyledSaveButton
-                  type="submit"
-                  variant="contained"
-                  disabled={isLoading}
-               >
-                  {isLoading ? 'Сохранение...' : 'Сохранить'}
-               </StyledSaveButton>
-            </ButtonWrapper>
+            {tabValue === 0 && (
+               <StyledForm onSubmit={handleSubmit}>
+                  <FormWrapper>
+                     <StyledLeftForm>
+                        <StyledText>Личная информация</StyledText>
+                        <Input
+                           type="info"
+                           placeholder="Напишите ваше имя"
+                           value={name}
+                           onChange={(e) => setName(e.target.value)}
+                           label="Ваше имя"
+                           error={Boolean(validationErrors.name)}
+                           helperText={validationErrors.name}
+                        />
+                        <Input
+                           type="info"
+                           placeholder="Напишите email"
+                           value={email}
+                           onChange={(e) => setEmail(e.target.value)}
+                           label="Email"
+                           error={Boolean(validationErrors.email)}
+                           helperText={validationErrors.email}
+                        />
+                        <StyledDeleteText onClick={handleDeleteProfileClick}>
+                           Удалить профиль?
+                        </StyledDeleteText>
+                     </StyledLeftForm>
 
-            <Modal open={isModalOpen} handleClose={handleCloseModal}>
-               <ModalContentWrapper>
-                  <Typography sx={{ mt: 2 }}>
-                     Вы уверены, что хотите удалить профиль?
-                  </Typography>
-                  <ModalActions>
-                     <StyledButton
-                        onClick={handleCloseModal}
-                        disabled={isLoading}
+                     <StyledRightForm>
+                        <StyledText>Изменить пароль</StyledText>
+                        <Input
+                           type="password"
+                           placeholder="Напишите текущий пароль"
+                           value={currentPassword}
+                           onChange={(e) => setCurrentPassword(e.target.value)}
+                           label="Текущий пароль"
+                           error={Boolean(validationErrors.currentPassword)}
+                           helperText={validationErrors.currentPassword}
+                        />
+                        <Input
+                           type="password"
+                           placeholder="Напишите новый пароль"
+                           value={newPassword}
+                           onChange={(e) => setNewPassword(e.target.value)}
+                           label="Новый пароль"
+                           error={Boolean(validationErrors.newPassword)}
+                           helperText={validationErrors.newPassword}
+                        />
+                        <Input
+                           type="password"
+                           placeholder="Подтвердите пароль"
+                           value={confirmPassword}
+                           onChange={(e) => setConfirmPassword(e.target.value)}
+                           label="Подтвердите пароль*"
+                           InputLabelProps={{ sx: { color: '#ca3c3c' } }}
+                           error={Boolean(validationErrors.confirmPassword)}
+                           helperText={validationErrors.confirmPassword}
+                        />
+                     </StyledRightForm>
+                  </FormWrapper>
+
+                  <ButtonWrapper>
+                     <StyledCencelButton
+                        variant="outlined"
+                        onClick={() => navigate(-1)}
                      >
-                        Отмена
-                     </StyledButton>
+                        Отменить
+                     </StyledCencelButton>
                      <StyledSaveButton
-                        onClick={handleConfirmDelete}
+                        type="submit"
                         variant="contained"
                         disabled={isLoading}
                      >
-                        {isLoading ? 'Удаление...' : 'Удалить'}
+                        {isLoading ? 'Сохранение...' : 'Сохранить'}
                      </StyledSaveButton>
-                  </ModalActions>
-               </ModalContentWrapper>
-            </Modal>
-         </StyledForm>
+                  </ButtonWrapper>
+
+                  <Modal open={isModalOpen} handleClose={handleCloseModal}>
+                     <ModalContentWrapper>
+                        <Typography sx={{ mt: 2 }}>
+                           Вы уверены, что хотите удалить профиль?
+                        </Typography>
+                        <ModalActions>
+                           <StyledButton
+                              onClick={handleCloseModal}
+                              disabled={isLoading}
+                           >
+                              Отмена
+                           </StyledButton>
+                           <StyledSaveButton
+                              onClick={handleConfirmDelete}
+                              variant="contained"
+                              disabled={isLoading}
+                           >
+                              {isLoading ? 'Удаление...' : 'Удалить'}
+                           </StyledSaveButton>
+                        </ModalActions>
+                     </ModalContentWrapper>
+                  </Modal>
+               </StyledForm>
+            )}
+            {tabValue === 1 && <Box>ghjbkj</Box>}
+         </Box>
       </Box>
    )
 }
@@ -339,4 +380,21 @@ const StyledButton = styled(Button)({
    backgroundColor: 'white !important',
    color: '#afafaf !important',
    boxShadow: 'none',
+})
+
+const StyledTabs = styled(Tabs)({
+   marginBottom: '20px',
+   margin: '0 auto',
+
+   '& .MuiTabs-indicator': {
+      backgroundColor: '#F34901',
+   },
+   '& .MuiTab-root': {
+      textTransform: 'none',
+      fontWeight: 500,
+      color: '#777',
+      '&.Mui-selected': {
+         color: '#F34901',
+      },
+   },
 })
