@@ -38,6 +38,7 @@ const BooksPage = () => {
       isLoading,
       error,
    } = useSelector((state) => state.allVendorBooks)
+
    const openMenu = Boolean(anchorEl)
 
    const handleMenuOpen = (event, bookId) => {
@@ -53,7 +54,7 @@ const BooksPage = () => {
    const handleEdit = () => {
       handleMenuClose()
       if (selectedBookIdForMenu) {
-         navigate(`/vendor/edit/${selectedBookIdForMenu}`)
+         navigate(`/vendor/allBook/innerpagevendor/${selectedBookIdForMenu}`)
       }
    }
 
@@ -63,52 +64,45 @@ const BooksPage = () => {
          await dispatch(
             deleteBookItemVendor({ bookItemId: selectedBookIdForMenu })
          )
-         if (selectedBookFilter === 'все') {
-            dispatch(
-               getAllVendorBooks({ pageNumber: pageNumber, pageSize: pageSize })
-            )
-         } else {
-            dispatch(
-               sortVendorBooks({
-                  value: selectedBookFilter,
-                  pageNumber: pageNumber,
-                  pageSize: pageSize,
-               })
-            )
-         }
+         const action =
+            selectedBookFilter === 'все' ? getAllVendorBooks : sortVendorBooks
+
+         dispatch(
+            action({
+               value: selectedBookFilter,
+               pageNumber,
+               pageSize,
+            })
+         )
       }
    }
 
    const handleBookPageChange = (event, value) => {
-      if (selectedBookFilter === 'все') {
-         dispatch(
-            getAllVendorBooks({
-               pageNumber: value,
-               pageSize: pageSize,
-            })
-         )
-      } else {
-         dispatch(
-            sortVendorBooks({
-               value: selectedBookFilter,
-               pageNumber: value,
-               pageSize: pageSize,
-            })
-         )
-      }
+      const action =
+         selectedBookFilter === 'все' ? getAllVendorBooks : sortVendorBooks
+
+      dispatch(
+         action({
+            value: selectedBookFilter,
+            pageNumber: value,
+            pageSize,
+         })
+      )
    }
 
    const handleBookFilterChange = (event) => {
       const value = event.target.value
       setSelectedBookFilter(value)
 
-      if (value === 'все') {
-         dispatch(getAllVendorBooks({ pageNumber: 1, pageSize: pageSize }))
-      } else {
-         dispatch(
-            sortVendorBooks({ value: value, pageNumber: 1, pageSize: pageSize })
-         )
-      }
+      const action = value === 'все' ? getAllVendorBooks : sortVendorBooks
+
+      dispatch(
+         action({
+            value,
+            pageNumber: 1,
+            pageSize,
+         })
+      )
    }
 
    const DownIcon = () => (
@@ -124,22 +118,16 @@ const BooksPage = () => {
    )
 
    useEffect(() => {
-      if (selectedBookFilter === 'все') {
-         dispatch(
-            getAllVendorBooks({
-               pageNumber: pageNumber,
-               pageSize: pageSize,
-            })
-         )
-      } else {
-         dispatch(
-            sortVendorBooks({
-               value: selectedBookFilter,
-               pageNumber: pageNumber,
-               pageSize: pageSize,
-            })
-         )
-      }
+      const action =
+         selectedBookFilter === 'все' ? getAllVendorBooks : sortVendorBooks
+
+      dispatch(
+         action({
+            value: selectedBookFilter,
+            pageNumber,
+            pageSize,
+         })
+      )
    }, [dispatch, pageNumber, pageSize, selectedBookFilter])
 
    return (
@@ -167,17 +155,14 @@ const BooksPage = () => {
                         }}
                      >
                         {BOOK_FILTER.map((f) => (
-                           <MenuItem
-                              key={f.value}
-                              value={f.value}
-                              sx={{ pl: 3 }}
-                           >
+                           <MenuItem key={f.value} value={f.value}>
                               {f.label}
                            </MenuItem>
                         ))}
                      </CustomSelect>
                   </NoBorderFormControl>
                </BooksHeader>
+
                <Box>
                   {isLoading && <Typography>Загрузка книг...</Typography>}
                   {error && (
@@ -215,6 +200,7 @@ const BooksPage = () => {
                      </BooksGrid>
                   )}
                </Box>
+
                <Menu
                   anchorEl={anchorEl}
                   open={openMenu}
@@ -222,23 +208,24 @@ const BooksPage = () => {
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                   transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                >
-                  <MenuItem onClick={handleEdit}>Редактировать </MenuItem>
-                  <MenuItem onClick={handleDelete}>Удалить </MenuItem>
+                  <MenuItem onClick={handleEdit}>Редактировать</MenuItem>
+                  <MenuItem onClick={handleDelete}>Удалить</MenuItem>
                </Menu>
+
+               {totalPages > 1 && (
+                  <PaginationContainer>
+                     <Pagination
+                        count={totalPages || 1}
+                        page={pageNumber}
+                        onChange={handleBookPageChange}
+                        color="primary"
+                        size="large"
+                        showFirstButton
+                        showLastButton
+                     />
+                  </PaginationContainer>
+               )}
             </BooksTabContentWrapper>
-            {totalPages > 1 && (
-               <PaginationContainer>
-                  <Pagination
-                     count={totalPages || 1}
-                     page={pageNumber}
-                     onChange={handleBookPageChange}
-                     color="primary"
-                     size="large"
-                     showFirstButton
-                     showLastButton
-                  />
-               </PaginationContainer>
-            )}
          </ContentBox>
       </PageWrapper>
    )
@@ -251,23 +238,19 @@ const PageWrapper = styled(Box)({
    width: '100vw',
    height: '100vh',
    overflow: 'hidden',
-   margin: 0,
-   padding: 0,
-   boxSizing: 'border-box',
 })
 
 const StyledTypography = styled(Typography)({
    color: 'gray',
    fontSize: '16px',
 })
+
 const ContentBox = styled(Box)({
-   marginLeft: '0px',
    width: '100%',
    height: '100vh',
    display: 'flex',
    flexDirection: 'column',
    padding: '20px',
-   boxSizing: 'border-box',
    overflowY: 'auto',
 })
 
@@ -276,24 +259,27 @@ const BooksTabContentWrapper = styled(Box)({
    display: 'flex',
    flexDirection: 'column',
    paddingBottom: '20px',
-   marginLeft: '-21px',
+   marginLeft: '0px',
 })
 
-const BooksHeader = styled(Box)({
+const BooksHeader = styled(Box)(({ theme }) => ({
    display: 'flex',
    justifyContent: 'space-between',
    alignItems: 'center',
    marginBottom: '20px',
-})
+   flexWrap: 'wrap',
+}))
 
-const PaginationContainer = styled(Box)({
-   marginTop: '20px',
-   display: 'flex',
-   justifyContent: 'center',
-   paddingBottom: '20px',
-})
-
-const CustomSelect = styled(Select)(() => ({
+const NoBorderFormControl = styled(FormControl)(({ theme }) => ({
+   minWidth: 120,
+   marginRight: '100px',
+   borderBottom: 'none',
+   [theme.breakpoints.down('sm')]: {
+      minWidth: '100%',
+      marginTop: '10px',
+   },
+}))
+const CustomSelect = styled(Select)({
    '&.MuiInputBase-root': {
       border: 'none',
       backgroundColor: 'transparent',
@@ -321,18 +307,22 @@ const CustomSelect = styled(Select)(() => ({
       color: '#000',
       position: 'absolute',
    },
-}))
-
-const NoBorderFormControl = styled(FormControl)(() => ({
-   minWidth: 100,
-   borderBottom: 'none',
-}))
+})
 
 const BooksGrid = styled(Box)(({ theme }) => ({
+   paddingRight: '20px',
    display: 'grid',
-   gap: '20px',
-   gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+   rowGap: '6px',
+   columnGap: '6px',
+   gridTemplateColumns: 'repeat(auto-fill, minmax(329px, 1fr))',
    [theme.breakpoints.down('sm')]: {
       gridTemplateColumns: '1fr',
    },
 }))
+
+const PaginationContainer = styled(Box)({
+   marginTop: '20px',
+   display: 'flex',
+   justifyContent: 'center',
+   paddingBottom: '20px',
+})

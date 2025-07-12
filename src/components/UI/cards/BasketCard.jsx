@@ -55,17 +55,18 @@ const BasketCard = forwardRef(
 
 export default BasketCard
 const StyledCard = styled(Card)(({ theme }) => ({
-   width: 305,
+   maxWidth: 309,
    height: 460,
-   padding: '20px 17px 19px 54px',
+   padding: '20px 17px 19px 24px',
    background: '#EDEDED',
    borderRadius: '0px',
    boxShadow: 'none',
+   marginBottom: '15px',
 }))
 
 const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
    height: 297,
-   width: 197,
+   maxwidth: 197,
    marginTop: '10px',
 }))
 

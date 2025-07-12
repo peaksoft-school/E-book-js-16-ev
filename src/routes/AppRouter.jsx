@@ -41,7 +41,7 @@ const AppRouter = () => (
                fallbackPath={'/'}
             />
          }
-      />
+      ></Route>
 
       <Route
          path={ROUTES.SIGN_IN}
@@ -142,11 +142,13 @@ const AppRouter = () => (
             />
          }
       >
+         <Route index element={<BooksPage />} />
+
          <Route path="/vendor/allBook" element={<BooksPage />} />
 
          <Route path="/vendor/profile" element={<VendorProfilePage />} />
          <Route
-            path="innerpagevendor/:bookItemId"
+            path="/vendor/allBook/innerpagevendor/:bookItemId"
             element={<InnerPageVendor />}
          />
          <Route
