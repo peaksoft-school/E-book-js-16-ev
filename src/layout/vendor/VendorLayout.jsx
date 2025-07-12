@@ -1,21 +1,29 @@
-import { useDispatch } from 'react-redux'
+import { Box, styled } from '@mui/material'
 import { Outlet } from 'react-router'
-import { AUTH_ACTION } from '../../store/slices/authSlice'
+import VendorFooter from '../VendorFooter'
+import VendorHeder from './VendorHeder'
 
 const VendorLayout = () => {
-   const dispatch = useDispatch()
-
-   const handleLogout = () => {
-      dispatch(AUTH_ACTION.logOut())
-   }
-
    return (
-      <div>
-         <h1>Vendor</h1>
-         <button onClick={handleLogout}>Выйти</button>
-         <Outlet />
-      </div>
+      <StyledContainer>
+         <VendorHeder />
+         <StyledOutletBox>
+            <Outlet />
+         </StyledOutletBox>
+         <VendorFooter />
+      </StyledContainer>
    )
 }
 
 export default VendorLayout
+
+const StyledContainer = styled(Box)({
+   display: 'flex',
+   flexDirection: 'column',
+   minHeight: '100vh',
+})
+
+const StyledOutletBox = styled(Box)({
+   paddingRight: 100,
+   paddingLeft: 100,
+})

@@ -11,57 +11,62 @@ import {
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
-const BasketCard = forwardRef(({ book }, ref) => {
-   const { image, title, price, date } = book
-
-   return (
-      <StyledCard ref={ref}>
-         <Box sx={{ position: 'relative' }}>
-            <StyledOverlayBox>
-               <StyledLikeButton aria-label="add to favorites" size="small">
-                  <FavoriteBorderIcon />
-               </StyledLikeButton>
-               <StyledLikeCount variant="caption">
-                  (12) В корзине (1)
-               </StyledLikeCount>
-            </StyledOverlayBox>
-            <StyledCardMedia component="img" image={image} alt={title} />
-            <StyledOptionsButton aria-label="settings" size="small">
-               <MoreVertIcon />
-            </StyledOptionsButton>
-         </Box>
-         <StyledCardContent>
-            <StyledTitle variant="h6" component="div">
-               {title}
-            </StyledTitle>
-            <StyledSubTitleWrapper mt={1}>
-               {date && (
-                  <StyledDate variant="body2" color="text.secondary">
-                     {date}
-                  </StyledDate>
-               )}
-               <StyledPrice variant="h5" sx={{ mt: 1 }}>
-                  {price}
-               </StyledPrice>
-            </StyledSubTitleWrapper>
-         </StyledCardContent>
-      </StyledCard>
-   )
-})
+const BasketCard = forwardRef(
+   ({ image, title, price, year, likes, basketCount, onclickOption }, ref) => {
+      return (
+         <StyledCard ref={ref}>
+            <Box sx={{ position: 'relative' }}>
+               <StyledOverlayBox>
+                  <StyledLikeButton aria-label="add to favorites" size="small">
+                     <FavoriteBorderIcon />
+                  </StyledLikeButton>
+                  <StyledLikeCount variant="caption">
+                     ({likes}) В корзине ({basketCount})
+                  </StyledLikeCount>
+               </StyledOverlayBox>
+               <StyledCardMedia component="img" image={image} alt={title} />
+               <StyledOptionsButton
+                  aria-label="settings"
+                  size="small"
+                  onClick={onclickOption}
+               >
+                  <MoreVertIcon />
+               </StyledOptionsButton>
+            </Box>
+            <StyledCardContent>
+               <StyledTitle variant="h6" component="div">
+                  {title}
+               </StyledTitle>
+               <StyledSubTitleWrapper mt={1}>
+                  {year && (
+                     <StyledDate variant="body2" color="text.secondary">
+                        {year}
+                     </StyledDate>
+                  )}
+                  <StyledPrice variant="h5" sx={{ mt: 1 }}>
+                     {price} с
+                  </StyledPrice>
+               </StyledSubTitleWrapper>
+            </StyledCardContent>
+         </StyledCard>
+      )
+   }
+)
 
 export default BasketCard
 const StyledCard = styled(Card)(({ theme }) => ({
-   width: 305,
-   height: 450,
-   padding: '20px 17px 19px 54px',
+   maxWidth: 309,
+   height: 460,
+   padding: '20px 17px 19px 24px',
    background: '#EDEDED',
    borderRadius: '0px',
    boxShadow: 'none',
+   marginBottom: '15px',
 }))
 
 const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
    height: 297,
-   width: 197,
+   maxwidth: 197,
    marginTop: '10px',
 }))
 
