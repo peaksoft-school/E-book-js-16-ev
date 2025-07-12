@@ -14,6 +14,7 @@ import notify from '../../utils/helpers/notify'
 import Modal from '../../components/UI/Modal'
 import { AUTH_ACTION } from '../../store/slices/authSlice'
 import { VENDOR_PROFILE_ACTION } from '../../store/vendor/profile/vendorProfileSlice'
+import RoleBreadcrumbs from '../../components/UI/innerpagecoms/RoleBreadCrums'
 
 const VendorProfilePage = () => {
    const [email, setEmail] = useState('')
@@ -33,6 +34,8 @@ const VendorProfilePage = () => {
    const { error, successMessage, isLoading, profile } = useSelector(
       (state) => state.vendorProfile
    )
+
+   const fio = firstName + ' ' + lastName
 
    useEffect(() => {
       dispatch(getProfileVendor())
@@ -175,6 +178,8 @@ const VendorProfilePage = () => {
          }}
       >
          <StyledForm onSubmit={handleSubmit}>
+            <RoleBreadcrumbs role="vendor" bookName={fio} />
+
             <FormWrapper>
                <StyledLeftForm>
                   <StyledText>Личная информация</StyledText>
