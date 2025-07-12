@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { Outlet } from 'react-router'
 import { AUTH_ACTION } from '../../store/slices/authSlice'
+import Header from '../Header'
 
 const UserLayout = () => {
    const dispatch = useDispatch()
@@ -11,8 +12,7 @@ const UserLayout = () => {
 
    return (
       <div>
-         <h1>Client</h1>
-         <button onClick={handleLogout}>Выйти</button>
+         <Header />
          <Outlet />
       </div>
    )

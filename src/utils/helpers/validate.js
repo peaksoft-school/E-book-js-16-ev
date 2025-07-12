@@ -74,7 +74,40 @@ const VALIDATION_SCHEMA_FORGOT = Yup.object({
 const phoneNumberRules = /^\+996\d{9}$/
 
 const passwordRules =
-   /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`])[A-Za-z\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~`]{8,}$/
+   /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{};':"\\|,.<>/?~`]).{8,}$/
+
+const VALIDATION_SCHEMA_UPDATE_PROFILE_CLIENT = Yup.object({
+   name: Yup.string()
+      .transform((val) => (val === '' ? undefined : val))
+      .min(2, 'Имя должно содержать не менее 2 символов')
+      .nullable(),
+
+   email: Yup.string()
+      .transform((val) => (val === '' ? undefined : val))
+      .email('Введите корректный email')
+      .nullable(),
+
+   newPassword: Yup.string()
+      .transform((val) => (val === '' ? undefined : val))
+      .matches(
+         passwordRules,
+         'Пароль должен содержать минимум 8 символов, одну заглавную букву, одну цифру и спецсимвол'
+      )
+      .notRequired(),
+
+   confirmPassword: Yup.string()
+      .transform((val) => (val === '' ? undefined : val))
+      .oneOf([Yup.ref('newPassword'), undefined], 'Пароли не совпадают')
+      .notRequired(),
+
+   currentPassword: Yup.string()
+      .transform((val) => (val === '' ? undefined : val))
+      .when('newPassword', {
+         is: (val) => !!val,
+         then: (schema) => schema.required('Введите текущий пароль'),
+         otherwise: (schema) => schema.notRequired(),
+      }),
+})
 
 const VALIDATION_SCHEMA_UPDATE_PROFILE = Yup.object({
    firstName: Yup.string()
@@ -134,6 +167,7 @@ const VALIDATION_SCHEMA_UPDATE_PROFILE = Yup.object({
          otherwise: (schema) => schema.notRequired(),
       }),
 })
+
 export {
    VALIDATION_SCHEMA_VENDOR,
    VALIDATION_SCHEMA_CLIENT,
@@ -141,4 +175,5 @@ export {
    VALIDATION_SCHEMA_RESET,
    VALIDATION_SCHEMA_FORGOT,
    VALIDATION_SCHEMA_UPDATE_PROFILE,
+   VALIDATION_SCHEMA_UPDATE_PROFILE_CLIENT,
 }

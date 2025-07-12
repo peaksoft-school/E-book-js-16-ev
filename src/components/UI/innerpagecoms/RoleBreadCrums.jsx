@@ -14,6 +14,9 @@ const RoleBreadcrumbs = ({ role, bookName }) => {
    } else if (role === 'user') {
       homeLink = '/catalog'
       homeText = 'Каталог'
+   } else if (role === 'client') {
+      homeLink = '/user'
+      homeText = 'Главная'
    }
 
    return (

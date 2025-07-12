@@ -5,6 +5,8 @@ import {
    Typography,
    Button,
    styled,
+   Menu,
+   MenuItem,
 } from '@mui/material'
 import { NavLink } from 'react-router'
 import Input from '../components/UI/Input'
@@ -12,11 +14,36 @@ import { Icons } from '../assets/icons'
 import { createGlobalStyle } from 'styled-components'
 import { NAV_LINKS } from '../utils/helpers'
 import { useNavigate } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import PersonIcon from '@mui/icons-material/Person'
+import { AUTH_ACTION } from '../store/slices/authSlice'
+import { useState } from 'react'
 
 const Header = () => {
+   const [anchorEl, setAnchorEl] = useState(null)
+
+   const open = Boolean(anchorEl)
    const navigate = useNavigate()
+   const dispatch = useDispatch()
 
    const handleNavigateSignIn = () => navigate('/sign-in')
+   const { user, isAuth } = useSelector((state) => state.auth)
+
+   const handleLogout = () => {
+      dispatch(AUTH_ACTION.logOut())
+   }
+   const handleMenuOpen = (event) => {
+      setAnchorEl(event.currentTarget)
+   }
+   const handleClose = () => {
+      navigate('/user/profile')
+      setAnchorEl(null)
+   }
+
+   const handleMenuClose = () => {
+      setAnchorEl(null)
+   }
+
    return (
       <>
          <GlobalFont />
@@ -33,15 +60,39 @@ const Header = () => {
                <StyledIconButton>
                   <img src={Icons.like} alt="Like" />
                </StyledIconButton>
-
-               <StyledBasket>Корзина({3})</StyledBasket>
+               {isAuth ? (
+                  <StyledBasket onClick={() => navigate('/basket')}>
+                     Корзина({3})
+                  </StyledBasket>
+               ) : (
+                  <StyledBasket onClick={() => navigate('/sign-up-client')}>
+                     Корзина({3})
+                  </StyledBasket>
+               )}
             </StyledHeaderUp>
 
             <StyledNav>
                <StyledMenuWrapper>
-                  <IconButton edge="start" color="inherit" aria-label="menu">
-                     <img src={Icons.menu} alt="menu" />
-                  </IconButton>
+                  {isAuth ? (
+                     <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={() => navigate('/user/sort')}
+                     >
+                        <img src={Icons.menu} alt="menu" />
+                     </IconButton>
+                  ) : (
+                     <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={() => navigate('/sort')}
+                     >
+                        <img src={Icons.menu} alt="menu" />
+                     </IconButton>
+                  )}
+
                   <StyledTypography>Жанры</StyledTypography>
                </StyledMenuWrapper>
 
@@ -53,7 +104,28 @@ const Header = () => {
                   ))}
                </NavLinks>
 
-               <StyledButton onClick={handleNavigateSignIn}>Войти</StyledButton>
+               {user ? (
+                  <StyledButton onClick={handleMenuOpen}>
+                     <PersonIcon style={{ marginRight: '8px' }} />
+
+                     {user.firstName}
+                  </StyledButton>
+               ) : (
+                  <StyledButton onClick={handleNavigateSignIn}>
+                     Войти
+                  </StyledButton>
+               )}
+               <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleMenuClose}
+                  disableScrollLock
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+               >
+                  <MenuItem onClick={handleClose}>Профиль</MenuItem>
+                  <MenuItem onClick={handleLogout}>Выйти</MenuItem>
+               </Menu>
             </StyledNav>
          </StyledAppBar>
       </>
@@ -66,7 +138,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
    paddingRight: '80px',
    paddingLeft: '80px',
    backgroundColor: theme.palette.background.paper,
-   boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+   boxShadow: 'none',
    display: 'flex',
    justifyContent: 'center',
    alignItems: 'center',
@@ -186,7 +258,6 @@ const StyledInputWrapper = styled(Box)(({ theme }) => ({
 
 const StyledButton = styled(Button)(({ theme }) => ({
    backgroundColor: '#1C1C1C',
-   width: '99px',
    height: '42px',
    borderRadius: '0px',
    color: 'white',
