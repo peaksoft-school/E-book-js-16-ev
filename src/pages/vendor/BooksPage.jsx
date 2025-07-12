@@ -186,7 +186,7 @@ const BooksPage = () => {
                            ) : (
                               <BasketCard
                                  key={book.bookItemId}
-                                 title={book.bookItemName}
+                                 title={book.name}
                                  image={book.image}
                                  price={book.price}
                                  year={book.year}

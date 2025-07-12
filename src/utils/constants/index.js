@@ -85,19 +85,32 @@ const SELLERS = [
 
 const VENDORCARDS = [
    {
-      img: 'https://img.freepik.com/free-photo/old-cement-wall-texture_1149-1280.jpg?t=st=1746559935~exp=1746563535~hmac=bf78bf477a514ec540120e124ccfe7aea89c46d0408ed61dfbe2775743c09465&w=1380',
+      img: 'https://cdnn21.img.ria.ru/images/07e5/09/01/1748162077_0:363:2995:2048_1920x1080_80_0_0_abb49dc1d41603260adb27215853058a.jpg',
       text: 'В целом, конечно, экономическая повестка сегодняшнего дня прекрасно подходит для реализации переосмысления внешнеэкономических политик.',
    },
    {
-      img: 'https://img.freepik.com/free-photo/old-cement-wall-texture_1149-1280.jpg?t=st=1746559935~exp=1746563535~hmac=bf78bf477a514ec540120e124ccfe7aea89c46d0408ed61dfbe2775743c09465&w=1380',
+      img: 'https://cdn-1.aki.kg/cdn-st-0/qdP/1/2035429.30191d9f76a927ebb37af9670c2492e5.jpg',
       text: 'В целом, конечно, экономическая повестка сегодняшнего дня прекрасно подходит для реализации переосмысления внешнеэкономических политик.',
    },
    {
-      img: 'https://img.freepik.com/free-photo/old-cement-wall-texture_1149-1280.jpg?t=st=1746559935~exp=1746563535~hmac=bf78bf477a514ec540120e124ccfe7aea89c46d0408ed61dfbe2775743c09465&w=1380',
+      img: 'https://cdn.iz.ru/sites/default/files/styles/900x506/public/news-2025-05/LS106504-138%20copy.jpg?itok=aDwRdYAp',
       text: 'В целом, конечно, экономическая повестка сегодняшнего дня прекрасно подходит для реализации переосмысления внешнеэкономических политик.',
    },
 ]
-
+const VENDORCARDS2 = [
+   {
+      img: 'https://www.zakon.kz/pbi/WEBP/2023-12-25/file-144ccacf-11c2-4d97-9ed4-dd67997aa4eb/800x450.webp',
+      text: 'В целом, конечно, экономическая повестка сегодняшнего дня прекрасно подходит для реализации переосмысления внешнеэкономических политик.',
+   },
+   {
+      img: 'https://cdn.iz.ru/sites/default/files/styles/900x506/public/news-2023-09/AP20319639050538.jpg?itok=hSnfLxTK',
+      text: 'В целом, конечно, экономическая повестка сегодняшнего дня прекрасно подходит для реализации переосмысления внешнеэкономических политик.',
+   },
+   {
+      img: 'https://i.ytimg.com/vi/Y8Q-LfatV0Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBYcPOtIuKV-AOmx7nEUHarYBkAUA',
+      text: 'В целом, конечно, экономическая повестка сегодняшнего дня прекрасно подходит для реализации переосмысления внешнеэкономических политик.',
+   },
+]
 const SLIDER_BOOKS = [
    {
       title: 'Сила настоящего',
@@ -163,6 +176,7 @@ export {
    BOOK_SLIDER,
    SELLERS,
    VENDORCARDS,
+   VENDORCARDS2,
    SLIDER_BOOKS,
    AUDIO_BOOKS,
 }

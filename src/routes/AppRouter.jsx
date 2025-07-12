@@ -17,6 +17,7 @@ import VendorsDetailtPage from '../pages/admin/vendors/VendorsDeatilPage'
 import InnerPageVendor from '../pages/vendor/InnerPageVendor'
 import AddType from '../pages/vendor/addType'
 import BooksPage from '../pages/vendor/BooksPage'
+import LandingPage from '../pages/LandingPage'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))
@@ -164,6 +165,8 @@ const AppRouter = () => (
          />
          <Route path="addbook" element={<AddBook />} />
       </Route>
+
+      <Route path="/sell" element={<LandingPage />} />
 
       <Route path="*" element="Not found" />
    </Routes>

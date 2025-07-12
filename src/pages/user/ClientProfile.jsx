@@ -233,7 +233,7 @@ const ClientProfile = () => {
    }
 
    return (
-      <Box>
+      <StyledWrapper>
          <RoleBreadcrumbs role="client" bookName="Профиль" />
 
          <Box
@@ -447,11 +447,16 @@ const ClientProfile = () => {
                </OperationsContentWrapper>
             )}
          </Box>
-      </Box>
+      </StyledWrapper>
    )
 }
 
 export default ClientProfile
+
+const StyledWrapper = styled(Box)({
+   paddingLeft: '70px',
+   margin: '0 auto',
+})
 
 const StyledForm = styled('form')({
    width: '100%',
@@ -556,6 +561,7 @@ const OperationsContentWrapper = styled(Box)({
    paddingBottom: '20px',
    width: '100%',
    marginLeft: '100px',
+   // margin: '0 auto',
 })
 
 const BookListContainer = styled(Box)({
