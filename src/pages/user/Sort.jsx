@@ -38,17 +38,18 @@ const initialFilterParams = {
 const Sort = () => {
    const dispatch = useDispatch()
    const { books } = useSelector((state) => state.sortBooks)
-   const [sort, setSort] = useState("")
+   const [sort, setSort] = useState('')
    const [openSort, setOpenSort] = useState(false)
    const [visiblePage, setVisiblePage] = useState(1)
    const [activeSort, setActiveSort] = useState('filter')
 
-const [filterParams, setFilterParams] = useState(initialFilterParams)
-
+   const [filterParams, setFilterParams] = useState(initialFilterParams)
 
    useEffect(() => {
-      fetchBooks(filterParams)
-   }, [])
+      if (activeSort === 'filter') {
+         fetchBooks(filterParams)
+      }
+   }, [filterParams, activeSort])
 
    const fetchBooks = (filters) => {
       if (activeSort !== 'filter') return
@@ -90,32 +91,26 @@ const [filterParams, setFilterParams] = useState(initialFilterParams)
       />
    )
 
- const handleSortChange = (event) => {
-   const value = event.target.value
-   setSort(value)
-   setActiveSort('bestseller')
-
-   setFilterParams(initialFilterParams)
-
-   l
-
-   dispatch(
-      fetchBestsellers({
-         isBestseller: value,
-         pageNumber: 1,
-         pageSize: 100,
-      })
-   )
-
-   setVisiblePage(1)
-}
+   const handleSortChange = (event) => {
+      const value = event.target.value
+      setSort(value)
+      setActiveSort('bestseller')
+      setFilterParams(initialFilterParams)
+      dispatch(
+         fetchBestsellers({
+            isBestseller: value,
+            pageNumber: 1,
+            pageSize: 100,
+         })
+      )
+   }
 
    const handleFilterChange = (filters) => {
       setActiveSort('filter')
       setFilterParams(filters)
-      fetchBooks(filters)
-      setSort("")
+      setSort('')
    }
+
    const handleDeleteFilter = (field, value) => {
       const updatedParams = {
          ...filterParams,
@@ -131,40 +126,42 @@ const [filterParams, setFilterParams] = useState(initialFilterParams)
    return (
       <StyledSortBox>
          <Breadcrumbs aria-label="breadcrumb">
-            <Link to="/">Главная</Link>
+            <Link to="/" className="bredC">
+               Главная
+            </Link>
             <Typography color="text.primary">Фильтрация</Typography>
          </Breadcrumbs>
 
          <StyledSecondBox>
-            <Typography variant="h6" sx={{ mt: 2, mb: 2 }}>
-               Найдено книг: {books?.length || 0}
+            <Typography variant="body1" sx={{ color: 'lightGrey' }}>
+               Найдены {books?.length || 0} книг
             </Typography>
 
-               <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
-      {filterParams.genres.map((genres) => (
-         <Chip
-            key={genres.id || genres}
-            label={genres.name || genres}
-            onDelete={() => handleDeleteFilter('genres', genres)}
-         />
-      ))}
+            <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
+               {filterParams.genres.map((genres) => (
+                  <Chip
+                     key={genres.id || genres}
+                     label={genres.name || genres}
+                     onDelete={() => handleDeleteFilter('genres', genres)}
+                  />
+               ))}
 
-      {filterParams.types.map((type) => (
-         <Chip
-            key={type.id || type}
-            label={type.name || type}
-            onDelete={() => handleDeleteFilter('types', type)}
-         />
-      ))}
+               {filterParams.types.map((type) => (
+                  <Chip
+                     key={type.id || type}
+                     label={type.name || type}
+                     onDelete={() => handleDeleteFilter('types', type)}
+                  />
+               ))}
 
-      {filterParams.languages.map((lang) => (
-         <Chip
-            key={lang.id || lang}
-            label={lang.name || lang}
-            onDelete={() => handleDeleteFilter('languages', lang)}
-         />
-      ))}
-   </Box>
+               {filterParams.languages.map((lang) => (
+                  <Chip
+                     key={lang.id || lang}
+                     label={lang.name || lang}
+                     onDelete={() => handleDeleteFilter('languages', lang)}
+                  />
+               ))}
+            </Box>
 
             <NoBorderFormControl>
                <CustomSelect
@@ -195,20 +192,25 @@ const [filterParams, setFilterParams] = useState(initialFilterParams)
                setFilterParams={setFilterParams}
                onFilterChange={handleFilterChange}
             />
-           
+
             <Box>
                <StyledCardBox>
                   {visibleBooks.map((book) => (
-                     <BookCard
-                        key={book.bookItemId}
-                        book={{
-                           title: book.name,
-                           authors: book.author.join(', '),
-                           price: book.price,
-                           image: book.imageUrl,
-                           type: book.type || '',
-                        }}
-                     />
+                     // <BookCard
+                     //    key={book.bookItemId}
+                     //    book={{
+                     //       bookItemId: book.bookItemId,
+                     //       title: book.name,
+                     //       authors: Array.isArray(book.author)
+                     //          ? book.author.join(', ')
+                     //          : '',
+                     //       price: book.price,
+                     //       image: book.imageUrl,
+                     //       type: book.type || '',
+                     //    }}
+                     // />
+                     <BookCard key={book.bookItemId} book={book} />
+
                   ))}
                </StyledCardBox>
 
@@ -287,11 +289,16 @@ const NoBorderFormControl = styled(FormControl)(() => ({
 const StyledSortBox = styled(Box)({
    paddingRight: 80,
    paddingLeft: 80,
-   gap: 50,
+   gap: 30,
    display: 'flex',
    justifyContent: 'center',
    flexDirection: 'column',
    marginBottom: 50,
+   '& .bredC': {
+      color: 'lightGrey',
+      borderBottom: 'none',
+      textDecoration: 'none',
+   },
 })
 
 const StyledFilterCardBox = styled(Box)({

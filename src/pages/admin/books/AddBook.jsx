@@ -240,7 +240,7 @@ const AddBook = ({
             )
          ).unwrap()
 
-         navigate('/admin/books')
+         {role === 'ADMIN' ? navigate('/admin/books') : navigate('/vendor')}
 
          toast.success(
             isEdit ? 'Книга успешно обновлена!' : 'Книга успешно добавлена!',
@@ -281,7 +281,7 @@ const AddBook = ({
             <Breadcrumbs aria-label="breadcrumb">
                <MuiLink
                   component={Link}
-                  to="/admin/books"
+                  to={role === 'ADMIN' ? "/admin/books" : "/vendor"}
                   underline="hover"
                   color="inherit"
                >

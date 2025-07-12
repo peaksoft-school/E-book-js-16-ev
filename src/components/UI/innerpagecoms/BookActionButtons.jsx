@@ -127,7 +127,7 @@ const BookActionButtons = ({
    if (role === 'client') {
       return (
          <>
-            <Button variant="borderOrg" onClick={onReject}>
+            <Button variant="borderOrg" >
                В избранное
             </Button>
             <Button variant="warning">Добавить в корзину</Button>

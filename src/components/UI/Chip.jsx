@@ -13,13 +13,14 @@ const Chip = forwardRef(
       color = 'default',
       variant = 'filled',
       ...rest
-   }) => {
+   }, ref) => {
       const finalDeleteIcon = deleteIcon ?? (
          <CloseIcon className="custom-delete-icon" />
       )
 
       return (
          <StyleChip
+         ref={ref}
             label={label}
             onClick={onClick}
             onDelete={onDelete}

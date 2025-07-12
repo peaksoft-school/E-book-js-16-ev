@@ -24,7 +24,7 @@ const InnerPageCardComponent = ({ role = 'client' }) => {
    const { book, loading, error } = useSelector((state) => {
       if (role === 'admin') return state.book
       if (role === 'vendor') return state.vendorBook
-      if (role === 'client') return state.someUserBookSlice
+      if (role === 'client') return state.bookClient
       return { book: null, loading: false, error: null }
    })
 
@@ -40,7 +40,7 @@ const InnerPageCardComponent = ({ role = 'client' }) => {
          dispatch(infoBook(bookItemId))
       } else if (role === 'vendor') {
          dispatch(vendorBookById(bookItemId))
-      } else if (role === 'client') {
+      } else  {
          dispatch(fetchBookClientById(bookItemId))
       }
    }, [bookItemId, dispatch, role])

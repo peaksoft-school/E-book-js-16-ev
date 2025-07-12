@@ -40,9 +40,11 @@ useEffect(() => {
       startPrice: price[0],
       endPrice: price[1],
    }
-
-   onFilterChange(newParams)
+   if (JSON.stringify(newParams) !== JSON.stringify(filterParams)) {
+      onFilterChange(newParams)
+   }
 }, [selectedGenre, bookType, price, language])
+
 
 useEffect(() => {
    setSelectedGenre(filterParams.genres || [])
@@ -153,7 +155,7 @@ useEffect(() => {
             </NoShadowAccordionDetails>
          </NoShadowAccordion>
 
-         <NoShadowAccordion defaultExpanded noDivider>
+         <NoShadowAccordion defaultExpanded >
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
                <Typography className="title">Язык издания</Typography>
             </NoShadowAccordionSummary>

@@ -11,10 +11,11 @@ import { styled } from '@mui/material/styles'
 import { Icons } from '../../../assets/icons'
 import Button from '../buttons/Button'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import { useNavigate } from 'react-router'
 
 const BookCard = forwardRef(({ book }, ref) => {
    const [isClicked, setIsClicked] = useState(false)
-
+   const navigate = useNavigate()
    const handleCardClick = () => {
       setIsClicked(!isClicked)
    }
@@ -30,19 +31,29 @@ const BookCard = forwardRef(({ book }, ref) => {
       }
    }
 
+   const handleClick = () => {
+      navigate(`/user/sort/innerpageuser/${book.bookItemId}`)
+   }
+
+   console.log(book, 'hello book')
    return (
       <StyledCard isclicked={isClicked.toString()} ref={ref}>
-         <StyledCardMedia component="img" image={book.image} alt={book.title} />
+         <StyledCardMedia
+            onClick={handleClick}
+            component="img"
+            image={book.imageUrl}
+            alt={book.name}
+         />
 
          <StyledCardContent onClick={handleCardClick}>
             <Box>
                <StyledTypography variant="body1" fontWeight="bold">
-                  {book.title.length > 21
-                     ? `${book.title.slice(0, 21)}...`
-                     : book.title}
+                  {book.name.length > 21
+                     ? `${book.name.slice(0, 21)}...`
+                     : book.name}
                </StyledTypography>
                <StyledTypography variant="caption" color="text.secondary">
-                  {book.authors}
+                  {Array.isArray(book.author) ? book.author.join(', ') : ''}
                </StyledTypography>
                <StyledTypography variant="body2" fontWeight="bold" mt={0.5}>
                   {book.price} с
@@ -94,7 +105,6 @@ const StyledCardContent = styled(CardContent)({
    display: 'flex',
    flexDirection: 'column',
 })
-
 
 const AddToCartBox = styled(Box)(({ theme }) => ({
    position: 'absolute',

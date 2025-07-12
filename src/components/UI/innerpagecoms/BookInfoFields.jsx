@@ -15,11 +15,15 @@ const BookInfoFields = ({ book }) => {
 
    if (book.type === 'ELECTRONIC') {
       infoFields.push({ label: 'Объем', value: `${book.valuePages} стр` })
+      if (book.pdfUrl) {
       infoFields.push({ label: 'Смотреть PDF', value: book.pdfUrl })
+   }
    } else if (book.type === 'PAPER') {
       infoFields.push({ label: 'Объем', value: `${book.valuePages} стр` })
    } else if (book.type === 'AUDIO') {
-      infoFields.push({ label: 'Длительность', value: `${book.audioDuration}` })
+      if(book.audioDuration) {
+         infoFields.push({ label: 'Длительность', value: `${book.audioDuration}` })
+      }
    }
 
    return (

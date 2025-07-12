@@ -3,7 +3,7 @@ import InnerPageCardComponent from '../../components/UI/innerpagecoms/InnerPageC
 
 const UserInnerPage = () => {
    return (
-      <Box>
+      <Box sx={{marginLeft: '80px', marginRight: '80px' }}>
          <InnerPageCardComponent role="client" />
       </Box>
    )

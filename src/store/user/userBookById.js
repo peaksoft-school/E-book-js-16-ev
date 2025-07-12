@@ -5,7 +5,7 @@ export const fetchBookClientById = createAsyncThunk(
    'bookClient/fetchById',
    async (bookItemId, { rejectWithValue }) => {
       try {
-         const response = await axiosInstance.get(`/bookItem/findByIdBookItemClient/${bookItemId}`)
+         const response = await axiosInstance.get(`/api/bookItem/findByIdBookItemClient/${bookItemId}`)
          return response.data
       } catch (error) {
          const message =
