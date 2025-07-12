@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
    Accordion,
    AccordionSummary,
@@ -16,20 +16,45 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Checkbox from './UI/Checkbox'
 import Radio from './UI/Radio'
 import Input from './UI/Input'
+import { GENRES } from '../utils/helpers'
 
-const FilterPanel = () => {
-   const [genre, setGenre] = useState(['Зарубежная литература'])
-   const [bookType, setBookType] = useState('paper')
-   const [price, setPrice] = useState([500, 10000])
-   const [language, setLanguage] = useState(['Русский язык'])
+const FilterPanel = ({ filterParams, onFilterChange }) => {
+   const [selectedGenre, setSelectedGenre] = useState([])
+   const [bookType, setBookType] = useState(filterParams.types[0] || '')
+   const [price, setPrice] = useState([
+      filterParams.startPrice,
+      filterParams.endPrice,
+   ])
+   const [language, setLanguage] = useState([])
 
-   const genres = new Array(7).fill('Зарубежная литература')
+useEffect(() => {
+   const newParams = {
+      genres: selectedGenre,
+      types: bookType ? [bookType] : [],
+      languages: language.map((l) => {
+         if (l.includes('Рус')) return 'RUSSIAN'
+         if (l.includes('Англ')) return 'ENGLISH'
+         if (l.includes('Кырг')) return 'KYRGYZ'
+         return l.toUpperCase()
+      }),
+      startPrice: price[0],
+      endPrice: price[1],
+   }
+
+   onFilterChange(newParams)
+}, [selectedGenre, bookType, price, language])
+
+useEffect(() => {
+   setSelectedGenre(filterParams.genres || [])
+   setBookType(filterParams.types[0] || '')
+   setPrice([filterParams.startPrice, filterParams.endPrice])
+   setLanguage(filterParams.languages || [])
+}, [filterParams])
+
 
    const handleGenreChange = (genreValue) => {
-      setGenre((prev) =>
-         prev.includes(genreValue)
-            ? prev.filter((g) => g !== genreValue)
-            : [...prev, genreValue]
+      setSelectedGenre((prev) =>
+         prev.includes(genreValue) ? [] : [genreValue]
       )
    }
 
@@ -47,26 +72,22 @@ const FilterPanel = () => {
             </NoShadowAccordionSummary>
 
             <NoShadowAccordionDetails>
-               <Input
-                  type="search"
-                  placeholder="Я ищу... "
-                  className="search-input"
-               />
-
-               <FormGroup>
-                  {genres.map((g, i) => (
-                     <FormControlLabel
-                        key={i}
-                        control={
-                           <Checkbox
-                              checked={genre.includes(g)}
-                              onChange={() => handleGenreChange(g)}
-                           />
-                        }
-                        label={g}
-                     />
-                  ))}
-               </FormGroup>
+               <Box className="genre-list-scroll">
+                  <FormGroup>
+                     {GENRES.map((genre) => (
+                        <FormControlLabel
+                           key={genre.value}
+                           control={
+                              <Checkbox
+                                 checked={selectedGenre.includes(genre.value)}
+                                 onChange={() => handleGenreChange(genre.value)}
+                              />
+                           }
+                           label={genre.label}
+                        />
+                     ))}
+                  </FormGroup>
+               </Box>
             </NoShadowAccordionDetails>
          </NoShadowAccordion>
 
@@ -81,17 +102,17 @@ const FilterPanel = () => {
                   onChange={(e) => setBookType(e.target.value)}
                >
                   <FormControlLabel
-                     value="paper"
+                     value="PAPER"
                      control={<Radio />}
                      label="Бумажная книга"
                   />
                   <FormControlLabel
-                     value="audio"
+                     value="AUDIO"
                      control={<Radio />}
                      label="Аудиокнига"
                   />
                   <FormControlLabel
-                     value="ebook"
+                     value="ELECTRONIC"
                      control={<Radio />}
                      label="Электронная книга"
                   />
@@ -126,8 +147,8 @@ const FilterPanel = () => {
                <StyledSlider
                   value={price}
                   onChange={(e, newValue) => setPrice(newValue)}
-                  min={0}
-                  max={20000}
+                  min={1}
+                  max={10000}
                />
             </NoShadowAccordionDetails>
          </NoShadowAccordion>
@@ -161,8 +182,7 @@ const FilterPanel = () => {
 export default FilterPanel
 
 const StyledBox = styled(Box)(() => ({
-   maxWidth: '266px',
-   margin: '20px',
+   maxWidth: '280px',
 
    '& .css-rpwreu-MuiPaper-root-MuiAccordion-root.Mui-expanded': {
       margin: 0,
@@ -207,57 +227,30 @@ const NoShadowAccordionSummary = styled(AccordionSummary)(() => ({
       fontFamily: 'Open Sans',
       fontWeight: '600',
       lineHeight: '120%',
+      fontSize: 18,
    },
 }))
+
 const NoShadowAccordionDetails = styled(AccordionDetails)(() => ({
    padding: 0,
    position: 'relative',
-   overflowY: 'auto',
-   maxHeight: '276px',
 
-   scrollbarWidth: 'thin',
-   scrollbarColor: ' #f1f1f1',
-
-   '&::-webkit-scrollbar': {
-      width: '2px',
+   '& .genre-list-scroll': {
+      maxHeight: '300px',
+      overflowY: 'auto',
+      paddingRight: '8px',
+      marginTop: '10px',
    },
-
-   '&::-webkit-scrollbar-track': {
-      background: '#f1f1f1',
-   },
-
-   '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#888',
-      borderRadius: '10px',
-      border: '2px solid #f1f1f1',
-   },
-
-   '&::-webkit-scrollbar-thumb:hover': {
-      background: '#555',
-   },
-
-   '& .search-input': {
-      paddingTop: '10px',
-
-      '& .MuiInputBase-root': {
-         backgroundColor: 'white',
-      },
+   '& .price-content': {
+marginTop: '10px',
    },
 
    '& .MuiFormGroup-root': {
-      paddingRight: '10px',
-
       '& .MuiFormControlLabel-root': {
          margin: 0,
-
          '& .MuiButtonBase-root': {
             padding: '9px 9px 9px 0',
          },
       },
-   },
-
-   '& .price-content': {
-      paddingTop: '20px',
-      overflowY: 'visible',
    },
 }))

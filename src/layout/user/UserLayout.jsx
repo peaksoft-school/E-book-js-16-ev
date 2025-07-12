@@ -2,6 +2,9 @@ import { useDispatch } from 'react-redux'
 import { Outlet } from 'react-router'
 import { AUTH_ACTION } from '../../store/slices/authSlice'
 import Cart from '../../components/Cart'
+import Header from '../Header'
+import Footer from '../Footer'
+import { Box } from '@mui/material'
 
 const UserLayout = () => {
    const dispatch = useDispatch()
@@ -11,12 +14,11 @@ const UserLayout = () => {
    }
 
    return (
-      <div>
-         <h1>Client</h1>
-         {/* <Cart/> */}
-         <button onClick={handleLogout}>Выйти</button>
+      <Box>
+      <Header/>
          <Outlet />
-      </div>
+         <Footer/>
+      </Box>
    )
 }
 

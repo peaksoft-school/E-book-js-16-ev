@@ -3,7 +3,7 @@ import {
    TextField,
    InputAdornment,
    IconButton,
-   InputLabel, // Keep this import
+   InputLabel,
    styled,
    Box,
    Typography,
@@ -22,7 +22,7 @@ const Input = forwardRef(
          value = '',
          onChange,
          iconVariant = 'on',
-         label, // Ensure label is destructured
+         label,
          multiline = false,
          rows,
          inputProps,
@@ -176,7 +176,7 @@ const StyledInput = styled(TextField, {
             ...common['& .MuiOutlinedInput-root'],
             borderRadius: '0px',
             backgroundColor: '#f7f7f7',
-            maxWidth: '895px',
+            width: '982px',
             height: '40px',
          },
          '& .MuiSvgIcon-root': {

@@ -18,6 +18,7 @@ import promoCodeReducer from './vendor/promoSandSlice'
 import vendorBookReducer from './vendor/vendorBookSlice'
 import deleteVendorBookReducer from './vendor/deleteVendorBookSlice'
 import bookClientStateReducer from './user/userBookByIdSlice'
+import sortBooksReducer from './user/userSortSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
    vendorBook: vendorBookReducer,
    vendorDeleteBook: deleteVendorBookReducer,
    bookClient: bookClientStateReducer,
+   sortBooks: sortBooksReducer,
 })
 
 const persistConfig = {

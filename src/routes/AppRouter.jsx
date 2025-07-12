@@ -16,6 +16,7 @@ import VendorsDetailtPage from '../pages/admin/vendors/VendorsDeatilPage'
 import InnerPageVendor from '../pages/vendor/InnerPageVendor'
 import AddType from '../pages/vendor/addType'
 import UserInnerPage from '../pages/user/UserInnerPage'
+import Sort from '../pages/user/Sort'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))
@@ -128,6 +129,7 @@ const AppRouter = () => (
          }
       >
          <Route path='innerpageuser/:bookItemId' element={<UserInnerPage/>}/> 
+         <Route path='sort'  element={<Sort/>}/>
       </Route>
 
       <Route
