@@ -36,7 +36,6 @@ const basketSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder
-         // 📦 Get Basket
          .addCase(getAll.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -52,7 +51,6 @@ const basketSlice = createSlice({
             state.error = action.payload
          })
 
-         // ➖ Decrease quantity
          .addCase(decreaseQuantityBookItem.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -65,7 +63,6 @@ const basketSlice = createSlice({
             state.error = action.payload
          })
 
-         // ➕ Increase quantity
          .addCase(increaseQuantityBookItem.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -78,7 +75,6 @@ const basketSlice = createSlice({
             state.error = action.payload
          })
 
-         // ❌ Delete entire basket
          .addCase(basketDelete.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -98,7 +94,6 @@ const basketSlice = createSlice({
             state.error = action.payload
          })
 
-         // ❌ Delete item by ID
          .addCase(basketDeleteById.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -111,7 +106,6 @@ const basketSlice = createSlice({
             state.error = action.payload
          })
 
-         // 💳 Payment
          .addCase(payment.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -132,7 +126,6 @@ const basketSlice = createSlice({
             state.error = action.payload
          })
 
-         // ⭐️ Add favorite book
          .addCase(addFavoriteBookForClient.pending, (state) => {
             state.isLoading = true
             state.error = null
