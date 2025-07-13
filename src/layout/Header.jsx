@@ -28,6 +28,7 @@ const Header = () => {
 
    const handleNavigateSignIn = () => navigate('/sign-in')
    const { user, isAuth } = useSelector((state) => state.auth)
+   const { summary } = useSelector((state) => state.basket)
 
    const handleLogout = () => {
       dispatch(AUTH_ACTION.logOut())
@@ -62,15 +63,19 @@ const Header = () => {
                </StyledInputWrapper>
 
                <StyledIconButton>
-                  <img src={Icons.like} alt="Like" />
+                  <img
+                     src={Icons.like}
+                     alt="Like"
+                     onClick={() => navigate('/user/favorites')}
+                  />
                </StyledIconButton>
                {isAuth ? (
                   <StyledBasket onClick={() => navigate('/user/basket')}>
-                     Корзина({3})
+                     Корзина({summary.quantityOfBookItems})
                   </StyledBasket>
                ) : (
                   <StyledBasket onClick={() => navigate('/sign-up-client')}>
-                     Корзина({3})
+                     Корзина
                   </StyledBasket>
                )}
             </StyledHeaderUp>
@@ -187,7 +192,7 @@ const StyledBasket = styled(Typography)(({ theme }) => ({
    fontFamily: 'Open Sans, sans-serif',
    fontWeight: 400,
    fontSize: '14px',
-   marginTop: '10px'
+   marginTop: '10px',
 }))
 
 const StyledMenuWrapper = styled(Box)(({ theme }) => ({
@@ -260,4 +265,3 @@ const StyledButton = styled(Button)(({ theme }) => ({
    color: 'white',
    padding: '10px 24px',
 }))
-

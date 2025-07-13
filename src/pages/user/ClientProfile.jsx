@@ -234,7 +234,7 @@ const ClientProfile = () => {
 
    return (
       <StyledWrapper>
-         <RoleBreadcrumbs role="client" bookName="Профиль" />
+         <RoleBreadcrumbs role="client2" bookName="Профиль" />
 
          <Box
             sx={{

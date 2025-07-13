@@ -23,6 +23,7 @@ import {
 } from '../../store/user/basket/basketThunk'
 import { BASKET_ACTION } from '../../store/user/basket/basketSlice'
 import notify from '../../utils/helpers/notify'
+import RoleBreadcrumbs from '../../components/UI/innerpagecoms/RoleBreadCrums'
 
 const BasketPage = () => {
    const dispatch = useDispatch()
@@ -44,7 +45,7 @@ const BasketPage = () => {
       if (payment.fulfilled.match(resultAction)) {
          const url = resultAction.payload.sessionUrl
          if (url) {
-            window.location.href = url // редирект на оплату
+            window.location.href = url
          } else {
             alert('Ошибка: не получен sessionUrl')
          }
@@ -121,6 +122,8 @@ const BasketPage = () => {
 
    return (
       <Container>
+         <RoleBreadcrumbs role="client2" bookName="Корзина" />
+
          <LeftBox>
             <HeaderTypography variant="h6">
                Ваши книги
@@ -169,13 +172,6 @@ const BasketPage = () => {
                <Typography>Скидка: {summary.discount} с</Typography>
                <Typography>Сумма: {summary.totalPrice} с</Typography>
 
-               <PromoTextField
-                  fullWidth
-                  size="small"
-                  placeholder="Введите промокод"
-                  InputProps={{ endAdornment: '>' }}
-               />
-
                <TotalAmountText fontWeight={700} mb={2}>
                   Итого: {summary.totalPrice - summary.discount} с
                </TotalAmountText>
@@ -194,6 +190,7 @@ const Container = styled(Box)(({ theme }) => ({
    display: 'flex',
    gap: theme.spacing(4),
    padding: theme.spacing(4),
+   marginLeft: '50px',
 }))
 
 const LeftBox = styled(Box)(() => ({
