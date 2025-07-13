@@ -25,7 +25,8 @@ const BasketItem = ({
 
             <ItemDetails>
                <BookTitle fontWeight={600}>{item.bookName}</BookTitle>
-               <AuthorText variant="body2">
+
+               <AuthorText variant="body2" color="gray">
                   {item.authors.join(', ')}
                </AuthorText>
 
@@ -38,78 +39,75 @@ const BasketItem = ({
 
                <PriceContainer>
                   {item.discount > 0 && (
-                     <OriginalPriceText variant="body2">
+                     <OriginalPrice variant="body2">
                         {item.price} с
-                     </OriginalPriceText>
+                     </OriginalPrice>
                   )}
-                  <CurrentPriceText variant="body1" fontWeight={600}>
+                  <CurrentPrice variant="body1" fontWeight={600}>
                      {item.totalPrice} с
-                  </CurrentPriceText>
+                  </CurrentPrice>
                </PriceContainer>
 
                <QuantityControl>
-                  <QuantityIconButton onClick={() => onDecrement(item)}>
+                  <IconButton size="small" onClick={() => onDecrement(item)}>
                      <RemoveIcon fontSize="small" />
-                  </QuantityIconButton>
+                  </IconButton>
                   <QuantityText>{item.quantity}</QuantityText>
-                  <QuantityIconButton onClick={() => onIncrement(item)}>
+                  <IconButton size="small" onClick={() => onIncrement(item)}>
                      <AddIcon fontSize="small" />
-                  </QuantityIconButton>
+                  </IconButton>
                </QuantityControl>
 
-               <AddToFavoriteButton
+               <FavoriteButton
                   variant="text"
-                  size="small"
-                  startIcon={
-                     <FavoriteBorderIcon sx={{ fontSize: '18px !important' }} />
-                  }
+                  startIcon={<FavoriteBorderIcon />}
                   onClick={() => onAddToFavorite(item)}
                >
                   Добавить в избранное
-               </AddToFavoriteButton>
+               </FavoriteButton>
             </ItemDetails>
 
             <RemoveButton onClick={() => onRemove(item)}>
                <DeleteIcon />
             </RemoveButton>
          </ItemContainer>
-         <ItemDivider />
+         <StyledDivider />
       </>
    )
 }
 
 export default BasketItem
 
+// --- Стили ---
+
 const ItemContainer = styled(Box)(({ theme }) => ({
    display: 'flex',
    gap: theme.spacing(2),
    alignItems: 'flex-start',
    marginBottom: theme.spacing(2),
-   paddingTop: theme.spacing(2),
 }))
 
-const BookImage = styled('img')(() => ({
+const BookImage = styled('img')({
    width: 90,
    height: 'auto',
    flexShrink: 0,
-}))
+})
 
-const ItemDetails = styled(Box)(() => ({
+const ItemDetails = styled(Box)({
    flex: 1,
    display: 'flex',
    flexDirection: 'column',
    justifyContent: 'flex-start',
    minWidth: 0,
-}))
+})
 
-const BookTitle = styled(Typography)(() => ({
+const BookTitle = styled(Typography)({
    fontWeight: 600,
    fontSize: '1rem',
    lineHeight: 1.3,
-}))
+})
 
 const AuthorText = styled(Typography)(({ theme }) => ({
-   variant: 'body2',
    color: theme.palette.text.secondary,
    fontSize: '0.875rem',
    marginTop: theme.spacing(0.5),
@@ -129,68 +127,50 @@ const PriceContainer = styled(Box)(({ theme }) => ({
    marginTop: theme.spacing(0.5),
 }))
 
-const OriginalPriceText = styled(Typography)(({ theme }) => ({
+const OriginalPrice = styled(Typography)(({ theme }) => ({
    textDecoration: 'line-through',
    color: theme.palette.text.secondary,
    fontSize: '0.875rem',
 }))
 
-const CurrentPriceText = styled(Typography)(({ theme }) => ({
+const CurrentPrice = styled(Typography)({
    fontWeight: 600,
    fontSize: '1rem',
-}))
+})
 
 const QuantityControl = styled(Box)(({ theme }) => ({
    display: 'flex',
    alignItems: 'center',
-   gap: theme.spacing(0.5),
+   gap: theme.spacing(1),
    marginTop: theme.spacing(1),
-   border: '1px solid #e0e0e0',
-   borderRadius: theme.shape.borderRadius,
-   width: 'fit-content',
-   padding: '2px 4px',
 }))
 
-const QuantityIconButton = styled(IconButton)(() => ({
-   padding: '4px',
-   color: '#000',
-   '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.04)',
-   },
-}))
-
-const QuantityText = styled(Typography)(() => ({
-   minWidth: '24px',
+const QuantityText = styled(Typography)({
+   minWidth: 24,
    textAlign: 'center',
    fontWeight: 500,
    fontSize: '0.9rem',
-}))
+})
 
-const AddToFavoriteButton = styled(Button)(({ theme }) => ({
+const FavoriteButton = styled(Button)(({ theme }) => ({
    marginTop: theme.spacing(1),
-   color: theme.palette.text.secondary,
-   fontSize: '0.875rem',
    textTransform: 'none',
    padding: 0,
+   color: theme.palette.text.secondary,
+   fontSize: '0.875rem',
    justifyContent: 'flex-end',
-   '& .MuiButton-startIcon': {
-      marginRight: theme.spacing(0.5),
-   },
+   '& .MuiButton-startIcon': {},
    '&:hover': {
       backgroundColor: 'transparent',
       textDecoration: 'underline',
    },
+   marginRight: '-50px',
 }))
 
 const RemoveButton = styled(IconButton)(({ theme }) => ({
-   position: 'absolute',
-   top: theme.spacing(2),
-   right: theme.spacing(0),
    color: theme.palette.text.secondary,
-   padding: '4px',
 }))
 
-const ItemDivider = styled(Divider)(({ theme }) => ({
-   marginTop: theme.spacing(2),
-   marginBottom: theme.spacing(0),
+const StyledDivider = styled(Divider)(({ theme }) => ({
+   marginY: theme.spacing(2),
 }))
