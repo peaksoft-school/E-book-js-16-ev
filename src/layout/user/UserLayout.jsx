@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { Outlet } from 'react-router'
 import { AUTH_ACTION } from '../../store/slices/authSlice'
-import Cart from '../../components/Cart'
 import Header from '../Header'
 import Footer from '../Footer'
 import { Box } from '@mui/material'
@@ -15,7 +14,7 @@ const UserLayout = () => {
 
    return (
       <Box>
-      <Header/>
+         <Header />
          <Outlet />
          <Footer/>
       </Box>

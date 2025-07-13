@@ -5,18 +5,17 @@ import {
    AccordionDetails,
    FormControlLabel,
    FormGroup,
-   RadioGroup,
    Slider,
    TextField,
    Typography,
    Box,
    styled,
+   RadioGroup,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Checkbox from './UI/Checkbox'
 import Radio from './UI/Radio'
-import Input from './UI/Input'
-import { GENRES } from '../utils/helpers'
+import { GENRES, LANGUAGE } from '../utils/helpers'
 
 const FilterPanel = ({ filterParams, onFilterChange }) => {
    const [selectedGenre, setSelectedGenre] = useState([])
@@ -27,32 +26,26 @@ const FilterPanel = ({ filterParams, onFilterChange }) => {
    ])
    const [language, setLanguage] = useState([])
 
-useEffect(() => {
-   const newParams = {
-      genres: selectedGenre,
-      types: bookType ? [bookType] : [],
-      languages: language.map((l) => {
-         if (l.includes('Рус')) return 'RUSSIAN'
-         if (l.includes('Англ')) return 'ENGLISH'
-         if (l.includes('Кырг')) return 'KYRGYZ'
-         return l.toUpperCase()
-      }),
-      startPrice: price[0],
-      endPrice: price[1],
-   }
-   if (JSON.stringify(newParams) !== JSON.stringify(filterParams)) {
-      onFilterChange(newParams)
-   }
-}, [selectedGenre, bookType, price, language])
+   useEffect(() => {
+      const newParams = {
+         genres: selectedGenre,
+         types: bookType ? [bookType] : [],
+         languages: language,
+         startPrice: price[0],
+         endPrice: price[1],
+      }
 
+      if (JSON.stringify(newParams) !== JSON.stringify(filterParams)) {
+         onFilterChange(newParams)
+      }
+   }, [selectedGenre, bookType, price, language])
 
-useEffect(() => {
-   setSelectedGenre(filterParams.genres || [])
-   setBookType(filterParams.types[0] || '')
-   setPrice([filterParams.startPrice, filterParams.endPrice])
-   setLanguage(filterParams.languages || [])
-}, [filterParams])
-
+   useEffect(() => {
+      setSelectedGenre(filterParams.genres || [])
+      setBookType(filterParams.types[0] || '')
+      setPrice([filterParams.startPrice, filterParams.endPrice])
+      setLanguage(filterParams.languages || [])
+   }, [filterParams])
 
    const handleGenreChange = (genreValue) => {
       setSelectedGenre((prev) =>
@@ -60,9 +53,11 @@ useEffect(() => {
       )
    }
 
-   const handleLanguageChange = (lang) => {
+   const handleLanguageChange = (langValue) => {
       setLanguage((prev) =>
-         prev.includes(lang) ? prev.filter((l) => l !== lang) : [...prev, lang]
+         prev.includes(langValue)
+            ? prev.filter((l) => l !== langValue)
+            : [...prev, langValue]
       )
    }
 
@@ -72,7 +67,6 @@ useEffect(() => {
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
                <Typography className="title">Жанры</Typography>
             </NoShadowAccordionSummary>
-
             <NoShadowAccordionDetails>
                <Box className="genre-list-scroll">
                   <FormGroup>
@@ -97,7 +91,6 @@ useEffect(() => {
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
                <Typography className="title">Тип</Typography>
             </NoShadowAccordionSummary>
-
             <NoShadowAccordionDetails>
                <RadioGroup
                   value={bookType}
@@ -126,7 +119,6 @@ useEffect(() => {
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
                <Typography className="title">Стоимость</Typography>
             </NoShadowAccordionSummary>
-
             <NoShadowAccordionDetails>
                <Box display="flex" gap={1} mb={2} className="price-content">
                   <TextField
@@ -136,7 +128,6 @@ useEffect(() => {
                      onChange={(e) => setPrice([+e.target.value, price[1]])}
                      label="от"
                   />
-
                   <TextField
                      size="small"
                      type="number"
@@ -155,37 +146,36 @@ useEffect(() => {
             </NoShadowAccordionDetails>
          </NoShadowAccordion>
 
-         <NoShadowAccordion defaultExpanded >
+         <NoShadowAccordion defaultExpanded>
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
                <Typography className="title">Язык издания</Typography>
             </NoShadowAccordionSummary>
             <NoShadowAccordionDetails>
                <FormGroup>
-                  {['Кыргызский язык', 'Русский язык', 'Английский язык'].map(
-                     (lang) => (
-                        <FormControlLabel
-                           key={lang}
-                           control={
-                              <Checkbox
-                                 checked={language.includes(lang)}
-                                 onChange={() => handleLanguageChange(lang)}
-                              />
-                           }
-                           label={lang}
-                        />
-                     )
-                  )}
+                  {LANGUAGE.map((lang) => (
+                     <FormControlLabel
+                        key={lang.value}
+                        control={
+                           <Checkbox
+                              checked={language.includes(lang.value)}
+                              onChange={() => handleLanguageChange(lang.value)}
+                           />
+                        }
+                        label={lang.label}
+                     />
+                  ))}
                </FormGroup>
             </NoShadowAccordionDetails>
          </NoShadowAccordion>
       </StyledBox>
    )
 }
+
 export default FilterPanel
+
 
 const StyledBox = styled(Box)(() => ({
    maxWidth: '280px',
-
    '& .css-rpwreu-MuiPaper-root-MuiAccordion-root.Mui-expanded': {
       margin: 0,
    },
@@ -193,11 +183,9 @@ const StyledBox = styled(Box)(() => ({
 
 const StyledSlider = styled(Slider)(() => ({
    color: '#FF4C00',
-
    '& .MuiSlider-track': {
       backgroundColor: '#FF4C00',
    },
-
    '& .MuiSlider-rail': {
       backgroundColor: '#C4C4C4',
       opacity: 1,
@@ -206,11 +194,9 @@ const StyledSlider = styled(Slider)(() => ({
 
 const NoShadowAccordion = styled(Accordion)(() => ({
    boxShadow: 'none',
-
    '&:before': {
       display: 'none',
    },
-
    '&:last-of-type': {
       borderBottom: 'none',
    },
@@ -220,11 +206,9 @@ const NoShadowAccordionSummary = styled(AccordionSummary)(() => ({
    boxShadow: 'none',
    padding: 0,
    borderBottom: '1px solid #C4C4C4',
-
    '& .MuiAccordionSummary-content': {
       margin: 0,
    },
-
    '& .title': {
       fontFamily: 'Open Sans',
       fontWeight: '600',
@@ -236,7 +220,6 @@ const NoShadowAccordionSummary = styled(AccordionSummary)(() => ({
 const NoShadowAccordionDetails = styled(AccordionDetails)(() => ({
    padding: 0,
    position: 'relative',
-
    '& .genre-list-scroll': {
       maxHeight: '300px',
       overflowY: 'auto',
@@ -244,9 +227,8 @@ const NoShadowAccordionDetails = styled(AccordionDetails)(() => ({
       marginTop: '10px',
    },
    '& .price-content': {
-marginTop: '10px',
+      marginTop: '10px',
    },
-
    '& .MuiFormGroup-root': {
       '& .MuiFormControlLabel-root': {
          margin: 0,

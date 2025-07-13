@@ -2,67 +2,88 @@ import { AppBar, Toolbar, Typography, Button, Box, styled } from '@mui/material'
 import { Icons } from '../assets/icons/index'
 import VendorFooter from '../layout/VendorFooter'
 import VendorCard from '../components/UI/VendorCard'
-import { VENDORCARDS } from '../utils/constants'
+import { VENDORCARDS, VENDORCARDS2 } from '../utils/constants'
+import { useNavigate } from 'react-router'
+import { useSelector } from 'react-redux'
 
-const LandingPage = () => (
-   <>
-      <StyledAppBar>
-         <Toolbar sx={{ justifyContent: 'space-between' }}>
-            <Box>
-               <img src={Icons.eBook} alt="" />
-            </Box>
+const LandingPage = () => {
+   const navigate = useNavigate()
+   const { user, isAuth } = useSelector((state) => state.auth)
 
-            <NavButton>Личный кабинет</NavButton>
-         </Toolbar>
-      </StyledAppBar>
+   const handleSignUp = () => {
+      navigate('/sign-up-vendor')
+   }
+   const handleSignIn = () => {
+      navigate('/sign-in')
+   }
+   const handleHome = () => {
+      navigate('/')
+   }
 
-      <StyledMain>
-         <StyledSectionUp>
-            <Box>
-               <Title>
-                  Портал в <Orange>книжный</Orange> мир
-               </Title>
+   return (
+      <>
+         <StyledAppBar>
+            <Toolbar sx={{ justifyContent: 'space-between' }}>
+               <Box>
+                  <img src={Icons.eBook} alt="" onClick={handleHome} />
+               </Box>
 
-               <Subtitle>Начните продавать свои книги на eBook</Subtitle>
+               <NavButton onClick={handleSignIn}>Личный кабинет</NavButton>
+            </Toolbar>
+         </StyledAppBar>
 
-               <StyledButton>Стать продавцом</StyledButton>
-            </Box>
+         <StyledMain>
+            <StyledSectionUp>
+               <Box>
+                  <Title>
+                     Портал в <Orange>книжный</Orange> мир
+                  </Title>
 
-            <Box>
-               <StyledCircle>
-                  <StyledImg src={Icons.knowledge} alt="" />
-               </StyledCircle>
-            </Box>
-         </StyledSectionUp>
+                  <Subtitle>Начните продавать свои книги на eBook</Subtitle>
 
-         <StyledCardsBoxUp>
-            <StyledCardTitle>Как начать продавать на eBook?</StyledCardTitle>
+                  <StyledButton onClick={handleSignUp}>
+                     Стать продавцом
+                  </StyledButton>
+               </Box>
 
-            <StyledCards>
-               {VENDORCARDS.map((item) => (
-                  <VendorCard img={item.img} text={item.text} />
-               ))}
-            </StyledCards>
-         </StyledCardsBoxUp>
+               <Box>
+                  <StyledCircle>
+                     <StyledImg src={Icons.knowledge} alt="" />
+                  </StyledCircle>
+               </Box>
+            </StyledSectionUp>
 
-         <StyledCardsBoxDown>
-            <StyledCardTitle>Условия</StyledCardTitle>
+            <StyledCardsBoxUp>
+               <StyledCardTitle>Как начать продавать на eBook?</StyledCardTitle>
 
-            <StyledCards>
-               {VENDORCARDS.map((item) => (
-                  <VendorCard img={item.img} text={item.text} />
-               ))}
-            </StyledCards>
-         </StyledCardsBoxDown>
+               <StyledCards>
+                  {VENDORCARDS.map((item) => (
+                     <VendorCard img={item.img} text={item.text} />
+                  ))}
+               </StyledCards>
+            </StyledCardsBoxUp>
 
-         <StyledButtonBox>
-            <StyledButton>Стать продавцом</StyledButton>
-         </StyledButtonBox>
-      </StyledMain>
+            <StyledCardsBoxDown>
+               <StyledCardTitle>Условия</StyledCardTitle>
 
-      <VendorFooter />
-   </>
-)
+               <StyledCards>
+                  {VENDORCARDS2.map((item) => (
+                     <VendorCard img={item.img} text={item.text} />
+                  ))}
+               </StyledCards>
+            </StyledCardsBoxDown>
+
+            <StyledButtonBox>
+               <StyledButton onClick={handleSignUp}>
+                  Стать продавцом
+               </StyledButton>
+            </StyledButtonBox>
+         </StyledMain>
+
+         <VendorFooter />
+      </>
+   )
+}
 
 export default LandingPage
 

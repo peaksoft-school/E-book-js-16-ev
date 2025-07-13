@@ -10,12 +10,14 @@ import InnerPageCard from '../pages/admin/aplications/InnerPageCard'
 import Books from '../pages/admin/books/Books'
 import AddBook from '../pages/admin/books/AddBook'
 import UploadBook from '../pages/admin/books/UploadBook'
+import ClientProfile from '../pages/user/ClientProfile'
 import VendorProfilePage from '../pages/vendor/VendorProfilePage'
 import VendorsPage from '../pages/admin/vendors/VendorsPage'
 import VendorsDetailtPage from '../pages/admin/vendors/VendorsDeatilPage'
 import InnerPageVendor from '../pages/vendor/InnerPageVendor'
 import AddType from '../pages/vendor/addType'
 import BooksPage from '../pages/vendor/BooksPage'
+import LandingPage from '../pages/LandingPage'
 import Sort from '../pages/user/Sort'
 import UserInnerPage from '../pages/user/UserInnerPage'
 
@@ -129,8 +131,10 @@ const AppRouter = () => (
             />
          }
       >
-         <Route path='sort/innerpageuser/:bookItemId' element={<UserInnerPage/>}/> 
+         <Route path="/user/profile" element={<ClientProfile />} />
+        <Route path='sort/innerpageuser/:bookItemId' element={<UserInnerPage/>}/> 
          <Route path='sort'  element={<Sort/>}/>
+      
       </Route>
 
       <Route
@@ -166,6 +170,8 @@ const AppRouter = () => (
          />
          <Route path="addbook" element={<AddBook />} />
       </Route>
+
+      <Route path="/sell" element={<LandingPage />} />
 
       <Route path="*" element="Not found" />
    </Routes>

@@ -40,4 +40,10 @@ const FORMATS = [
    { label: 'Электронные', value: 'ELECTRONIC' },
 ]
 
-export { CATEGORIES, NAV_LINKS, GENRES, FORMATS, BOOK_FILTER }
+const LANGUAGE = [
+   { value: 'RUSSIAN', label: 'Русский' },
+   { value: 'KYRGYZ', label: 'Кыргызский' },
+   { value: 'ENGLISH', label: 'Английский' },
+]
+
+export { CATEGORIES, NAV_LINKS, GENRES, FORMATS, BOOK_FILTER, LANGUAGE }

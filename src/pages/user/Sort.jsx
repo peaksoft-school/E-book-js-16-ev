@@ -19,6 +19,8 @@ import BookCard from '../../components/UI/cards/BookCard'
 import { Icons } from '../../assets/icons'
 import Button from '../../components/UI/buttons/Button'
 import Chip from '../../components/UI/Chip'
+import { FORMATS, GENRES, LANGUAGE } from '../../utils/helpers'
+import { languages } from 'eslint-plugin-prettier'
 
 const SORT = [
    { label: 'Новинки', value: false },
@@ -122,6 +124,7 @@ const Sort = () => {
       setFilterParams(updatedParams)
       handleFilterChange(updatedParams)
    }
+   console.log('LANGUAGE item:', languages)
 
    return (
       <StyledSortBox>
@@ -137,19 +140,29 @@ const Sort = () => {
                Найдены {books?.length || 0} книг
             </Typography>
 
-            <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
-               {filterParams.genres.map((genres) => (
+            <Box display="flex" flexWrap="wrap" gap={1} mb={1}>
+               {filterParams.genres.map((genre) => (
                   <Chip
-                     key={genres.id || genres}
-                     label={genres.name || genres}
-                     onDelete={() => handleDeleteFilter('genres', genres)}
+                     key={genre.id || genre}
+                     label={
+                        GENRES.find((g) => g.value === (genre.value || genre))
+                           ?.label ||
+                        genre.name ||
+                        genre
+                     }
+                     onDelete={() => handleDeleteFilter('genres', genre)}
                   />
                ))}
 
                {filterParams.types.map((type) => (
                   <Chip
                      key={type.id || type}
-                     label={type.name || type}
+                     label={
+                        FORMATS.find((f) => f.value === (type.value || type))
+                           ?.label ||
+                        type.name ||
+                        type
+                     }
                      onDelete={() => handleDeleteFilter('types', type)}
                   />
                ))}
@@ -157,7 +170,16 @@ const Sort = () => {
                {filterParams.languages.map((lang) => (
                   <Chip
                      key={lang.id || lang}
-                     label={lang.name || lang}
+                     label={
+                        LANGUAGE.find(
+                           (f) =>
+                              f.value === lang ||
+                              f.value === lang.value ||
+                              f.value === lang.name
+                        )?.label ||
+                        lang.name ||
+                        lang
+                     }
                      onDelete={() => handleDeleteFilter('languages', lang)}
                   />
                ))}
@@ -296,4 +318,5 @@ const StyledSecondBox = styled(Box)({
    display: 'flex',
    justifyContent: 'space-between',
    alignItems: 'center',
+   height: 48,
 })

@@ -36,7 +36,7 @@ const Input = forwardRef(
       ref
    ) => {
       const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-const { role } = useSelector((state) => state.auth)
+      const { role } = useSelector((state) => state.auth)
       if (!placeholder) {
          console.error('Ошибка: placeholder является обязательным пропсом')
       }
@@ -45,12 +45,15 @@ const { role } = useSelector((state) => state.auth)
          setIsPasswordVisible((prev) => !prev)
 
       const getEndAdornment = () => {
-         if (customIcon) return   <Box
-            component="img"
-            src={customIcon}
-            alt="icon"
-            sx={{ width: 20, height: 20 }}
-         />
+         if (customIcon)
+            return (
+               <Box
+                  component="img"
+                  src={customIcon}
+                  alt="icon"
+                  sx={{ width: 20, height: 20 }}
+               />
+            )
          if (!withIcon) return null
 
          if (type === 'search') return <SearchIcon />
@@ -79,7 +82,7 @@ const { role } = useSelector((state) => state.auth)
 
       return (
          <Box
-            width={type === 'description'  ? 650 : '100%'}
+            width={type === 'description' ? 650 : '100%'}
             display="flex"
             flexDirection="column"
          >
