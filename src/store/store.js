@@ -20,6 +20,7 @@ import promoCodeReducer from './vendor/promoSandSlice'
 import vendorBookReducer from './vendor/vendorBookSlice'
 import deleteVendorBookReducer from './vendor/deleteVendorBookSlice'
 import { historyActionClientSlice } from './user/profile/historyActionClientSlice'
+import { basketSlice } from './user/basket/basketSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
    vendorBook: vendorBookReducer,
    vendorDeleteBook: deleteVendorBookReducer,
    [historyActionClientSlice.name]: historyActionClientSlice.reducer,
+   [basketSlice.name]: basketSlice.reducer,
 })
 
 const persistConfig = {

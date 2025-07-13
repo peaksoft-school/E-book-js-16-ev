@@ -49,7 +49,11 @@ const Header = () => {
          <GlobalFont />
          <StyledAppBar position="static">
             <StyledHeaderUp>
-               <LogoImage src={Icons.eBook} alt="Логотип" />
+               <LogoImage
+                  src={Icons.eBook}
+                  alt="Логотип"
+                  onClick={() => navigate('/')}
+               />
                <StyledInputWrapper>
                   <Input
                      type="search"
@@ -61,7 +65,7 @@ const Header = () => {
                   <img src={Icons.like} alt="Like" />
                </StyledIconButton>
                {isAuth ? (
-                  <StyledBasket onClick={() => navigate('/basket')}>
+                  <StyledBasket onClick={() => navigate('/user/basket')}>
                      Корзина({3})
                   </StyledBasket>
                ) : (
