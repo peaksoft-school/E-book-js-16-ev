@@ -22,6 +22,7 @@ import deleteVendorBookReducer from './vendor/deleteVendorBookSlice'
 import bookClientStateReducer from './user/userBookByIdSlice'
 import sortBooksReducer from './user/userSortSlice'
 import { historyActionClientSlice } from './user/profile/historyActionClientSlice'
+import { basketSlice } from './user/basket/basketSlice'
 import promoReducer from './user/promo/promoSlice'
 
 const rootReducer = combineReducers({
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
    bookClient: bookClientStateReducer,
    sortBooks: sortBooksReducer,
    [historyActionClientSlice.name]: historyActionClientSlice.reducer,
+   [basketSlice.name]: basketSlice.reducer,
    promo: promoReducer,
 })
 
