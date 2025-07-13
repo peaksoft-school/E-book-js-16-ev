@@ -8,6 +8,7 @@ import {
    rejectBook,
 } from '../../../store/admin/applications/innerpage/bookThunk'
 import { vendorBookById } from '../../../store/vendor/vendorBookThunk'
+import { fetchBookClientById } from '../../../store/user/userBookById'
 import ImageGallery from './ImageGallery'
 import BookInfoFields from './BookInfoFields'
 import BookDescriptionTabs from './BookDescriptionTabs'
@@ -17,13 +18,13 @@ import RejectModal from './RejectModal'
 import SimpleAudioPlayerColumn from '../AudioPlayer'
 import RoleBreadcrumbs from './RoleBreadCrums'
 
-const InnerPageCardComponent = ({ role = 'user' }) => {
+const InnerPageCardComponent = ({ role = 'client' }) => {
    const dispatch = useDispatch()
    const { bookItemId } = useParams()
    const { book, loading, error } = useSelector((state) => {
       if (role === 'admin') return state.book
       if (role === 'vendor') return state.vendorBook
-      if (role === 'user') return state.someUserBookSlice
+      if (role === 'client') return state.bookClient
       return { book: null, loading: false, error: null }
    })
 
@@ -39,8 +40,8 @@ const InnerPageCardComponent = ({ role = 'user' }) => {
          dispatch(infoBook(bookItemId))
       } else if (role === 'vendor') {
          dispatch(vendorBookById(bookItemId))
-      } else if (role === 'user') {
-         dispatch(getBookForUser(bookItemId))
+      } else  {
+         dispatch(fetchBookClientById(bookItemId))
       }
    }, [bookItemId, dispatch, role])
 

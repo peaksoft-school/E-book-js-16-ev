@@ -1,41 +1,63 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
    Accordion,
    AccordionSummary,
    AccordionDetails,
    FormControlLabel,
    FormGroup,
-   RadioGroup,
    Slider,
    TextField,
    Typography,
    Box,
    styled,
+   RadioGroup,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Checkbox from './UI/Checkbox'
 import Radio from './UI/Radio'
-import Input from './UI/Input'
+import { GENRES, LANGUAGE } from '../utils/helpers'
 
-const FilterPanel = () => {
-   const [genre, setGenre] = useState(['Зарубежная литература'])
-   const [bookType, setBookType] = useState('paper')
-   const [price, setPrice] = useState([500, 10000])
-   const [language, setLanguage] = useState(['Русский язык'])
+const FilterPanel = ({ filterParams, onFilterChange }) => {
+   const [selectedGenre, setSelectedGenre] = useState([])
+   const [bookType, setBookType] = useState(filterParams.types[0] || '')
+   const [price, setPrice] = useState([
+      filterParams.startPrice,
+      filterParams.endPrice,
+   ])
+   const [language, setLanguage] = useState([])
 
-   const genres = new Array(7).fill('Зарубежная литература')
+   useEffect(() => {
+      const newParams = {
+         genres: selectedGenre,
+         types: bookType ? [bookType] : [],
+         languages: language,
+         startPrice: price[0],
+         endPrice: price[1],
+      }
+
+      if (JSON.stringify(newParams) !== JSON.stringify(filterParams)) {
+         onFilterChange(newParams)
+      }
+   }, [selectedGenre, bookType, price, language])
+
+   useEffect(() => {
+      setSelectedGenre(filterParams.genres || [])
+      setBookType(filterParams.types[0] || '')
+      setPrice([filterParams.startPrice, filterParams.endPrice])
+      setLanguage(filterParams.languages || [])
+   }, [filterParams])
 
    const handleGenreChange = (genreValue) => {
-      setGenre((prev) =>
-         prev.includes(genreValue)
-            ? prev.filter((g) => g !== genreValue)
-            : [...prev, genreValue]
+      setSelectedGenre((prev) =>
+         prev.includes(genreValue) ? [] : [genreValue]
       )
    }
 
-   const handleLanguageChange = (lang) => {
+   const handleLanguageChange = (langValue) => {
       setLanguage((prev) =>
-         prev.includes(lang) ? prev.filter((l) => l !== lang) : [...prev, lang]
+         prev.includes(langValue)
+            ? prev.filter((l) => l !== langValue)
+            : [...prev, langValue]
       )
    }
 
@@ -45,28 +67,23 @@ const FilterPanel = () => {
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
                <Typography className="title">Жанры</Typography>
             </NoShadowAccordionSummary>
-
             <NoShadowAccordionDetails>
-               <Input
-                  type="search"
-                  placeholder="Я ищу... "
-                  className="search-input"
-               />
-
-               <FormGroup>
-                  {genres.map((g, i) => (
-                     <FormControlLabel
-                        key={i}
-                        control={
-                           <Checkbox
-                              checked={genre.includes(g)}
-                              onChange={() => handleGenreChange(g)}
-                           />
-                        }
-                        label={g}
-                     />
-                  ))}
-               </FormGroup>
+               <Box className="genre-list-scroll">
+                  <FormGroup>
+                     {GENRES.map((genre) => (
+                        <FormControlLabel
+                           key={genre.value}
+                           control={
+                              <Checkbox
+                                 checked={selectedGenre.includes(genre.value)}
+                                 onChange={() => handleGenreChange(genre.value)}
+                              />
+                           }
+                           label={genre.label}
+                        />
+                     ))}
+                  </FormGroup>
+               </Box>
             </NoShadowAccordionDetails>
          </NoShadowAccordion>
 
@@ -74,24 +91,23 @@ const FilterPanel = () => {
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
                <Typography className="title">Тип</Typography>
             </NoShadowAccordionSummary>
-
             <NoShadowAccordionDetails>
                <RadioGroup
                   value={bookType}
                   onChange={(e) => setBookType(e.target.value)}
                >
                   <FormControlLabel
-                     value="paper"
+                     value="PAPER"
                      control={<Radio />}
                      label="Бумажная книга"
                   />
                   <FormControlLabel
-                     value="audio"
+                     value="AUDIO"
                      control={<Radio />}
                      label="Аудиокнига"
                   />
                   <FormControlLabel
-                     value="ebook"
+                     value="ELECTRONIC"
                      control={<Radio />}
                      label="Электронная книга"
                   />
@@ -103,7 +119,6 @@ const FilterPanel = () => {
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
                <Typography className="title">Стоимость</Typography>
             </NoShadowAccordionSummary>
-
             <NoShadowAccordionDetails>
                <Box display="flex" gap={1} mb={2} className="price-content">
                   <TextField
@@ -113,7 +128,6 @@ const FilterPanel = () => {
                      onChange={(e) => setPrice([+e.target.value, price[1]])}
                      label="от"
                   />
-
                   <TextField
                      size="small"
                      type="number"
@@ -126,44 +140,42 @@ const FilterPanel = () => {
                <StyledSlider
                   value={price}
                   onChange={(e, newValue) => setPrice(newValue)}
-                  min={0}
-                  max={20000}
+                  min={1}
+                  max={10000}
                />
             </NoShadowAccordionDetails>
          </NoShadowAccordion>
 
-         <NoShadowAccordion defaultExpanded noDivider>
+         <NoShadowAccordion defaultExpanded>
             <NoShadowAccordionSummary expandIcon={<ExpandMoreIcon />}>
                <Typography className="title">Язык издания</Typography>
             </NoShadowAccordionSummary>
             <NoShadowAccordionDetails>
                <FormGroup>
-                  {['Кыргызский язык', 'Русский язык', 'Английский язык'].map(
-                     (lang) => (
-                        <FormControlLabel
-                           key={lang}
-                           control={
-                              <Checkbox
-                                 checked={language.includes(lang)}
-                                 onChange={() => handleLanguageChange(lang)}
-                              />
-                           }
-                           label={lang}
-                        />
-                     )
-                  )}
+                  {LANGUAGE.map((lang) => (
+                     <FormControlLabel
+                        key={lang.value}
+                        control={
+                           <Checkbox
+                              checked={language.includes(lang.value)}
+                              onChange={() => handleLanguageChange(lang.value)}
+                           />
+                        }
+                        label={lang.label}
+                     />
+                  ))}
                </FormGroup>
             </NoShadowAccordionDetails>
          </NoShadowAccordion>
       </StyledBox>
    )
 }
+
 export default FilterPanel
 
-const StyledBox = styled(Box)(() => ({
-   maxWidth: '266px',
-   margin: '20px',
 
+const StyledBox = styled(Box)(() => ({
+   maxWidth: '280px',
    '& .css-rpwreu-MuiPaper-root-MuiAccordion-root.Mui-expanded': {
       margin: 0,
    },
@@ -171,11 +183,9 @@ const StyledBox = styled(Box)(() => ({
 
 const StyledSlider = styled(Slider)(() => ({
    color: '#FF4C00',
-
    '& .MuiSlider-track': {
       backgroundColor: '#FF4C00',
    },
-
    '& .MuiSlider-rail': {
       backgroundColor: '#C4C4C4',
       opacity: 1,
@@ -184,11 +194,9 @@ const StyledSlider = styled(Slider)(() => ({
 
 const NoShadowAccordion = styled(Accordion)(() => ({
    boxShadow: 'none',
-
    '&:before': {
       display: 'none',
    },
-
    '&:last-of-type': {
       borderBottom: 'none',
    },
@@ -198,66 +206,35 @@ const NoShadowAccordionSummary = styled(AccordionSummary)(() => ({
    boxShadow: 'none',
    padding: 0,
    borderBottom: '1px solid #C4C4C4',
-
    '& .MuiAccordionSummary-content': {
       margin: 0,
    },
-
    '& .title': {
       fontFamily: 'Open Sans',
       fontWeight: '600',
       lineHeight: '120%',
+      fontSize: 18,
    },
 }))
+
 const NoShadowAccordionDetails = styled(AccordionDetails)(() => ({
    padding: 0,
    position: 'relative',
-   overflowY: 'auto',
-   maxHeight: '276px',
-
-   scrollbarWidth: 'thin',
-   scrollbarColor: ' #f1f1f1',
-
-   '&::-webkit-scrollbar': {
-      width: '2px',
+   '& .genre-list-scroll': {
+      maxHeight: '300px',
+      overflowY: 'auto',
+      paddingRight: '8px',
+      marginTop: '10px',
    },
-
-   '&::-webkit-scrollbar-track': {
-      background: '#f1f1f1',
+   '& .price-content': {
+      marginTop: '10px',
    },
-
-   '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#888',
-      borderRadius: '10px',
-      border: '2px solid #f1f1f1',
-   },
-
-   '&::-webkit-scrollbar-thumb:hover': {
-      background: '#555',
-   },
-
-   '& .search-input': {
-      paddingTop: '10px',
-
-      '& .MuiInputBase-root': {
-         backgroundColor: 'white',
-      },
-   },
-
    '& .MuiFormGroup-root': {
-      paddingRight: '10px',
-
       '& .MuiFormControlLabel-root': {
          margin: 0,
-
          '& .MuiButtonBase-root': {
             padding: '9px 9px 9px 0',
          },
       },
-   },
-
-   '& .price-content': {
-      paddingTop: '20px',
-      overflowY: 'visible',
    },
 }))

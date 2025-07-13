@@ -140,8 +140,6 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
    backgroundColor: theme.palette.background.paper,
    boxShadow: 'none',
    display: 'flex',
-   justifyContent: 'center',
-   alignItems: 'center',
    overflowX: 'hidden',
    [theme.breakpoints.down('md')]: {
       paddingLeft: '20px',
@@ -150,13 +148,9 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 }))
 
 const StyledHeaderUp = styled(Box)(({ theme }) => ({
-   width: '100%',
-   maxWidth: '1280px',
    display: 'flex',
    flexWrap: 'wrap',
    alignItems: 'center',
-   justifyContent: 'space-between',
-   gap: '20px',
    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'center',
@@ -164,8 +158,6 @@ const StyledHeaderUp = styled(Box)(({ theme }) => ({
 }))
 
 const StyledNav = styled(Box)(({ theme }) => ({
-   width: '100%',
-   maxWidth: '1280px',
    display: 'flex',
    flexWrap: 'wrap',
    alignItems: 'center',
@@ -191,6 +183,7 @@ const StyledBasket = styled(Typography)(({ theme }) => ({
    fontFamily: 'Open Sans, sans-serif',
    fontWeight: 400,
    fontSize: '14px',
+   marginTop: '10px'
 }))
 
 const StyledMenuWrapper = styled(Box)(({ theme }) => ({
@@ -206,6 +199,7 @@ const NavLinks = styled(Box)(({ theme }) => ({
    flexWrap: 'wrap',
    gap: '20px',
    justifyContent: 'center',
+   marginRight: 420,
 }))
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
@@ -225,14 +219,14 @@ const StyledNavLink = styled(NavLink)(({ theme }) => ({
 }))
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
-   marginLeft: '0px',
-   marginRight: '20px',
+   marginRight: '40px',
+   marginTop: '10px',
 }))
 
 const LogoImage = styled('img')({
    maxWidth: '147px',
    height: '85px',
-   marginRight: '20px',
+   marginRight: '40px',
 })
 
 const GlobalFont = createGlobalStyle`
@@ -251,9 +245,8 @@ const GlobalFont = createGlobalStyle`
 `
 
 const StyledInputWrapper = styled(Box)(({ theme }) => ({
-   marginRight: '20px',
-   flexGrow: 1,
-   minWidth: '200px',
+   marginRight: '40px',
+   marginTop: '10px',
 }))
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -263,3 +256,4 @@ const StyledButton = styled(Button)(({ theme }) => ({
    color: 'white',
    padding: '10px 24px',
 }))
+
