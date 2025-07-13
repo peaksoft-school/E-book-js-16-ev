@@ -22,6 +22,8 @@ import BasketPage from '../pages/user/BasketPage'
 import Sort from '../pages/user/Sort'
 import UserInnerPage from '../pages/user/UserInnerPage'
 import Promo from '../pages/user/Promo'
+import FavoritesPage from '../pages/user/FavoritesPage'
+import SlidersPage from '../pages/SlidersPage'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))
@@ -47,7 +49,13 @@ const AppRouter = () => (
                fallbackPath={'/'}
             />
          }
-      ></Route>
+      >
+         <Route index element={<SlidersPage />} />
+
+         <Route path="landing" element={<SlidersPage />} />
+
+         <Route path="sort" element={<Sort />} />
+      </Route>
 
       <Route
          path={ROUTES.SIGN_IN}
@@ -133,6 +141,8 @@ const AppRouter = () => (
             />
          }
       >
+         <Route path="/user" element={<SlidersPage />} />
+
          <Route path="/user/basket" element={<BasketPage />} />
 
          <Route path="/user/profile" element={<ClientProfile />} />
@@ -140,9 +150,11 @@ const AppRouter = () => (
             path="sort/innerpageuser/:bookItemId"
             element={<UserInnerPage />}
          />
-         <Route path="sort" element={<Sort />} />
+         <Route path="/user/sort" element={<Sort />} />
 
          <Route path="promo" element={<Promo />} />
+
+         <Route path="favorites" element={<FavoritesPage />} />
       </Route>
 
       <Route

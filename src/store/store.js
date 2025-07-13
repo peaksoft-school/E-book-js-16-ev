@@ -24,6 +24,7 @@ import sortBooksReducer from './user/userSortSlice'
 import { historyActionClientSlice } from './user/profile/historyActionClientSlice'
 import { basketSlice } from './user/basket/basketSlice'
 import promoReducer from './user/promo/promoSlice'
+import { favoriteSlice } from './user/favorites/userFavoritesSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
    [historyActionClientSlice.name]: historyActionClientSlice.reducer,
    [basketSlice.name]: basketSlice.reducer,
    promo: promoReducer,
+   [favoriteSlice.name]: favoriteSlice.reducer,
 })
 
 const persistConfig = {
