@@ -20,6 +20,7 @@ import BooksPage from '../pages/vendor/BooksPage'
 import LandingPage from '../pages/LandingPage'
 import Sort from '../pages/user/Sort'
 import UserInnerPage from '../pages/user/UserInnerPage'
+import Promo from '../pages/user/Promo'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))
@@ -132,9 +133,12 @@ const AppRouter = () => (
          }
       >
          <Route path="/user/profile" element={<ClientProfile />} />
-        <Route path='sort/innerpageuser/:bookItemId' element={<UserInnerPage/>}/> 
-         <Route path='sort'  element={<Sort/>}/>
-      
+         <Route
+            path="sort/innerpageuser/:bookItemId"
+            element={<UserInnerPage />}
+         />
+         <Route path="sort" element={<Sort />} />
+         <Route path="promo" element={<Promo />} />
       </Route>
 
       <Route
