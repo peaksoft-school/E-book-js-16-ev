@@ -105,7 +105,7 @@ const AddBook = ({
 
       if (inputType === 'checkbox') {
          val = checked
-      } else if (['price', 'discount'].includes(name)) {
+      } else if (['price'].includes(name)) {
          val = value.replace(/[^0-9.]/g, '')
          const parts = val.split('.')
          if (parts.length > 2) val = parts[0] + '.' + parts[1]
@@ -275,6 +275,7 @@ const AddBook = ({
          setModalOpen(true)
       }
    }
+    console.log('initialData.audioUrl:', initialData?.audioUrl)
    return (
       <StyledBox role={role}>
          <Box className="breadcrums" role={role}>
@@ -579,36 +580,40 @@ const AddBook = ({
                      label="Бестселлер"
                   />
                )}
-               {type === 'AUDIO' && (
-                  <>
-                     <Box className="fragment" role={role}>
-                        <UploadButton
-                           label="фрагмент аудиозаписи"
-                           fileName="fragment"
-                           accept="audio/*"
-                           onFileSelect={handleFileChange}
-                           initialFile={fragment}
-                        />
-                        <span className="span">максимум 10 мин.</span>
-                     </Box>
-                     <UploadButton
-                        label="аудиозапись"
-                        fileName="audio"
-                        accept="audio/*"
-                        onFileSelect={handleFileChange}
-                        initialFile={audio}
-                     />
-                  </>
-               )}
-               {type === 'ELECTRONIC' && (
-                  <UploadButton
-                     label="PDF"
-                     fileName="pdf"
-                     accept="application/pdf"
-                     onFileSelect={handleFileChange}
-                     initialFile={pdf}
-                  />
-               )}
+              {type === 'AUDIO' && (
+   <>
+      <Box className="fragment" role={role}>
+         <UploadButton
+            label="фрагмент аудиозаписи"
+            fileName="fragment"
+            accept="audio/*"
+            onFileSelect={handleFileChange}
+            initialFile={initialData?.fragment}
+         />
+         <span className="span">максимум 10 мин.</span>
+      </Box>
+      
+   <UploadButton
+      label="аудиозапись"
+      fileName="audio"
+      accept="audio/*"
+      onFileSelect={handleFileChange}
+      initialFile={initialData?.audio}
+   />
+
+
+   </>
+)}
+{type === 'ELECTRONIC' && (
+   <UploadButton
+      label="PDF"
+      fileName="pdf"
+      accept="application/pdf"
+      onFileSelect={handleFileChange}
+      initialFile={initialData?.pdf}
+   />
+)}
+
             </StyledRightBox>
          </StyledContainer>
 

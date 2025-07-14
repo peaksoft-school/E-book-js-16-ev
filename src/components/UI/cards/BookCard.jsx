@@ -1,4 +1,4 @@
-import { useState, forwardRef } from 'react'
+import { useState, forwardRef, useEffect } from 'react'
 import {
    Card as MuiCard,
    CardMedia,
@@ -10,41 +10,67 @@ import {
 import { styled } from '@mui/material/styles'
 import { Icons } from '../../../assets/icons'
 import Button from '../buttons/Button'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { useNavigate } from 'react-router'
+import { useDispatch } from 'react-redux'
+import { addFavoriteBook } from '../../../store/user/favoriteThunk'
+import { fetchAllSortBooks } from '../../../store/user/userSortThunk' // не забудь импорт
 
-const BookCard = forwardRef(({ book }, ref) => {
+const BookCard = forwardRef(({ book, activeSort, filterParams }, ref) => {
    const [isClicked, setIsClicked] = useState(false)
    const navigate = useNavigate()
-   const handleCardClick = () => {
-      setIsClicked(!isClicked)
-   }
+   const [isFavorited, setIsFavorited] = useState(book.favorite)
 
-   const getIcon = (type) => {
-      switch (type) {
-         case 'audio':
-            return <AudioIcon src={Icons.headphone} alt="Audio Book" />
-         case 'text':
-            return ''
-         default:
-            return null
+   const dispatch = useDispatch()
+
+   useEffect(() => {
+      setIsFavorited(book.favorite)
+   }, [book.favorite])
+
+   const handleCardClick = () => setIsClicked((prev) => !prev)
+
+   const handleFavoriteClick = async (e) => {
+      e.stopPropagation()
+      await dispatch(addFavoriteBook(book.bookItemId))
+      setIsFavorited((prev) => !prev)
+
+      if (activeSort === 'filter') {
+         dispatch(
+            fetchAllSortBooks({
+               body: filterParams,
+               pageNumber: 1,
+               pageSize: 100,
+            })
+         )
       }
    }
 
    const handleClick = () => {
       navigate(`/user/sort/innerpageuser/${book.bookItemId}`)
    }
-   
-   return (
-      <StyledCard isclicked={isClicked.toString()} ref={ref}>
-         <StyledCardMedia
-            onClick={handleClick}
-            component="img"
-            image={book.imageUrl}
-            alt={book.name}
-         />
 
-         <StyledCardContent onClick={handleCardClick}>
+   return (
+      <StyledCard
+         onMouseEnter={handleCardClick}
+         onMouseLeave={handleCardClick}
+         isclicked={isClicked.toString()}
+         ref={ref}
+      >
+         <ImageWrapper onClick={handleClick}>
+            <StyledCardMedia
+               component="img"
+               image={book.imageUrl}
+               alt={book.name}
+            />
+
+            {(book.type === 'AUDIO' || book.type === 'ELECTRONIC') && (
+               <IconOverlay
+                  src={book.type === 'AUDIO' ? Icons.aIcon : Icons.eIcon}
+                  alt={`${book.type} icon`}
+               />
+            )}
+         </ImageWrapper>
+
+         <StyledCardContent>
             <Box>
                <StyledTypography variant="body1" fontWeight="bold">
                   {book.name.length > 21
@@ -59,25 +85,32 @@ const BookCard = forwardRef(({ book }, ref) => {
                </StyledTypography>
             </Box>
 
-            <AddToCartBox>
-               {isClicked ? (
-                  <Button variant="warning">Добавить в корзину</Button>
-               ) : (
-                  <Box sx={{ height: 0 }} />
-               )}
+            <AddToCartBox isvisible={isClicked}>
+               <Button variant="warning" className="add-btn">
+                  Добавить в корзину
+               </Button>
             </AddToCartBox>
          </StyledCardContent>
 
          {isClicked && (
             <IconButton
-               sx={{ position: 'absolute', top: 8, right: 8, color: '#F34901' }}
-               aria-label="like"
+               sx={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  opacity: isClicked ? 1 : 0,
+                  transition: 'opacity 0.3s ease',
+                  pointerEvents: isClicked ? 'auto' : 'none',
+               }}
+               onClick={handleFavoriteClick}
             >
-               <FavoriteBorderIcon />
+               <img
+                  src={isFavorited ? Icons.loveO : Icons.love}
+                  alt="favorite"
+                  style={{ width: 24, height: 24 }}
+               />
             </IconButton>
          )}
-
-         <HoverIcons className="hover-icons">{getIcon(book.type)}</HoverIcons>
       </StyledCard>
    )
 })
@@ -91,45 +124,50 @@ const StyledCard = styled(MuiCard)(({ isclicked }) => ({
    boxShadow: 'none',
    overflow: 'visible',
    zIndex: isclicked === 'true' ? 10 : 1,
-   transition: 'all 0.3s ease',
+   transition: 'transform 0.3s ease, z-index 0.3s ease',
+   transform: isclicked === 'true' ? 'translateY(-10px)' : 'translateY(0)',
 }))
+
+const ImageWrapper = styled('div')({
+   position: 'relative',
+   width: '235px',
+   height: '343px',
+})
 
 const StyledCardMedia = styled(CardMedia)({
    width: '235px',
    height: '343px',
 })
 
-const StyledCardContent = styled(CardContent)({
-   padding: 0,
-   display: 'flex',
-   flexDirection: 'column',
+const IconOverlay = styled('img')({
+   position: 'absolute',
+   top: 5,
+   left: 5,
+   width: 24,
+   height: 24,
+   objectFit: 'contain',
+   pointerEvents: 'none',
+   zIndex: 10,
 })
 
-const AddToCartBox = styled(Box)(({ theme }) => ({
-   position: 'absolute',
-   bottom: -40,
+const StyledCardContent = styled(Box)({
+   display: 'flex',
+   flexDirection: 'column',
+   height: '100%',
+})
+
+const AddToCartBox = styled(Box)(({ isvisible }) => ({
    width: '100%',
    display: 'flex',
    justifyContent: 'center',
    transition: 'opacity 0.3s ease, transform 0.3s ease',
+   opacity: isvisible ? 1 : 0,
+   transform: isvisible ? 'translateY(0)' : 'translateY(10px)',
+
+   '& .add-btn': {
+      width: '100%',
+   },
 }))
-
-const HoverIcons = styled(Box)({
-   position: 'absolute',
-   top: 8,
-   left: 8,
-   display: 'flex',
-   gap: '8px',
-   opacity: 0,
-   transition: 'opacity 0.3s',
-   pointerEvents: 'none',
-})
-
-const AudioIcon = styled('img')({
-   width: '24px',
-   height: '24px',
-   objectFit: 'contain',
-})
 
 const StyledTypography = styled(Typography)({
    '&.MuiTypography-body1': {

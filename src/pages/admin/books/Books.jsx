@@ -162,7 +162,16 @@ const BookFilterPage = () => {
                <Typography>Нет книг по выбранному фильтру</Typography>
             ) : (
                allBooks.map((book) => (
-                  <ApplicationCard key={book.bookItemId} book={book} micon />
+                  <ApplicationCard key={book.bookItemId} book={book} micon  onDelete={() => {
+      dispatch(
+         fetchBooksByGenreAndType({
+            genre: genre || null,
+            type: format || null,
+            pageNumber: currentPage,
+            pageSize,
+         })
+      )
+   }}/>
                ))
             )}
          </StyledCardBox>

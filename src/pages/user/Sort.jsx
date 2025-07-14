@@ -218,7 +218,7 @@ const Sort = () => {
             <Box>
                <StyledCardBox>
                   {visibleBooks.map((book) => (
-                     <BookCard key={book.bookItemId} book={book} />
+                     <BookCard key={book.bookItemId} book={book}   activeSort={activeSort}   filterParams={filterParams}/>
                   ))}
                </StyledCardBox>
 

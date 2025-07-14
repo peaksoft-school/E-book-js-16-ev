@@ -28,3 +28,20 @@ export const fetchBooks = createAsyncThunk(
       }
    }
 )
+
+export const searchBooksByName = createAsyncThunk(
+   'application/searchBooksByName',
+   async ({ request, pageNumber, pageSize }, { rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.get(
+            `api/bookItem/applicationSearch`,
+            {
+               params: { request, pageNumber, pageSize },
+            }
+         )
+         return response.data
+      } catch (error) {
+         return rejectWithValue(error.response?.data?.message || 'Ошибка поиска')
+      }
+   }
+)

@@ -17,7 +17,7 @@ import { Icons } from '../../../assets/icons'
 import { deleteBook } from '../../../store/admin/books/deleteAdminBookThunk'
 import { fetchBooksByGenreAndType } from '../../../store/admin/books/booksThunk'
 
-const ApplicationCard = forwardRef(({ book, micon }, ref) => {
+const ApplicationCard = forwardRef(({ book, micon, onDelete }, ref) => {
    const {
       imageUrl,
       name,
@@ -27,6 +27,7 @@ const ApplicationCard = forwardRef(({ book, micon }, ref) => {
       image,
       dateOfApplication,
       bookItemId,
+      type
    } = book
    const navigate = useNavigate()
    const dispatch = useDispatch()
@@ -54,13 +55,21 @@ const ApplicationCard = forwardRef(({ book, micon }, ref) => {
          genre: selectedGenre,
          type: selectedFormat,
       }
-
-      if (window.confirm('Вы действительно хотите удалить эту книгу?')) {
          await dispatch(
             deleteBook({ bookItemId, fetchBooksByGenreAndType, data })
          )
+
+          if (typeof onDelete === 'function') {
+         onDelete()
       }
    }
+
+   const getTypeIcon = () => {
+   if (type === 'AUDIO') return Icons.aIcon
+   if (type === 'ELECTRONIC') return Icons.eIcon
+   return null
+}
+
 
    const handleClick = () => {
       if (micon == null) {
@@ -71,6 +80,10 @@ const ApplicationCard = forwardRef(({ book, micon }, ref) => {
    return (
       <StyledCard showed={showed} ref={ref}>
          <Box sx={{ position: 'relative' }}>
+            {getTypeIcon() && (
+   <StyledTypeIcon src={getTypeIcon()} alt="book type icon" />
+)}
+
             <StyledCardMedia
                onClick={handleClick}
                component="img"
@@ -198,4 +211,13 @@ const StyledOptionsButton = styled(IconButton)(({ theme }) => ({
    top: theme.spacing(-4.2),
    right: theme.spacing(-4),
    color: '#222222',
+}))
+
+const StyledTypeIcon = styled('img')(() => ({
+   position: 'absolute',
+   top: 5,
+   right: 5,
+   width: 30,
+   height: 30,
+   zIndex: 2,
 }))
