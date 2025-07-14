@@ -55,6 +55,12 @@ const AppRouter = () => (
          <Route path="landing" element={<SlidersPage />} />
 
          <Route path="sort" element={<Sort />} />
+         <Route path="sort/:genre" element={<Sort />} />
+
+         <Route
+            path="sort/innerpageuser/:bookItemId"
+            element={<UserInnerPage />}
+         />
       </Route>
 
       <Route
@@ -146,10 +152,12 @@ const AppRouter = () => (
          <Route path="/user/basket" element={<BasketPage />} />
 
          <Route path="/user/profile" element={<ClientProfile />} />
+
          <Route
             path="sort/innerpageuser/:bookItemId"
             element={<UserInnerPage />}
          />
+
          <Route path="/user/sort" element={<Sort />} />
 
          <Route path="promo" element={<Promo />} />
