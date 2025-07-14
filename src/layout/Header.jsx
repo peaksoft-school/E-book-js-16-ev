@@ -12,7 +12,7 @@ import { NavLink } from 'react-router'
 import Input from '../components/UI/Input'
 import { Icons } from '../assets/icons'
 import { createGlobalStyle } from 'styled-components'
-import { NAV_LINKS } from '../utils/helpers'
+import { GENRES, NAV_LINKS } from '../utils/helpers'
 import { useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import PersonIcon from '@mui/icons-material/Person'
@@ -20,9 +20,12 @@ import { AUTH_ACTION } from '../store/slices/authSlice'
 import { useState } from 'react'
 
 const Header = () => {
-   const [anchorEl, setAnchorEl] = useState(null)
+   const [anchorElUser, setAnchorElUser] = useState(null)
+   const [anchorElGenre, setAnchorElGenre] = useState(null)
 
-   const open = Boolean(anchorEl)
+   const openUserMenu = Boolean(anchorElUser)
+   const openGenreMenu = Boolean(anchorElGenre)
+
    const navigate = useNavigate()
    const dispatch = useDispatch()
 
@@ -32,17 +35,33 @@ const Header = () => {
 
    const handleLogout = () => {
       dispatch(AUTH_ACTION.logOut())
-   }
-   const handleMenuOpen = (event) => {
-      setAnchorEl(event.currentTarget)
-   }
-   const handleClose = () => {
-      navigate('/user/profile')
-      setAnchorEl(null)
+      setAnchorElUser(null)
    }
 
-   const handleMenuClose = () => {
-      setAnchorEl(null)
+   const handleUserMenuOpen = (event) => {
+      setAnchorElUser(event.currentTarget)
+   }
+
+   const handleUserMenuClose = () => {
+      navigate('/user/profile')
+      setAnchorElUser(null)
+   }
+
+   const handleUserMenuCloseOnly = () => {
+      setAnchorElUser(null)
+   }
+
+   const handleGenreMenuOpen = (event) => {
+      setAnchorElGenre(event.currentTarget)
+   }
+
+   const handleGenreMenuClose = () => {
+      setAnchorElGenre(null)
+   }
+
+   const handleGenreClick = (genreValue) => {
+      navigate(`/sort/${genreValue}`)
+      handleGenreMenuClose()
    }
 
    return (
@@ -82,27 +101,38 @@ const Header = () => {
 
             <StyledNav>
                <StyledMenuWrapper>
-                  {isAuth ? (
-                     <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={() => navigate('/user/sort')}
-                     >
-                        <img src={Icons.menu} alt="menu" />
-                     </IconButton>
-                  ) : (
-                     <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={() => navigate('/sort')}
-                     >
-                        <img src={Icons.menu} alt="menu" />
-                     </IconButton>
-                  )}
+                  <IconButton
+                     edge="start"
+                     color="inherit"
+                     aria-label="menu"
+                     onClick={handleGenreMenuOpen}
+                  >
+                     <img src={Icons.menu} alt="menu" />
+                  </IconButton>
+                  <StyledTypography onClick={handleGenreMenuOpen}>
+                     Жанры
+                  </StyledTypography>
 
-                  <StyledTypography>Жанры</StyledTypography>
+                  <Menu
+                     anchorEl={anchorElGenre}
+                     open={openGenreMenu}
+                     onClose={handleGenreMenuClose}
+                     disableScrollLock
+                     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                  >
+                     {GENRES.map((genre) => (
+                        <StyledMenuItem
+                           key={genre.value}
+                           onClick={() => handleGenreClick(genre.value)}
+                        >
+                           <GenreLabel>{genre.label}</GenreLabel>
+                           {genre.count !== undefined && (
+                              <GenreCount>{genre.count}</GenreCount>
+                           )}
+                        </StyledMenuItem>
+                     ))}
+                  </Menu>
                </StyledMenuWrapper>
 
                <NavLinks>
@@ -114,9 +144,8 @@ const Header = () => {
                </NavLinks>
 
                {user ? (
-                  <StyledButton onClick={handleMenuOpen}>
+                  <StyledButton onClick={handleUserMenuOpen}>
                      <PersonIcon style={{ marginRight: '8px' }} />
-
                      {user.firstName}
                   </StyledButton>
                ) : (
@@ -125,14 +154,14 @@ const Header = () => {
                   </StyledButton>
                )}
                <Menu
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleMenuClose}
+                  anchorEl={anchorElUser}
+                  open={openUserMenu}
+                  onClose={handleUserMenuCloseOnly}
                   disableScrollLock
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                   transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                >
-                  <MenuItem onClick={handleClose}>Профиль</MenuItem>
+                  <MenuItem onClick={handleUserMenuClose}>Профиль</MenuItem>{' '}
                   <MenuItem onClick={handleLogout}>Выйти</MenuItem>
                </Menu>
             </StyledNav>
@@ -185,6 +214,7 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
    fontFamily: 'Open Sans, sans-serif',
    fontWeight: 600,
    fontSize: '16px',
+   cursor: 'pointer',
 }))
 
 const StyledBasket = styled(Typography)(({ theme }) => ({
@@ -242,14 +272,14 @@ const GlobalFont = createGlobalStyle`
    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
 
    * {
-      box-sizing: border-box;
+     box-sizing: border-box;
    }
 
    body {
-      font-family: 'Open Sans', sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
+     font-family: 'Open Sans', sans-serif;
+     margin: 0;
+     padding: 0;
+     overflow-x: hidden;
    }
 `
 
@@ -265,3 +295,33 @@ const StyledButton = styled(Button)(({ theme }) => ({
    color: 'white',
    padding: '10px 24px',
 }))
+
+const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
+   display: 'flex',
+   justifyContent: 'space-between',
+   width: '280px',
+   padding: '8px 16px',
+   '&:hover': {
+      backgroundColor: '#f5f5f5',
+      '& span': {
+         color: '#FF4C00',
+      },
+   },
+}))
+
+const GenreLabel = styled('span')({
+   flexGrow: 1,
+   textAlign: 'left',
+   color: '#222222',
+   fontFamily: 'Open Sans, sans-serif',
+   fontWeight: 400,
+   fontSize: '14px',
+})
+
+const GenreCount = styled('span')({
+   color: '#999999',
+   fontFamily: 'Open Sans, sans-serif',
+   fontWeight: 400,
+   fontSize: '14px',
+   marginLeft: '16px',
+})
