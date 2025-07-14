@@ -57,7 +57,7 @@ export default BasketCard
 const StyledCard = styled(Card)(({ theme }) => ({
    maxWidth: 309,
    height: 460,
-   padding: '20px 17px 19px 24px',
+   padding: '20px 37px 19px 34px',
    background: '#EDEDED',
    borderRadius: '0px',
    boxShadow: 'none',
@@ -110,6 +110,7 @@ const StyledPrice = styled(Typography)(({ theme }) => ({
 const StyledOptionsButton = styled(IconButton)(({ theme }) => ({
    position: 'absolute',
    top: theme.spacing(0),
-   right: theme.spacing(1),
+   right: theme.spacing(0),
    color: '#222222',
+   marginRight: '-20px',
 }))

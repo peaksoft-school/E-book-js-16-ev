@@ -14,7 +14,6 @@ import {
 import { Icons } from '../../assets/icons/index'
 import { BOOK_FILTER } from '../../utils/helpers'
 import BasketCard from '../../components/UI/cards/BasketCard'
-import DiscountCard from '../../components/UI/cards/DiscountCard'
 import {
    deleteBookItemVendor,
    getAllVendorBooks,
@@ -173,30 +172,20 @@ const BooksPage = () => {
                   )}
                   {!isLoading && !error && books.length > 0 && (
                      <BooksGrid>
-                        {books.map((book) =>
-                           selectedBookFilter === 'со скидками' ? (
-                              <DiscountCard
-                                 key={book.bookItemId}
-                                 title={book.bookItemName}
-                                 authors={book.authorsName}
-                                 image={book.image}
-                                 price={book.price}
-                                 discount={book.discount}
-                              />
-                           ) : (
-                              <BasketCard
-                                 key={book.bookItemId}
-                                 title={book.name}
-                                 image={book.image}
-                                 price={book.price}
-                                 year={book.year}
-                                 basketCount={book.basketCount}
-                                 onclickOption={(e) =>
-                                    handleMenuOpen(e, book.bookItemId)
-                                 }
-                              />
-                           )
-                        )}
+                        {books.map((book) => (
+                           <BasketCard
+                              key={book.bookItemId}
+                              title={book.name}
+                              image={book.image}
+                              price={book.price}
+                              year={book.year}
+                              basketCount={book.basketCount}
+                              likes={book.likes}
+                              onclickOption={(e) =>
+                                 handleMenuOpen(e, book.bookItemId)
+                              }
+                           />
+                        ))}
                      </BooksGrid>
                   )}
                </Box>

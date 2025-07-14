@@ -160,6 +160,8 @@ const AppRouter = () => (
 
          <Route path="/user/sort" element={<Sort />} />
 
+         <Route path="/user/sort/:genre" element={<Sort />} />
+
          <Route path="promo" element={<Promo />} />
 
          <Route path="favorites" element={<FavoritesPage />} />
