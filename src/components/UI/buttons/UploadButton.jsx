@@ -3,12 +3,20 @@ import { Box, Button, styled } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import { Icons } from '../../../assets/icons'
 
+const getFileName = (url) => {
+   try {
+      return decodeURIComponent(url.split('/').pop())
+   } catch {
+      return ''
+   }
+}
+
 const UploadButton = forwardRef(
    ({ label, fileName, accept = '*', onFileSelect, initialFile }, ref) => {
       const fileInputRef = useRef()
       const [status, setStatus] = useState(initialFile ? 'uploaded' : 'default')
       const [selectedName, setSelectedName] = useState(
-         initialFile ? initialFile.split('/').pop() : ''
+         initialFile ? getFileName(initialFile) : ''
       )
 
       const handleClick = () => {
@@ -24,20 +32,19 @@ const UploadButton = forwardRef(
          }
       }
 
-      useEffect(() => {
-         if (initialFile) {
-            setSelectedName(getFileName(initialFile))
-            setStatus('uploaded')
-         }
-      }, [initialFile])
+useEffect(() => {
+   console.log('initialFile in useEffect:', initialFile)
+  
 
-      const getFileName = (url) => {
-         try {
-            return decodeURIComponent(url.split('/').pop())
-         } catch {
-            return ''
-         }
-      }
+   if (initialFile) {
+      setSelectedName(getFileName(initialFile))
+      setStatus('uploaded')
+   } else {
+      setSelectedName('')
+      setStatus('default')
+   }
+}, [initialFile])
+
 
       const capitalizeFirst = (str) =>
          str.charAt(0).toUpperCase() + str.slice(1)
@@ -50,14 +57,9 @@ const UploadButton = forwardRef(
       }
 
       const getIcon = () => {
-         switch (status) {
-            case 'uploaded':
-               return <CheckIcon />
-            default:
-               return (
-                  <IconImage component="img" alt="icon" src={Icons.download} />
-               )
-         }
+         return status === 'uploaded'
+            ? <CheckIcon />
+            : <IconImage component="img" alt="icon" src={Icons.download} />
       }
 
       return (
@@ -74,9 +76,11 @@ const UploadButton = forwardRef(
                onClick={handleClick}
                startIcon={getIcon()}
                variant={status === 'uploaded' ? 'contained' : 'outlined'}
+               status={status}
             >
                {getButtonText()}
             </StyledButton>
+           
          </Container>
       )
    }
@@ -111,4 +115,10 @@ const StyledButton = styled(Button)(({ status }) => ({
 const IconImage = styled(Box)({
    width: 20,
    height: 20,
+})
+
+const FileNameText = styled(Box)({
+   fontSize: 12,
+   color: '#666',
+   marginTop: 4,
 })

@@ -38,8 +38,9 @@ const UploadBook = () => {
             language,
             type,
             bestseller,
-            audio,
-            pdf,
+            audioUrl,
+            fragmentUrl,
+            pdfUrl,
          } = bookData
 
          const formData = {
@@ -65,8 +66,9 @@ const UploadBook = () => {
             images: images || [],
             type: type || 'PAPER',
             language: language || 'RUSSIAN',
-            audio: audio || '',
-            pdf: pdf || '',
+            audio: audioUrl || '',
+            fragment: fragmentUrl || '',
+            pdf: pdfUrl || '',
          })
       }
    }, [bookData])

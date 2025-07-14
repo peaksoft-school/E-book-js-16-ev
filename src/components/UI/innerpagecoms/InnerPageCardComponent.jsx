@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Box, Typography, styled } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import {
    infoBook,
    acceptBook,
@@ -20,6 +20,7 @@ import RoleBreadcrumbs from './RoleBreadCrums'
 
 const InnerPageCardComponent = ({ role = 'client' }) => {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const { bookItemId } = useParams()
    const { book, loading, error } = useSelector((state) => {
       if (role === 'admin') return state.book
@@ -40,13 +41,14 @@ const InnerPageCardComponent = ({ role = 'client' }) => {
          dispatch(infoBook(bookItemId))
       } else if (role === 'vendor') {
          dispatch(vendorBookById(bookItemId))
-      } else  {
+      } else {
          dispatch(fetchBookClientById(bookItemId))
       }
    }, [bookItemId, dispatch, role])
 
    const handleAccept = () => {
       dispatch(acceptBook(bookItemId)).then(() => setOpenAcceptModal(true))
+      navigate('/admin/application')
    }
 
    const handleReject = () => {
@@ -54,6 +56,7 @@ const InnerPageCardComponent = ({ role = 'client' }) => {
          setOpenCancelModal(false)
          setCancelReason('')
       })
+      navigate('/admin/application')
    }
 
    if (loading) return <p>Загрузка...</p>

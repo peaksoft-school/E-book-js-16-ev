@@ -11,14 +11,16 @@ import {
 } from '@mui/material'
 import SideBar from '../../components/SideBar'
 import Input from '../../components/UI/Input'
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AUTH_ACTION } from '../../store/slices/authSlice'
+
+export const SearchContext = createContext('')
 
 const AdminLayout = () => {
    const [anchorEl, setAnchorEl] = useState(null)
    const open = Boolean(anchorEl)
-
+   const [search, setSearch] = useState('')
    const dispatch = useDispatch()
    const navigate = useNavigate()
 
@@ -47,10 +49,12 @@ const AdminLayout = () => {
          <SideBar />
          <ContentBox>
             <StyledHeaderBox>
-               <Input
-                  type="search"
-                  placeholder="Искать жанр, книги, авторов, издательства..."
-               />
+                  <Input
+                     type="search"
+                     placeholder="Искать жанр, книги, авторов, издательства..."
+                     value={search}
+                     onChange={(e) => setSearch(e.target.value)}
+                  />
 
                <Box sx={{ position: 'relative' }}>
                   <StyledButton
@@ -76,7 +80,7 @@ const AdminLayout = () => {
                </Box>
             </StyledHeaderBox>
             <Box>
-               <Outlet />
+               <Outlet context={[search]}/>
             </Box>
          </ContentBox>
       </PageWrapper>
