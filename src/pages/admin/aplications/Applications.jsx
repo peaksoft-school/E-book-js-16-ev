@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, styled, Typography, Pagination } from '@mui/material'
-import { useSearchParams } from 'react-router'
-import ApplicationCard from '../../../components/UI/cards/ApplicationCard.jsx'
-import { fetchBooks } from '../../../store/admin/applications/applicationThunk.js'
+import { useSearchParams, useOutletContext } from 'react-router'
+import ApplicationCard from '../../../components/UI/cards/ApplicationCard'
+import {
+   fetchBooks,
+   searchBooksByName,
+} from '../../../store/admin/applications/applicationThunk'
 
 const PAGE_SIZE = 12
 
@@ -12,21 +15,27 @@ const Applications = () => {
    const [searchParams, setSearchParams] = useSearchParams()
    const currentPage = Number(searchParams.get('page')) || 1
 
+   const [search] = useOutletContext()
+
    const { books, totalElements, totalSeen, loading, error } = useSelector(
       (state) => state.application
    )
 
-   const totalPages = Math.ceil(totalElements / PAGE_SIZE)
-
-   const unseenCount = totalElements - totalSeen
-
    useEffect(() => {
-      dispatch(fetchBooks({ pageNumber: currentPage, pageSize: PAGE_SIZE }))
-   }, [dispatch, currentPage])
+      const params = {
+         pageNumber: currentPage,
+         pageSize: PAGE_SIZE,
+      }
 
-   const handlePageChange = (event, value) => {
-      setSearchParams({ page: value })
-   }
+      if (search.trim()) {
+         dispatch(searchBooksByName({ ...params, request: search }))
+      } else {
+         dispatch(fetchBooks(params))
+      }
+   }, [dispatch, currentPage, search])
+
+   const totalPages = Math.ceil(totalElements / PAGE_SIZE)
+   const unseenCount = totalElements - totalSeen
 
    return (
       <PageWrapper>
@@ -55,7 +64,9 @@ const Applications = () => {
                   <Pagination
                      count={totalPages}
                      page={currentPage}
-                     onChange={handlePageChange}
+                     onChange={(e, value) =>
+                        setSearchParams({ page: value.toString() })
+                     }
                      color="primary"
                   />
                </PaginationWrapper>
@@ -66,6 +77,7 @@ const Applications = () => {
 }
 
 export default Applications
+
 
 const PageWrapper = styled(Box)({
    display: 'flex',

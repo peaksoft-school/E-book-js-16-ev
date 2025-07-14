@@ -47,6 +47,10 @@ import knew from './svgs/New.svg'
 import exclg from './svgs/Vector.svg'
 import prosent from './svgs/prosent.svg'
 import promo from './svgs/promologo.svg'
+import loveO from './svgs/heartorange.svg'
+import love from './svgs/love.svg'
+import eIcon from './svgs/eIcon.svg'
+import aIcon from './svgs/aIcon.svg'
 
 export const Icons = {
    application,
@@ -98,4 +102,8 @@ export const Icons = {
    exclg,
    prosent,
    promo,
+   loveO,
+   love,
+   eIcon,
+   aIcon,
 }

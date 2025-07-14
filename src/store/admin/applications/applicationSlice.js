@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchBooks } from './applicationThunk'
+import { fetchBooks, searchBooksByName } from './applicationThunk'
 
 const initialState = {
    books: [],
@@ -22,19 +22,24 @@ const applicationSlice = createSlice({
             state.loading = true
             state.error = null
          })
-         .addCase(fetchBooks.fulfilled, (state, action) => {
-            state.loading = false
-            state.books = action.payload.books
-            state.totalElements = action.payload.totalElements
-            state.totalPages = action.payload.totalPages
-            state.pageNumber = action.payload.pageNumber
-            state.pageSize = action.payload.pageSize
-            state.totalSeen = action.payload.totalSeen
-         })
-
          .addCase(fetchBooks.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
+         })
+
+         .addCase(fetchBooks.fulfilled, (state, action) => {
+            state.books = action.payload.books
+            state.totalElements = action.payload.totalElements
+            state.totalSeen = action.payload.totalSeen
+            state.loading = false
+            state.error = null
+         })
+         .addCase(searchBooksByName.fulfilled, (state, action) => {
+            state.books = action.payload.content
+            state.totalElements = action.payload.totalElements
+            state.totalSeen = action.payload.totalSeen || 0
+            state.loading = false
+            state.error = null
          })
    },
 })
