@@ -1,5 +1,3 @@
-// src/components/layout/Header.jsx
-
 import {
    AppBar,
    Box,
@@ -22,8 +20,8 @@ import { AUTH_ACTION } from '../store/slices/authSlice'
 import { useState } from 'react'
 
 const Header = () => {
-   const [anchorElUser, setAnchorElUser] = useState(null) // Состояние для меню пользователя
-   const [anchorElGenre, setAnchorElGenre] = useState(null) // Состояние для меню жанров
+   const [anchorElUser, setAnchorElUser] = useState(null)
+   const [anchorElGenre, setAnchorElGenre] = useState(null)
 
    const openUserMenu = Boolean(anchorElUser)
    const openGenreMenu = Boolean(anchorElGenre)
@@ -32,12 +30,12 @@ const Header = () => {
    const dispatch = useDispatch()
 
    const handleNavigateSignIn = () => navigate('/sign-in')
-   const { user, isAuth } = useSelector((state) => state.auth) // Убедитесь, что состояние Redux верно
-   const { summary } = useSelector((state) => state.basket) // Убедитесь, что состояние Redux верно
+   const { user, isAuth } = useSelector((state) => state.auth)
+   const { summary } = useSelector((state) => state.basket)
 
    const handleLogout = () => {
       dispatch(AUTH_ACTION.logOut())
-      setAnchorElUser(null) // Закрыть меню пользователя при выходе
+      setAnchorElUser(null)
    }
 
    const handleUserMenuOpen = (event) => {
@@ -50,7 +48,6 @@ const Header = () => {
    }
 
    const handleUserMenuCloseOnly = () => {
-      // Чтобы закрыть без навигации
       setAnchorElUser(null)
    }
 
@@ -62,9 +59,8 @@ const Header = () => {
       setAnchorElGenre(null)
    }
 
-   // Логика для формирования пути на основе 'value' жанра из helpers.js
    const handleGenreClick = (genreValue) => {
-      navigate(`/genres/${genreValue}`) // Переход на /genres/FICTION, /genres/CHILDRENS и т.д.
+      navigate(`/sort/${genreValue}`)
       handleGenreMenuClose()
    }
 
@@ -105,12 +101,11 @@ const Header = () => {
 
             <StyledNav>
                <StyledMenuWrapper>
-                  {/* Кнопка меню жанров */}
                   <IconButton
                      edge="start"
                      color="inherit"
                      aria-label="menu"
-                     onClick={handleGenreMenuOpen} // Открыть меню жанров
+                     onClick={handleGenreMenuOpen}
                   >
                      <img src={Icons.menu} alt="menu" />
                   </IconButton>
@@ -118,7 +113,6 @@ const Header = () => {
                      Жанры
                   </StyledTypography>
 
-                  {/* Меню жанров */}
                   <Menu
                      anchorEl={anchorElGenre}
                      open={openGenreMenu}
@@ -127,14 +121,12 @@ const Header = () => {
                      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                      transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                   >
-                     {/* Отображаем жанры из константы GENRES */}
                      {GENRES.map((genre) => (
                         <StyledMenuItem
-                           key={genre.value} // Используем genre.value как ключ, так как он уникален
-                           onClick={() => handleGenreClick(genre.value)} // Передаем genre.value
+                           key={genre.value}
+                           onClick={() => handleGenreClick(genre.value)}
                         >
                            <GenreLabel>{genre.label}</GenreLabel>
-                           {/* Если у вас есть счетчик книг в жанре, раскомментируйте это */}
                            {genre.count !== undefined && (
                               <GenreCount>{genre.count}</GenreCount>
                            )}
@@ -161,11 +153,10 @@ const Header = () => {
                      Войти
                   </StyledButton>
                )}
-               {/* Меню пользователя */}
                <Menu
                   anchorEl={anchorElUser}
                   open={openUserMenu}
-                  onClose={handleUserMenuCloseOnly} // Закрыть без навигации для общего закрытия
+                  onClose={handleUserMenuCloseOnly}
                   disableScrollLock
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                   transformOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -247,7 +238,7 @@ const NavLinks = styled(Box)(({ theme }) => ({
    flexWrap: 'wrap',
    gap: '20px',
    justifyContent: 'center',
-   marginRight: 420, // Отрегулируйте этот отступ при необходимости для макета
+   marginRight: 420,
 }))
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
@@ -308,12 +299,12 @@ const StyledButton = styled(Button)(({ theme }) => ({
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
    display: 'flex',
    justifyContent: 'space-between',
-   width: '280px', // Отрегулируйте ширину по мере необходимости
+   width: '280px',
    padding: '8px 16px',
    '&:hover': {
-      backgroundColor: '#f5f5f5', // Светло-серый при наведении
+      backgroundColor: '#f5f5f5',
       '& span': {
-         color: '#FF4C00', // Изменить цвет текста при наведении
+         color: '#FF4C00',
       },
    },
 }))
@@ -328,9 +319,9 @@ const GenreLabel = styled('span')({
 })
 
 const GenreCount = styled('span')({
-   color: '#999999', // Серый цвет для счетчика
+   color: '#999999',
    fontFamily: 'Open Sans, sans-serif',
    fontWeight: 400,
    fontSize: '14px',
-   marginLeft: '16px', // Пространство между меткой и счетчиком
+   marginLeft: '16px',
 })
