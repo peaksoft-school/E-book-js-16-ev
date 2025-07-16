@@ -45,4 +45,4 @@ const globalSearchSlice = createSlice({
 })
 
 export const { clearSearchResults } = globalSearchSlice.actions
-export default globalSearchSlice.reducer
+export default globalSearchSlice

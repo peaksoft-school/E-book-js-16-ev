@@ -14,7 +14,6 @@ import {
 import { Icons } from '../../assets/icons/index'
 import { BOOK_FILTER } from '../../utils/helpers'
 import BasketCard from '../../components/UI/cards/BasketCard'
-import DiscountCard from '../../components/UI/cards/DiscountCard'
 import {
    deleteBookItemVendor,
    getAllVendorBooks,

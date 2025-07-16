@@ -24,6 +24,7 @@ import UserInnerPage from '../pages/user/UserInnerPage'
 import Promo from '../pages/user/Promo'
 import FavoritesPage from '../pages/user/FavoritesPage'
 import SlidersPage from '../pages/SlidersPage'
+import RejectedBooksPage from '../pages/vendor/RejectedBooksPage'
 
 const SignUpVendor = lazy(() => import('../pages/sign-up/SignUpVendor'))
 const SignUpClient = lazy(() => import('../pages/sign-up/SignUpClient'))
@@ -160,6 +161,8 @@ const AppRouter = () => (
 
          <Route path="/user/sort" element={<Sort />} />
 
+         <Route path="/user/sort/:genre" element={<Sort />} />
+
          <Route path="promo" element={<Promo />} />
 
          <Route path="favorites" element={<FavoritesPage />} />
@@ -184,19 +187,25 @@ const AppRouter = () => (
          <Route path="/vendor/allBook" element={<BooksPage />} />
 
          <Route path="/vendor/profile" element={<VendorProfilePage />} />
+
          <Route
             path="/vendor/allBook/innerpagevendor/:bookItemId"
             element={<InnerPageVendor />}
          />
+
          <Route
             path="innerpagevendor/uploadbook/:bookItemId"
             element={<UploadBook />}
          />
+
          <Route
             path="innerpagevendor/:bookItemId/addtype"
             element={<AddType />}
          />
+
          <Route path="addbook" element={<AddBook />} />
+
+         <Route path="rejection-books" element={<RejectedBooksPage />} />
       </Route>
 
       <Route path="/sell" element={<LandingPage />} />

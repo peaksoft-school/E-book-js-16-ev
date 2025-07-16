@@ -1,29 +1,69 @@
-import { Box, styled, TextField, Typography } from '@mui/material'
+import {
+   Box,
+   styled,
+   TextField,
+   Typography,
+   CircularProgress,
+   Alert,
+} from '@mui/material'
 import Button from './UI/buttons/Button'
 import { Link } from 'react-router'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addUserToMailList } from '../store/user/mailingThunk'
+import notify from '../utils/helpers/notify'
 
-const Mailing = () => (
-   <StyledContainer>
-      <Box>
-         <Typography className="text">Подписаться на рассылку</Typography>
+const Mailing = () => {
+   const [email, setEmail] = useState('')
+   const dispatch = useDispatch()
+   const { isLoading, error, successMessage } = useSelector(
+      (state) => state.mailing
+   )
 
-         <StyledBoxInt>
-            <StyledTfield placeholder="Напишите ваш E-mail" />
+   const handleSubmit = () => {
+      if (!email) return
+      dispatch(addUserToMailList({ email }))
+      setEmail('')
+      notify({ message: successMessage })
+   }
 
-            <Button>Отправить</Button>
-         </StyledBoxInt>
-      </Box>
+   return (
+      <StyledContainer>
+         <Box>
+            <Typography className="text">Подписаться на рассылку</Typography>
 
-      <StyledLinkBox>
-         <StyledLink to="/instagram">Instagram</StyledLink>
-         <StyledLink to="/facebook">Facebook</StyledLink>
-         <StyledLink to="/vk">ВКонтакте</StyledLink>
-      </StyledLinkBox>
-   </StyledContainer>
-)
+            <StyledBoxInt>
+               <StyledTfield
+                  placeholder="Напишите ваш E-mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+               />
+               <Button onClick={handleSubmit} disabled={isLoading}>
+                  {isLoading ? (
+                     <CircularProgress size={20} color="inherit" />
+                  ) : (
+                     'Отправить'
+                  )}
+               </Button>
+            </StyledBoxInt>
+
+            {error && (
+               <Alert severity="error" sx={{ mt: 2 }}>
+                  {error}
+               </Alert>
+            )}
+         </Box>
+
+         <StyledLinkBox>
+            <StyledLink to="/instagram">Instagram</StyledLink>
+            <StyledLink to="/facebook">Facebook</StyledLink>
+            <StyledLink to="/vk">ВКонтакте</StyledLink>
+         </StyledLinkBox>
+      </StyledContainer>
+   )
+}
 
 export default Mailing
-
 const StyledContainer = styled(Box)({
    display: 'flex',
    flexDirection: 'column',

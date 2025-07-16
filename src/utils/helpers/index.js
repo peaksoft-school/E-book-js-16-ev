@@ -8,7 +8,7 @@ const CATEGORIES = [
 ]
 
 const NAV_LINKS = [
-   {label: 'Все книги', to: '/sort'},
+   { label: 'Все книги', to: '/sort' },
    { label: 'Промокоды', to: 'user/promo' },
    { label: 'Начать продавать на eBook', to: '/sell' },
 ]

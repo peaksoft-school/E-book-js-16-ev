@@ -39,6 +39,10 @@ const VendorHeder = () => {
       (state) => state.promoCode
    )
 
+   const { rejectionBooks } = useSelector((state) => state.rejectionBooks)
+
+   const hasRejected = rejectionBooks.length > 0
+
    const handleSubmitPromoCode = () => {
       const { code, discount, startDate, endDate } = promoData
 
@@ -95,21 +99,20 @@ const VendorHeder = () => {
    return (
       <StyledHeader>
          <StyledBox1>
-            <img src={Icons.eBook} alt="logo" />
+            <img
+               src={Icons.eBook}
+               alt="logo"
+               onClick={() => navigate('/vendor')}
+            />
             <Input
                width="895px"
                placeholder="Искать жанр, книги, авторов, издательства... "
             />
-            <Box
-               component="img"
-               src={Icons.ball}
-               alt="!"
-               sx={{
-                  width: 24,
-                  height: 24,
-                  cursor: 'pointer',
-               }}
-            />
+            <BellWrapper onClick={() => navigate('/vendor/rejection-books')}>
+               <BellIcon src={Icons.ball} alt="Уведомления" />
+               {hasRejected && <RedDot />}
+            </BellWrapper>
+
             <Box>
                <StyledButton
                   aria-label="settings"
@@ -296,4 +299,28 @@ const StyledButton = styled(MuiButton)({
 
 const StyledBtn = styled(Button)({
    marginLeft: 386,
+})
+
+const BellWrapper = styled('div')({
+   position: 'relative',
+   width: '32px',
+   height: '32px',
+   cursor: 'pointer',
+})
+
+const RedDot = styled('div')(({ theme }) => ({
+   position: 'absolute',
+   top: 0,
+   right: 0,
+   width: '10px',
+   height: '10px',
+   borderRadius: '50%',
+   backgroundColor: theme.palette.error.main,
+   border: `2px solid ${theme.palette.background.paper}`,
+}))
+
+const BellIcon = styled('img')({
+   width: '100%',
+   height: '100%',
+   objectFit: 'contain',
 })
