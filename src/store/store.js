@@ -27,6 +27,7 @@ import promoReducer from './user/promo/promoSlice'
 import favoriteBookReducer from './user/favoriteSlice'
 import { favoriteSlice } from './user/favorites/userFavoritesSlice'
 import { mailingSlice } from './user/mailingSlice'
+import { rejectionBooksSlice } from './vendor/rejectionBooksSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -54,6 +55,7 @@ const rootReducer = combineReducers({
    favorite: favoriteBookReducer,
    [favoriteSlice.name]: favoriteSlice.reducer,
    [mailingSlice.name]: mailingSlice.reducer,
+   [rejectionBooksSlice.name]: rejectionBooksSlice.reducer,
 })
 
 const persistConfig = {
