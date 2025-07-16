@@ -21,31 +21,47 @@ import Button from '../../components/UI/buttons/Button'
 import Chip from '../../components/UI/Chip'
 import { FORMATS, GENRES, LANGUAGE } from '../../utils/helpers'
 import { languages } from 'eslint-plugin-prettier'
+import { useParams } from 'react-router'
+import { useLocation } from 'react-router'
+import { globalSearchBooks } from '../../store/sliders/globalSearchBooksThunk'
 
 const SORT = [
-   { label: 'Новинки', value: false },
-   { label: 'Бестселлеры', value: true },
+   { label: 'Новинки', value: 'false' },
+   { label: 'Бестселлеры', value: 'true' },
 ]
 
 const ITEMS_PER_PAGE = 12
 
-const initialFilterParams = {
+const initialFilterParams = (initialGenre) => ({
    types: [],
    languages: [],
-   genres: [],
+   genres: initialGenre ? [initialGenre] : [],
    startPrice: 1,
    endPrice: 10000,
-}
+})
 
-const Sort = () => {
+const Sort = ({ initialGenre }) => {
    const dispatch = useDispatch()
    const { books } = useSelector((state) => state.sortBooks)
    const [sort, setSort] = useState('')
    const [openSort, setOpenSort] = useState(false)
    const [visiblePage, setVisiblePage] = useState(1)
    const [activeSort, setActiveSort] = useState('filter')
+   const { genre } = useParams()
+   const [filterParams, setFilterParams] = useState(
+      initialFilterParams(initialGenre)
+   )
+   const location = useLocation()
+   const searchParams = new URLSearchParams(location.search)
+   const searchQuery = searchParams.get('search')
+   const { books: searchedBooks } = useSelector((state) => state.globalSearch)
 
-   const [filterParams, setFilterParams] = useState(initialFilterParams)
+   useEffect(() => {
+      if (searchQuery) {
+         dispatch(globalSearchBooks({ request: searchQuery }))
+         setActiveSort('search')
+      }
+   }, [searchQuery])
 
    useEffect(() => {
       if (activeSort === 'filter') {
@@ -67,8 +83,7 @@ const Sort = () => {
       dispatch(fetchAllSortBooks({ body, pageNumber: 1, pageSize: 100 }))
       setVisiblePage(1)
    }
-
-   const visibleBooks = books.slice(0, visiblePage * ITEMS_PER_PAGE)
+   const visibleBooks = books?.slice(0, visiblePage * ITEMS_PER_PAGE) || []
 
    const handleShowMore = () => {
       setVisiblePage((prev) => prev + 1)
@@ -95,12 +110,11 @@ const Sort = () => {
 
    const handleSortChange = (event) => {
       const value = event.target.value
-      setSort(value)
       setActiveSort('bestseller')
-      setFilterParams(initialFilterParams)
+      setSort(value)
       dispatch(
          fetchBestsellers({
-            isBestseller: value,
+            isBestseller: value === 'true',
             pageNumber: 1,
             pageSize: 100,
          })
@@ -124,7 +138,6 @@ const Sort = () => {
       setFilterParams(updatedParams)
       handleFilterChange(updatedParams)
    }
-   console.log('LANGUAGE item:', languages)
 
    return (
       <StyledSortBox>
@@ -217,12 +230,26 @@ const Sort = () => {
 
             <Box>
                <StyledCardBox>
-                  {visibleBooks.map((book) => (
-                     <BookCard key={book.bookItemId} book={book}   activeSort={activeSort}   filterParams={filterParams}/>
-                  ))}
+                  {activeSort === 'search'
+                     ? searchedBooks.map((book) => (
+                          <BookCard
+                             key={book.bookItemId}
+                             book={book}
+                             activeSort={activeSort}
+                             filterParams={filterParams}
+                          />
+                       ))
+                     : visibleBooks.map((book) => (
+                          <BookCard
+                             key={book.bookItemId}
+                             book={book}
+                             activeSort={activeSort}
+                             filterParams={filterParams}
+                          />
+                       ))}
                </StyledCardBox>
 
-               {books.length > 12 && (
+               {activeSort !== 'search' && books.length > 12 && (
                   <Box
                      mt={4}
                      display="flex"

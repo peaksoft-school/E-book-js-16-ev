@@ -10,9 +10,16 @@ import {
 } from '@mui/material'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { useNavigate } from 'react-router'
 
 const BasketCard = forwardRef(
-   ({ image, title, price, year, likes, basketCount, onclickOption }, ref) => {
+   ({ image, title, price, year, likes, basketCount, onclickOption , bookItemId}, ref) => {
+const navigate = useNavigate()
+
+const handlenavigate = () => {
+   navigate(`/vendor/allBook/innerpagevendor/${bookItemId}`)
+}
+
       return (
          <StyledCard ref={ref}>
             <Box sx={{ position: 'relative' }}>
@@ -24,13 +31,13 @@ const BasketCard = forwardRef(
                      ({likes}) В корзине ({basketCount})
                   </StyledLikeCount>
                </StyledOverlayBox>
-               <StyledCardMedia component="img" image={image} alt={title} />
+               <StyledCardMedia component="img" image={image}   onClick={handlenavigate} alt={title}/>
                <StyledOptionsButton
                   aria-label="settings"
                   size="small"
                   onClick={onclickOption}
                >
-                  <MoreVertIcon />
+                  <MoreVertIcon  />
                </StyledOptionsButton>
             </Box>
             <StyledCardContent>
@@ -55,7 +62,7 @@ const BasketCard = forwardRef(
 
 export default BasketCard
 const StyledCard = styled(Card)(({ theme }) => ({
-   maxWidth: 309,
+   width: 309,
    height: 460,
    padding: '20px 37px 19px 34px',
    background: '#EDEDED',
