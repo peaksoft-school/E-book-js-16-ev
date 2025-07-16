@@ -18,10 +18,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import PersonIcon from '@mui/icons-material/Person'
 import { AUTH_ACTION } from '../store/slices/authSlice'
 import { useState } from 'react'
+import { globalSearchBooks } from '../store/sliders/globalSearchBooksThunk'
 
 const Header = () => {
    const [anchorElUser, setAnchorElUser] = useState(null)
    const [anchorElGenre, setAnchorElGenre] = useState(null)
+   const [searchValue, setSearchValue] = useState('')
 
    const openUserMenu = Boolean(anchorElUser)
    const openGenreMenu = Boolean(anchorElGenre)
@@ -77,6 +79,15 @@ const Header = () => {
                <StyledInputWrapper>
                   <Input
                      type="search"
+                     value={searchValue}
+                     onChange={(e) => setSearchValue(e.target.value)}
+                     onKeyDown={(e) => {
+                        if (e.key === 'Enter' && searchValue.trim()) {
+                           dispatch(globalSearchBooks({ request: searchValue }))
+                           navigate(`/sort?search=${searchValue}`)
+                           setSearchValue('')
+                        }
+                     }}
                      placeholder="Искать жанр, книги, авторов, издательства..."
                   />
                </StyledInputWrapper>
@@ -238,7 +249,7 @@ const NavLinks = styled(Box)(({ theme }) => ({
    flexWrap: 'wrap',
    gap: '20px',
    justifyContent: 'center',
-   marginRight: 420,
+   marginRight: 590,
 }))
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({

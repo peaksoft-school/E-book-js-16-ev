@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router'
 import Button from '../buttons/Button'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { deleteVendorBook } from '../../../store/vendor/deleteVendorBookThunk'
 import { Box, ClickAwayListener, Paper, Typography } from '@mui/material'
@@ -19,6 +19,7 @@ const BookActionButtons = ({
    const navigate = useNavigate()
    const dispatch = useDispatch()
    const [dropdownOpen, setDropdownOpen] = useState(false)
+   const { isAuth } = useSelector((state) => state.auth)
 
    const handleDelete = async () => {
       try {
@@ -30,7 +31,9 @@ const BookActionButtons = ({
       }
    }
    const handleSelectType = (selectedType) => {
-      navigate(`/vendor/innerpagevendor/${bookItemId}/addtype`, { state: { selectedType } })
+      navigate(`/vendor/innerpagevendor/${bookItemId}/addtype`, {
+         state: { selectedType },
+      })
    }
    const handleEdit = () => {
       navigate(`/vendor/innerpagevendor/uploadbook/${bookItemId}`)
@@ -40,11 +43,23 @@ const BookActionButtons = ({
       const existingTypes = [type]
       if (audioBook) existingTypes.push('AUDIO')
       if (paperBook) existingTypes.push('PAPER')
-         if (electronicBook) existingTypes.push('ELECTRONIC')
+      if (electronicBook) existingTypes.push('ELECTRONIC')
 
       return allTypes.filter((t) => !existingTypes.includes(t))
    }
    const availableTypes = getAvailableTypes()
+
+   const handleClicktoFav = () => {
+      if (isAuth === 'USER') {
+         navigate('/user/favorites')
+      } else navigate('/sign-up-client')
+   }
+
+   const handleClicktoBasket = () => {
+      if (isAuth === 'USER') {
+         navigate('/user/basket')
+      } else navigate('/sign-up-client')
+   }
 
    if (role === 'admin') {
       return (
@@ -61,7 +76,12 @@ const BookActionButtons = ({
 
    if (role === 'vendor') {
       return (
-         <Box sx={{ display: 'flex', gap: availableTypes.length === 0 ? 11.5 : 2  }}>
+         <Box
+            sx={{
+               display: 'flex',
+               gap: availableTypes.length === 0 ? 11.5 : 2,
+            }}
+         >
             <Button variant="borderOrgS" onClick={handleDelete}>
                Удалить
             </Button>
@@ -69,7 +89,6 @@ const BookActionButtons = ({
                Редактировать
             </Button>
 
-            
             {availableTypes.length > 0 && (
                <Box sx={{ position: 'relative' }}>
                   <Button
@@ -127,10 +146,12 @@ const BookActionButtons = ({
    if (role === 'client') {
       return (
          <>
-            <Button variant="borderOrg" >
+            <Button variant="borderOrg" onClick={handleClicktoFav}>
                В избранное
             </Button>
-            <Button variant="warning">Добавить в корзину</Button>
+            <Button variant="warning" onClick={handleClicktoBasket}>
+               Добавить в корзину
+            </Button>
          </>
       )
    }

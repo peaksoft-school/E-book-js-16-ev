@@ -143,6 +143,7 @@ const BooksPage = () => {
                         value={selectedBookFilter}
                         onChange={handleBookFilterChange}
                         displayEmpty
+                        MenuProps={{ disableScrollLock: true }}
                         onOpen={() => setOpenFilterSelect(true)}
                         onClose={() => setOpenFilterSelect(false)}
                         IconComponent={openFilterSelect ? UpIcon : DownIcon}
@@ -190,7 +191,9 @@ const BooksPage = () => {
                                  image={book.image}
                                  price={book.price}
                                  year={book.year}
+                                 likes={book.likes}
                                  basketCount={book.basketCount}
+                                 bookItemId={book.bookItemId}
                                  onclickOption={(e) =>
                                     handleMenuOpen(e, book.bookItemId)
                                  }
@@ -235,8 +238,8 @@ export default BooksPage
 
 const PageWrapper = styled(Box)({
    display: 'flex',
-   width: '100vw',
-   height: '100vh',
+   width: '1470px',
+   // height: '100vh',
    overflow: 'hidden',
 })
 
@@ -247,10 +250,10 @@ const StyledTypography = styled(Typography)({
 
 const ContentBox = styled(Box)({
    width: '100%',
-   height: '100vh',
+   // height: '100vh',
    display: 'flex',
    flexDirection: 'column',
-   padding: '20px',
+   // padding: '20px',
    overflowY: 'auto',
 })
 
@@ -310,14 +313,18 @@ const CustomSelect = styled(Select)({
 })
 
 const BooksGrid = styled(Box)(({ theme }) => ({
-   paddingRight: '20px',
-   display: 'grid',
-   rowGap: '6px',
-   columnGap: '6px',
-   gridTemplateColumns: 'repeat(auto-fill, minmax(329px, 1fr))',
-   [theme.breakpoints.down('sm')]: {
-      gridTemplateColumns: '1fr',
-   },
+   // paddingRight: '20px',
+   display: 'flex',
+   flexWrap: 'wrap',
+   // flexDirection: 'row',
+   gap: 27,
+
+   // rowGap: '6px',
+   // columnGap: '6px',
+   // gridTemplateColumns: 'repeat(auto-fill, minmax(329px, 1fr))',
+   // [theme.breakpoints.down('sm')]: {
+   //    gridTemplateColumns: '1fr',
+   // },
 }))
 
 const PaginationContainer = styled(Box)({

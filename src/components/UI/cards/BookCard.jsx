@@ -13,12 +13,14 @@ import Button from '../buttons/Button'
 import { useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { addFavoriteBook } from '../../../store/user/favoriteThunk'
-import { fetchAllSortBooks } from '../../../store/user/userSortThunk' // не забудь импорт
+import { fetchAllSortBooks } from '../../../store/user/userSortThunk'
+import { useSelector } from 'react-redux'
 
 const BookCard = forwardRef(({ book, activeSort, filterParams }, ref) => {
    const [isClicked, setIsClicked] = useState(false)
    const navigate = useNavigate()
    const [isFavorited, setIsFavorited] = useState(book.favorite)
+   const { isAuth } = useSelector((state) => state.auth)
 
    const dispatch = useDispatch()
 
@@ -30,6 +32,12 @@ const BookCard = forwardRef(({ book, activeSort, filterParams }, ref) => {
 
    const handleFavoriteClick = async (e) => {
       e.stopPropagation()
+
+      if (!isAuth) {
+         navigate('/sign-up-client')
+         return
+      }
+
       await dispatch(addFavoriteBook(book.bookItemId))
       setIsFavorited((prev) => !prev)
 
@@ -45,7 +53,11 @@ const BookCard = forwardRef(({ book, activeSort, filterParams }, ref) => {
    }
 
    const handleClick = () => {
-      navigate(`/user/sort/innerpageuser/${book.bookItemId}`)
+      if (isAuth === 'USER') {
+         navigate(`/user/sort/innerpageuser/${book.bookItemId}`)
+      } else {
+         navigate(`/sort/innerpageuser/${book.bookItemId}`)
+      }
    }
 
    return (

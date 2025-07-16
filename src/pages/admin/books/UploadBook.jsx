@@ -41,6 +41,7 @@ const UploadBook = () => {
             audioUrl,
             fragmentUrl,
             pdfUrl,
+            quantity,
          } = bookData
 
          const formData = {
@@ -52,11 +53,12 @@ const UploadBook = () => {
             year: year || '',
             publisher: publisher || '',
             pages: valuePages || '',
-            count: '',
+            count:  quantity || '',
             hours: '',
             minutes: '',
             seconds: '',
             bestSeller: bestseller || false,
+            quantity: quantity || '',
          }
 
          setInitialData({

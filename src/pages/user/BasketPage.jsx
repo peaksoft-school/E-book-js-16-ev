@@ -156,7 +156,7 @@ const BasketPage = () => {
                      onRemove={() => handleRemove(item)}
                      onIncrement={() => handleIncrement(item)}
                      onDecrement={() => handleDecrement(item)}
-                     onAddToFavorite={() => handleAddToFavorite(item)} // передаем в BasketItem
+                     onAddToFavorite={() => handleAddToFavorite(item)}
                   />
                ))
             )}
